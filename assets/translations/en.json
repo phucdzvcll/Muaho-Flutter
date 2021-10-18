@@ -1,4 +1,5 @@
 {
   "btn_login": "LOGIN",
-  "btn_register": "REGISTER"
+  "btn_register": "REGISTER",
+  "txt_hello": "Hello"
 }

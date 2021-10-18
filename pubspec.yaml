@@ -37,11 +37,17 @@ dependencies:
   device_info: ^2.0.2
   easy_localization: ^3.0.0
   dio: ^4.0.0
+  carousel_slider: ^4.0.0
+  json_serializable: ^6.0.0
+  json_annotation: ^4.3.0
+  smooth_page_indicator: ^1.0.0+2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_native_splash: ^1.2.3
-  build_runner: ^2.0.4
+  build_runner: ^2.1.4
+
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/flash_screen_higt_quality.png

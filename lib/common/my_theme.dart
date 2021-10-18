@@ -17,7 +17,10 @@ class MyTheme {
   static final primaryColor = Color(0xffDF5A00);
   static final primaryButtonColor = Color(0xffFA7921);
   static final backgroundColor = Color(0xffF6EADF);
-  static final double normalTextSize = 14;
+  static final borderLineColor = Color(0xfff2c09d);
+  static final lessImportantTextColor = Color(0xff929292);
+  static final double radiusSize = 16;
+  static final double paddingSize = 16;
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: backgroundColor,
     fontFamily: 'OldStandardTT',
