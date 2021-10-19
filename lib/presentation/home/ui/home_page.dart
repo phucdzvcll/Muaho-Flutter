@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:muaho/common/my_theme.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,8 +21,10 @@ class _HomePageState extends State<HomePage> {
       child: CarouselSlider(
         options: CarouselOptions(
           height: 280.0,
+          enlargeCenterPage: true,
+          enlargeStrategy: CenterPageEnlargeStrategy.height,
           onPageChanged: (index, reason) =>
-              {_currentPageNotifier.value = index},
+              {setState(() => _currentPageNotifier.value = index)},
         ),
         items: [1, 2, 3, 4, 5].map((i) {
           return Builder(
@@ -43,13 +46,15 @@ class _HomePageState extends State<HomePage> {
 
   _buildCircleIndicator() {
     return Padding(
-      padding: EdgeInsets.only(top: MyTheme.paddingSize / 2),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CirclePageIndicator(
-          dotColor: MyTheme.primaryButtonColor,
-          itemCount: 5,
-          currentPageNotifier: _currentPageNotifier,
+      padding: const EdgeInsets.only(top: 16),
+      child: AnimatedSmoothIndicator(
+        activeIndex: _currentPageNotifier.value,
+        count: 5,
+        effect: WormEffect(
+          dotHeight: 8,
+          dotWidth: 8,
+          activeDotColor: MyTheme.primaryButtonColor,
+          dotColor: MyTheme.lessImportantTextColor,
         ),
       ),
     );
@@ -146,11 +151,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Stack(
-                children: <Widget>[
-                  _buildPageView(),
-                ],
-              ),
+              _buildPageView(),
               _buildCircleIndicator(),
             ],
           ),
