@@ -1,18 +1,18 @@
-class Banner {
+class SlideBannerEntity {
   final int id;
   final String subject;
   final String description;
   final String thumbUrl;
 
   //<editor-fold desc="Data Methods" defaultstate="collapsed">
-  const Banner({
+  const SlideBannerEntity({
     required this.id,
     required this.subject,
     required this.description,
     required this.thumbUrl,
   });
 
-  Banner copyWith({
+  SlideBannerEntity copyWith({
     int? id,
     String? subject,
     String? description,
@@ -25,7 +25,7 @@ class Banner {
       return this;
     }
 
-    return new Banner(
+    return new SlideBannerEntity(
       id: id ?? this.id,
       subject: subject ?? this.subject,
       description: description ?? this.description,
@@ -41,7 +41,7 @@ class Banner {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Banner &&
+      (other is SlideBannerEntity &&
           runtimeType == other.runtimeType &&
           id == other.id &&
           subject == other.subject &&
