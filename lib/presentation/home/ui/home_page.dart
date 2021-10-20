@@ -16,55 +16,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _currentPageNotifier = ValueNotifier<int>(0);
 
-  _slideBanner(List<SlideBannerEntity> banners) {
-    _buildPageView(banners);
-    _buildCircleIndicator();
-  }
-
-  _buildPageView(List<SlideBannerEntity> banners) {
-    return Container(
-      child: CarouselSlider(
-        options: CarouselOptions(
-          height: 280.0,
-          enlargeCenterPage: true,
-          enlargeStrategy: CenterPageEnlargeStrategy.height,
-          onPageChanged: (index, reason) =>
-              {_currentPageNotifier.value = index},
-        ),
-        items: banners.map((i) {
-          return Builder(
-            builder: (BuildContext context) {
-              return Container(
-                  width: 600,
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
-                  decoration: BoxDecoration(color: Colors.amber),
-                  child: Image.network(i.thumbUrl));
-            },
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  _buildCircleIndicator() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: ValueListenableBuilder<int>(
-        valueListenable: _currentPageNotifier,
-        builder: (_, value, child) => AnimatedSmoothIndicator(
-          activeIndex: value,
-          count: 5,
-          effect: WormEffect(
-            dotHeight: 8,
-            dotWidth: 8,
-            activeDotColor: MyTheme.primaryButtonColor,
-            dotColor: MyTheme.lessImportantTextColor,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -167,6 +118,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           _buildStateSlideBanner(slideBannerState, context),
+          _buildSlideBannerIndicator(slideBannerState, context)
         ],
       ),
     );
@@ -182,11 +134,67 @@ class _HomePageState extends State<HomePage> {
         child: Text("Error"),
       );
     } else if (state is SlideBannerOnClick) {
+      return Container();
     } else if (state is SlideBannerSuccess) {
-      return _slideBanner(state.slideBannerEntity);
+      return _buildPageView(state.slideBannerEntity);
     } else {
       return Container();
     }
-    return Container();
+  }
+
+  Widget _buildSlideBannerIndicator(
+      SlideBannerState state, BuildContext context) {
+    if (state is SlideBannerLoading) {
+      return Center();
+    } else if (state is SlideBannerError) {
+      return Container();
+    } else if (state is SlideBannerOnClick) {
+      return Container();
+    } else if (state is SlideBannerSuccess) {
+      return _buildCircleIndicator(state.slideBannerEntity.length);
+    } else {
+      return Container();
+    }
+  }
+
+  _buildPageView(List<SlideBannerEntity> banners) {
+    return Container(
+      child: CarouselSlider(
+        options: CarouselOptions(
+          enlargeCenterPage: true,
+          enlargeStrategy: CenterPageEnlargeStrategy.height,
+          onPageChanged: (index, reason) =>
+              {_currentPageNotifier.value = index},
+        ),
+        items: banners.map((i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                  decoration: BoxDecoration(color: Colors.amber),
+                  child: Image.network(i.thumbUrl));
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  _buildCircleIndicator(int countItem) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: ValueListenableBuilder<int>(
+        valueListenable: _currentPageNotifier,
+        builder: (_, value, child) => AnimatedSmoothIndicator(
+          activeIndex: value,
+          count: countItem,
+          effect: WormEffect(
+            dotHeight: 8,
+            dotWidth: 8,
+            activeDotColor: MyTheme.primaryButtonColor,
+            dotColor: MyTheme.lessImportantTextColor,
+          ),
+        ),
+      ),
+    );
   }
 }

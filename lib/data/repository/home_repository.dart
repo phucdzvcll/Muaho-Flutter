@@ -11,7 +11,7 @@ class HomeRepositoryImpl implements HomePageRepository {
     var result = await handleNetworkResult(requestGetSlideBanner);
     if (result.isSuccess()) {
       List<SlideBannerEntity> slideBanner = [];
-      result.response?.data?.forEach((element) {
+      result.response?.forEach((element) {
         var banner = SlideBannerEntity(
             id: element.id.defaultZero(),
             subject: element.subject.defaultEmpty(),

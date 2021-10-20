@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:muaho/data/wrapped_response.dart';
 
@@ -5,25 +7,14 @@ part 'slide_banner_response.g.dart';
 
 @JsonSerializable()
 class SlideBannerResponse extends WrappedResponse {
-  final List<Data>? data;
+  SlideBannerResponse();
 
 //<editor-fold desc="Data Methods">
 
-  SlideBannerResponse({
-    required this.data,
-  });
+  //List<dynamic> parsedListJson = jsonDecode("data");
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is SlideBannerResponse &&
-          runtimeType == other.runtimeType &&
-          data == other.data);
-
-  factory SlideBannerResponse.fromJson(Map<String, dynamic> json) =>
-      _$SlideBannerResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SlideBannerResponseToJson(this);
+  //List<Data> data =
+  //    List<Data>.from(parsedListJson.map((i) => Data.fromJson(i)));
 
 //</editor-fold>
 }
@@ -36,6 +27,10 @@ class Data {
   final String? thumbUrl;
 
 //<editor-fold desc="Data Methods">
+  @override
+  String toString() {
+    return 'Data{id: $id, subject: $subject, description: $description, thumbUrl: $thumbUrl}';
+  }
 
   const Data({
     required this.id,
@@ -43,16 +38,6 @@ class Data {
     required this.description,
     required this.thumbUrl,
   });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Data &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          subject == other.subject &&
-          description == other.description &&
-          thumbUrl == other.thumbUrl);
 
   factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
