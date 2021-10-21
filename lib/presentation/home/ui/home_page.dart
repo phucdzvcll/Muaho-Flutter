@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:muaho/common/my_theme.dart';
-import 'package:muaho/domain/models/slide_banner_entity.dart';
+import 'package:muaho/presentation/home/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/slide_banner/slide_banner_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _currentBannerIndexNotifier = ValueNotifier<int>(0);
-  final _visibleNotifier = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +25,13 @@ class _HomePageState extends State<HomePage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: MyTheme.backgroundColor,
-          body: BlocBuilder<SlideBannerBloc, SlideBannerState>(
-            builder: (ctx, state) {
-              return _body(state, ctx);
-            },
-          ),
+          body: _body(),
         ),
       ),
     );
   }
 
-  Center _body(SlideBannerState slideBannerState, BuildContext context) {
+  Center _body() {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -120,11 +117,86 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          _buildStateSlideBanner(slideBannerState, context),
-          _buildSlideBannerIndicator(slideBannerState, context),
-          _titleCategory()
+          BlocBuilder<SlideBannerBloc, SlideBannerState>(
+            builder: (ctx, state) {
+              return _slideBannerBuilder(state, ctx);
+            },
+          ),
+          // _titleCategory(),
         ],
       ),
+    );
+  }
+
+  Widget _productCategoriesBuild(ProductCategoryState state) {
+    if (state is ProductCategoryError) {
+      return Container(
+        child: Text("Error"),
+      );
+    } else if (state is ProductCategoryLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (state is ProductCategorySuccess) {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          _titleCategory(),
+          Padding(
+            padding: const EdgeInsets.only(right: 20, left: 20),
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              childAspectRatio: 100 / 150,
+              physics: BouncingScrollPhysics(),
+              children: state.productCategories
+                  .map(
+                    (e) => Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor,
+                                width: 1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(11),
+                              child: Image.network(e.thumbUrl)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(e.name),
+                        )
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Container(
+        child: Text("fwsdfsdfdsf"),
+      );
+    }
+  }
+
+  _slideBannerBuilder(SlideBannerState slideBannerState, BuildContext ctx) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        _buildStateSlideBanner(slideBannerState, ctx),
+        _buildSlideBannerIndicator(slideBannerState, ctx),
+        BlocBuilder<ProductCategoryBloc, ProductCategoryState>(
+          builder: (ctx, state) {
+            return _productCategoriesBuild(state);
+          },
+        ),
+      ],
     );
   }
 
@@ -271,8 +343,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 32, top: 16, bottom: 8, right: 32),
+              padding: const EdgeInsets.only(
+                  left: 32, top: 16, bottom: 8, right: 32),
               child: Container(
                 height: 1.5,
                 color: MyTheme.spacingColor,

@@ -26,7 +26,7 @@ class SlideBannerBloc extends Bloc<SlideBannerEvent, SlideBannerState> {
 
   Stream<SlideBannerState> _handleRequestListBanner() async* {
     yield SlideBannerLoading();
-    Either<Failure, GetListBannerResult> result =
+    Either<Failure, BannersResult> result =
         await _bannerUseCase.execute(EmptyInput());
     if (result.isSuccess) {
       yield SlideBannerSuccess(slideBannerEntity: result.success.listBanner);

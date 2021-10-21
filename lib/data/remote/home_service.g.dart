@@ -16,18 +16,39 @@ class _HomeService implements HomeService {
   String? baseUrl;
 
   @override
-  Future<List<Data>> getSlideBanners() async {
+  Future<List<SlideBannerResponse>> getSlideBanners() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch<List<dynamic>>(_setStreamType<List<Data>>(
-        Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, '/banners',
-                queryParameters: queryParameters, data: _data)
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<SlideBannerResponse>>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/banners',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => Data.fromJson(i as Map<String, dynamic>))
+        .map((dynamic i) =>
+            SlideBannerResponse.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  Future<List<ProductCategoryHomeResponse>> getProductCategoriesHome() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<ProductCategoryHomeResponse>>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/categories',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) =>
+            ProductCategoryHomeResponse.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

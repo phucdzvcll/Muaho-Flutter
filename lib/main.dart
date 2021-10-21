@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/home/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/slide_banner/slide_banner_bloc.dart';
 import 'package:muaho/presentation/home/ui/home_page.dart';
 import 'package:muaho/data/data.dart';
@@ -46,14 +47,22 @@ void _initDi() {
 
   //Factory
   GetIt.instance.registerFactory(() => GetListBannerUseCase());
+  GetIt.instance.registerFactory(() => GetListProductCategoriesHomeUseCase());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SlideBannerBloc()..add(RequestListBannerEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SlideBannerBloc>(
+            create: (context) =>
+                SlideBannerBloc()..add(RequestListBannerEvent())),
+        BlocProvider<ProductCategoryBloc>(
+            create: (context) =>
+                ProductCategoryBloc()..add(RequestProductCategoryEvent())),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

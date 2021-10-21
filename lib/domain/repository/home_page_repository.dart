@@ -1,5 +1,8 @@
 import '../domain.dart';
 
 abstract class HomePageRepository {
-  Future<Either<Failure, GetListBannerResult>> getListSlideBanner();
+  Future<Either<Failure, BannersResult>> getListSlideBanner();
+
+  Future<Either<Failure, ProductCategoriesHomeResults>>
+      getListProductCategoriesHome();
 }

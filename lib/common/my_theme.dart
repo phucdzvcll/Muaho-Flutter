@@ -69,7 +69,6 @@ class MyTheme {
 
   static final ButtonStyle buttonStyleNormal = ElevatedButton.styleFrom(
     primary: primaryButtonColor,
-    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
@@ -77,7 +76,6 @@ class MyTheme {
   static final ButtonStyle buttonStyleNormalLessImportant =
       ElevatedButton.styleFrom(
     primary: backgroundColor,
-    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(12),
@@ -87,7 +85,6 @@ class MyTheme {
   );
   static final ButtonStyle buttonStyleDisable = ElevatedButton.styleFrom(
     primary: Color(0xffF2985A),
-    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
@@ -95,7 +92,6 @@ class MyTheme {
   static final ButtonStyle buttonStyleDisableLessImportant =
       ElevatedButton.styleFrom(
     primary: backgroundColor,
-    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(12),

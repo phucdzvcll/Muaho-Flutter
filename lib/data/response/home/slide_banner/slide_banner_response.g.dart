@@ -7,25 +7,16 @@ part of 'slide_banner_response.dart';
 // **************************************************************************
 
 SlideBannerResponse _$SlideBannerResponseFromJson(Map<String, dynamic> json) =>
-    SlideBannerResponse()
-      ..header = json['header'] == null
-          ? null
-          : Header.fromJson(json['header'] as Map<String, dynamic>);
-
-Map<String, dynamic> _$SlideBannerResponseToJson(
-        SlideBannerResponse instance) =>
-    <String, dynamic>{
-      'header': instance.header,
-    };
-
-Data _$DataFromJson(Map<String, dynamic> json) => Data(
+    SlideBannerResponse(
       id: json['id'] as int?,
       subject: json['subject'] as String?,
       description: json['description'] as String?,
       thumbUrl: json['thumbUrl'] as String?,
     );
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+Map<String, dynamic> _$SlideBannerResponseToJson(
+        SlideBannerResponse instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'subject': instance.subject,
       'description': instance.description,
