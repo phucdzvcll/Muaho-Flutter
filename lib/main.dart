@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/presentation/home/product_catrgory/product_category_bloc.dart';
-import 'package:muaho/presentation/home/slide_banner/slide_banner_bloc.dart';
-import 'package:muaho/presentation/home/ui/home_page.dart';
+import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
+import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
 import 'package:muaho/data/data.dart';
+import 'package:muaho/presentation/home/home_screen.dart';
 
 import 'common/my_theme.dart';
 import 'generated/codegen_loader.g.dart';
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         initialRoute: '/',
         theme: MyTheme.lightTheme,
-        routes: {"/": (context) => HomePage()},
+        routes: {"/": (context) => HomeScreen()},
       ),
     );
   }

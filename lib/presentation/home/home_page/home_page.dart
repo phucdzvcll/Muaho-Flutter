@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:muaho/presentation/home/product_catrgory/product_category_bloc.dart';
-import 'package:muaho/presentation/home/slide_banner/slide_banner_bloc.dart';
+import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
+import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:muaho/common/common.dart';
@@ -24,8 +24,11 @@ class _HomePageState extends State<HomePage> {
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: MyTheme.backgroundColor,
-          body: _body(),
+          body: SingleChildScrollView(
+            child: _body(),
+          )
         ),
       ),
     );
