@@ -101,6 +101,7 @@ class _HomePageState extends State<HomePage> {
                     height: 40,
                     child: Icon(
                       Icons.search_outlined,
+                      size: 24,
                     ),
                   ),
                 ),

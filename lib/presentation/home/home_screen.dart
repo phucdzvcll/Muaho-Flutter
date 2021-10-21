@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/presentation/home/home_page/home_page.dart';
 import 'package:muaho/presentation/home/notification_page/notification_page.dart';
 import 'package:muaho/presentation/home/setting_page/setting_page.dart';
@@ -28,14 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).primaryColor,
+                  color: MyTheme.primaryButtonColor,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildNavigationBarItem(Icons.home, 0),
-                    _buildNavigationBarItem(Icons.person, 1),
-                    _buildNavigationBarItem(Icons.camera, 2),
+                    _buildNavigationBarItem(Icons.dynamic_feed_rounded, 1),
+                    _buildNavigationBarItem(Icons.settings, 2),
                   ],
                 ),
               ),
@@ -70,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 40,
           decoration: BoxDecoration(
             color: id == _currentPage.value
-                ? Theme.of(context).backgroundColor
-                : Theme.of(context).primaryColor,
+                ? MyTheme.activeButtonColor
+                : MyTheme.primaryButtonColor,
             borderRadius: BorderRadius.circular(12)
           ),
           child: Icon(
