@@ -14,19 +14,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _currentPageNotifier = ValueNotifier<int>(0);
+  final _currentBannerIndexNotifier = ValueNotifier<int>(0);
+  final _visibleNotifier = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: MyTheme.backgroundColor,
-        body: BlocBuilder<SlideBannerBloc, SlideBannerState>(
-          builder: (ctx, state) {
-            return _body(state, ctx);
-          },
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: MyTheme.backgroundColor,
+          body: BlocBuilder<SlideBannerBloc, SlideBannerState>(
+            builder: (ctx, state) {
+              return _body(state, ctx);
+            },
+          ),
         ),
-// This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
   }
@@ -118,7 +121,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           _buildStateSlideBanner(slideBannerState, context),
-          _buildSlideBannerIndicator(slideBannerState, context)
+          _buildSlideBannerIndicator(slideBannerState, context),
+          _titleCategory()
         ],
       ),
     );
@@ -158,41 +162,147 @@ class _HomePageState extends State<HomePage> {
   }
 
   _buildPageView(List<SlideBannerEntity> banners) {
-    return Container(
-      child: CarouselSlider(
-        options: CarouselOptions(
-          enlargeCenterPage: true,
-          enlargeStrategy: CenterPageEnlargeStrategy.height,
-          onPageChanged: (index, reason) =>
-              {_currentPageNotifier.value = index},
-        ),
-        items: banners.map((i) {
-          return Builder(
-            builder: (BuildContext context) {
-              return Container(
-                  decoration: BoxDecoration(color: Colors.amber),
-                  child: Image.network(i.thumbUrl));
-            },
-          );
-        }).toList(),
+    return CarouselSlider(
+      options: CarouselOptions(
+        reverse: false,
+        autoPlay: true,
+        enlargeCenterPage: true,
+        autoPlayInterval: Duration(seconds: 5),
+        enlargeStrategy: CenterPageEnlargeStrategy.height,
+        onPageChanged: (index, reason) =>
+            {_currentBannerIndexNotifier.value = index},
       ),
+      items: banners.map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return FittedBox(
+              fit: BoxFit.fill,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Stack(children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(32),
+                    child: Image.network(
+                      i.thumbUrl,
+                    ),
+                  ),
+                  Positioned(
+                    top: 16,
+                    left: 24,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          border:
+                              Border.all(color: Theme.of(context).primaryColor),
+                          color: Theme.of(context).backgroundColor),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.width / 6,
+                        child: Center(
+                            child: Padding(
+                          padding: const EdgeInsets.only(left: 32.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  i.description,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2!
+                                      .copyWith(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.w600,
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  i.subject,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.subtitle1,
+                                  textAlign: TextAlign.left,
+                                ),
+                              )
+                            ],
+                          ),
+                        )),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            );
+          },
+        );
+      }).toList(),
     );
   }
 
   _buildCircleIndicator(int countItem) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.only(bottom: 8),
       child: ValueListenableBuilder<int>(
-        valueListenable: _currentPageNotifier,
+        valueListenable: _currentBannerIndexNotifier,
         builder: (_, value, child) => AnimatedSmoothIndicator(
           activeIndex: value,
           count: countItem,
           effect: WormEffect(
-            dotHeight: 8,
-            dotWidth: 8,
+            dotHeight: 4,
+            dotWidth: 4,
             activeDotColor: MyTheme.primaryButtonColor,
             dotColor: MyTheme.lessImportantTextColor,
           ),
+        ),
+      ),
+    );
+  }
+
+  _titleCategory() {
+    return Container(
+      child: Center(
+        child: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 32, top: 16, bottom: 8, right: 32),
+              child: Container(
+                height: 1.5,
+                color: MyTheme.spacingColor,
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(MyTheme.paddingSize),
+                  child: Text(
+                    "Danh mục cửa hàng",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(color: MyTheme.lessImportantTextColor),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(MyTheme.paddingSize),
+                  child: Text(
+                    "Xem tất cả",
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        fontSize: 14, color: Theme.of(context).primaryColor),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
