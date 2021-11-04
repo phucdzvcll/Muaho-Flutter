@@ -1,12 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/domain.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,12 +23,11 @@ class _HomePageState extends State<HomePage> {
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: MyTheme.backgroundColor,
-          body: SingleChildScrollView(
-            child: _body(),
-          )
-        ),
+            resizeToAvoidBottomInset: false,
+            backgroundColor: MyTheme.backgroundColor,
+            body: SingleChildScrollView(
+              child: _body(),
+            )),
       ),
     );
   }
@@ -46,7 +44,13 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                  child: Image.network("https://picsum.photos/50"),
+                  child: FadeInImage.assetNetwork(
+                    width: 60,
+                    height: 60,
+                    placeholder: 'assets/images/placeholder.png',
+                    image: "https://picsum.photos/50",
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 Expanded(
                   child: Padding(
@@ -167,8 +171,13 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(11),
-                              child: Image.network(e.thumbUrl)),
+                            borderRadius: BorderRadius.circular(11),
+                            child: FadeInImage.assetNetwork(
+                              placeholder: 'assets/images/placeholder.png',
+                              image: e.thumbUrl,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
@@ -184,7 +193,7 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return Container(
-        child: Text("fwsdfsdfdsf"),
+        child: Text("Error"),
       );
     }
   }
@@ -216,7 +225,7 @@ class _HomePageState extends State<HomePage> {
     } else if (state is SlideBannerOnClick) {
       return Container();
     } else if (state is SlideBannerSuccess) {
-      return _buildPageView(state.slideBannerEntity);
+      return _buildPageView(state.slideBannerEntity, context);
     } else {
       return Container();
     }
@@ -237,7 +246,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _buildPageView(List<SlideBannerEntity> banners) {
+  _buildPageView(List<SlideBannerEntity> banners, BuildContext ctx) {
     return CarouselSlider(
       options: CarouselOptions(
         reverse: false,
@@ -258,8 +267,12 @@ class _HomePageState extends State<HomePage> {
                 child: Stack(children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(32),
-                    child: Image.network(
-                      i.thumbUrl,
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/placeholder.png',
+                      image: i.thumbUrl,
+                      width: 600,
+                      height: 280,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Positioned(
@@ -272,8 +285,8 @@ class _HomePageState extends State<HomePage> {
                               Border.all(color: Theme.of(context).primaryColor),
                           color: Theme.of(context).backgroundColor),
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.width / 6,
+                        width: MediaQuery.of(ctx).size.width,
+                        height: MediaQuery.of(ctx).size.width / 6,
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.only(left: 32.0),
