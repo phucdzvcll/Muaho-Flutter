@@ -11,9 +11,10 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Colors.white,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Center(
             child: Text("_SettingPageState"),
           ),

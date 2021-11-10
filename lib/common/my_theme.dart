@@ -35,13 +35,18 @@ class MyTheme {
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
+      headline2: TextStyle(
+        fontSize: 18,
+        color: Color(0xff4E4E4E),
+        fontStyle: FontStyle.normal,
+      ),
       subtitle1: TextStyle(
         fontSize: 16,
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
       subtitle2: TextStyle(
-        fontSize: 16,
+        fontSize: 14,
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
@@ -92,6 +97,7 @@ class MyTheme {
   );
   static final ButtonStyle buttonStyleDisableLessImportant =
       ElevatedButton.styleFrom(
+    elevation: 0,
     primary: backgroundColor,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(

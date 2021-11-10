@@ -9,9 +9,9 @@ part of 'product_categories_response.dart';
 ProductCategoryHomeResponse _$ProductCategoryHomeResponseFromJson(
         Map<String, dynamic> json) =>
     ProductCategoryHomeResponse(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      thumbUrl: json['thumbUrl'] as String,
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+      thumbUrl: json['thumbUrl'] as String?,
     );
 
 Map<String, dynamic> _$ProductCategoryHomeResponseToJson(

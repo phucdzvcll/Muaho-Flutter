@@ -4,9 +4,9 @@ part 'product_categories_response.g.dart';
 
 @JsonSerializable()
 class ProductCategoryHomeResponse {
-  final int id;
-  final String name;
-  final String thumbUrl;
+  final int? id;
+  final String? name;
+  final String? thumbUrl;
 
   factory ProductCategoryHomeResponse.fromJson(Map<String, dynamic> json) =>
       _$ProductCategoryHomeResponseFromJson(json);

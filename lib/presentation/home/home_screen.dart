@@ -18,9 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Colors.white,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           bottomNavigationBar: ValueListenableBuilder<int>(
             valueListenable: _currentPage,
             builder: (_, value, child) => Padding(
@@ -63,18 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: GestureDetector(
         onTap: () {
           _pageController.animateToPage(id,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.ease);
+              duration: Duration(milliseconds: 300), curve: Curves.ease);
         },
         child: Container(
           height: 40,
           width: 40,
           decoration: BoxDecoration(
-            color: id == _currentPage.value
-                ? MyTheme.activeButtonColor
-                : MyTheme.primaryButtonColor,
-            borderRadius: BorderRadius.circular(12)
-          ),
+              color: id == _currentPage.value
+                  ? MyTheme.activeButtonColor
+                  : MyTheme.primaryButtonColor,
+              borderRadius: BorderRadius.circular(12)),
           child: Icon(
             icon,
             color: Colors.white,

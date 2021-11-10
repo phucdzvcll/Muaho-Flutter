@@ -20,11 +20,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Colors.white,
       child: SafeArea(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: MyTheme.backgroundColor,
+            backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: _body(),
             )),
@@ -103,9 +103,14 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(
                     width: 40,
                     height: 40,
-                    child: Icon(
-                      Icons.search_outlined,
-                      size: 24,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/search');
+                      },
+                      child: Icon(
+                        Icons.search_outlined,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ),

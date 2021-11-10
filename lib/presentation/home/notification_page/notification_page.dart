@@ -11,9 +11,10 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Colors.white,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Center(
             child: Text("NotificationPage"),
           ),

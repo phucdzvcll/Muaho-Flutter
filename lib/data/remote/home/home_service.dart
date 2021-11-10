@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:retrofit/http.dart';
 import 'package:muaho/data/data.dart';
+import 'package:retrofit/http.dart';
 
 part 'home_service.g.dart';
 
