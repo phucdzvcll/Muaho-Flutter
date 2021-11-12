@@ -1,15 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/common/extensions/network.dart';
 import 'package:muaho/data/remote/search/search_service.dart';
-import 'package:muaho/domain/common/either.dart';
-import 'package:muaho/domain/common/failure.dart';
-import 'package:muaho/domain/models/search/hot_keyword.dart';
-import 'package:muaho/domain/models/search/hot_shop.dart';
-import 'package:muaho/domain/repository/search_page_repository.dart';
-import 'package:muaho/domain/use_case/search/get_list_hot_search_use_case.dart';
+import 'package:muaho/domain/domain.dart';
 
-class SearchRepositoryImpl implements SearchPageRepository {
+class SearchRepositoryImpl implements SearchRepository {
   SearchService searchService = GetIt.instance.get();
 
   @override
@@ -35,6 +29,27 @@ class SearchRepositoryImpl implements SearchPageRepository {
       });
       return SuccessValue(
           HostSearchResult(listHotKeywords: keywords, listHotShop: shops));
+    } else {
+      return FailValue(Failure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<SearchShop>>> getListShop(String keyword) async {
+    var requestGetShop = searchService.getShop(keyword);
+    var result = await handleNetworkResult(requestGetShop);
+    if (result.isSuccess()) {
+      List<SearchShop> shops = [];
+      result.response?.forEach((element) {
+        var shop = SearchShop(
+            id: element.id.defaultZero(),
+            name: element.name.defaultEmpty(),
+            address: element.address.defaultEmpty(),
+            thumbUrl: element.thumbUrl.defaultEmpty(),
+            star: element.star.defaultZero());
+        shops.add(shop);
+      });
+      return SuccessValue(shops);
     } else {
       return FailValue(Failure());
     }

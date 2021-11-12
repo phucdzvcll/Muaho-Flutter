@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/models/search/hot_keyword.dart';
-import 'package:muaho/domain/models/search/hot_shop.dart';
-import 'package:muaho/presentation/search/hot_search/hot_search_bloc.dart';
+import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
+import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -173,6 +173,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Container _appBar(BuildContext context) {
+    TextEditingController _controller = new TextEditingController();
     return Container(
       width: double.infinity,
       height: 60,
@@ -213,13 +214,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
+                    textInputAction: TextInputAction.done,
+                    controller: _controller,
                     textAlign: TextAlign.left,
                     decoration: InputDecoration(
                         prefixIcon: IconButton(
                           padding: EdgeInsets.zero,
                           icon: Icon(Icons.search),
                           onPressed: () {
-                            /* Clear the search field */
+                            if (_controller.text != "") {
+                              Navigator.pushNamed(context, "/search_shop",
+                                  arguments: SearchArgument(
+                                      keyword: _controller.text));
+                            }
                           },
                         ),
                         hintText: 'Bạn muốn mua gì?',

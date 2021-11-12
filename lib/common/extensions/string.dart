@@ -10,6 +10,6 @@ extension StringUtils on String {
 
 extension StringNullUtils on String? {
   String defaultEmpty() => defaultIfNull("");
+
   String defaultIfNull(String defaultValue) => this ?? defaultValue;
 }
-

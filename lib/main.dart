@@ -8,12 +8,13 @@ import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/data/remote/search/search_service.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/domain/repository/search_page_repository.dart';
+import 'package:muaho/domain/repository/search_repository.dart';
 import 'package:muaho/domain/use_case/search/get_list_hot_search_use_case.dart';
 import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
-import 'package:muaho/presentation/search/search_screen.dart';
+import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
+import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 
 import 'common/my_theme.dart';
 import 'data/repository/search_repository.dart';
@@ -64,12 +65,12 @@ void _initDi() {
   GetIt.instance.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
   //searchPage
   GetIt.instance.registerSingleton<SearchService>(SearchService(dio));
-  GetIt.instance
-      .registerSingleton<SearchPageRepository>(SearchRepositoryImpl());
+  GetIt.instance.registerSingleton<SearchRepository>(SearchRepositoryImpl());
   //Factory
   GetIt.instance.registerFactory(() => GetListBannerUseCase());
   GetIt.instance.registerFactory(() => GetListProductCategoriesHomeUseCase());
   GetIt.instance.registerFactory(() => GetHotSearchUseCase());
+  GetIt.instance.registerFactory(() => GetListShopBySearchUseCase());
 }
 
 class MyApp extends StatelessWidget {
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => HomeScreen(),
           "/search": (context) => SearchScreen(),
+          "/search_shop": (context) => SearchShopScreen(),
         },
       ),
     );
