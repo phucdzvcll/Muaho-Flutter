@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
 import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart';
 
 class SearchShopScreen extends StatefulWidget {
@@ -19,9 +21,9 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: new AppBar(
-            automaticallyImplyLeading: true,
+            automaticallyImplyLeading: false,
             centerTitle: true,
-            title: Text(args.keyword),
+            title: _appBar(context),
           ),
           body: Container(
             decoration: BoxDecoration(
@@ -59,15 +61,191 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
           child: Text("Nothing here"),
         );
       } else {
-        return Center(
-          child: Text(state.shops[0].name),
-        );
+        return _requestSearchShopSuccessBuilder(state);
       }
     } else {
       return Center(
         child: Text("Error"),
       );
     }
+  }
+
+  Container _appBar(BuildContext context) {
+    TextEditingController _controller = new TextEditingController();
+    return Container(
+      width: double.infinity,
+      height: 60,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.navigate_before,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Center(
+                  child: Text(
+                    "Chọn cửa hàng".toUpperCase(),
+                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      Icons.search_rounded,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _requestSearchShopSuccessBuilder(SearchShopSuccess state) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24.0),
+      child: CustomScrollView(
+        scrollDirection: Axis.vertical,
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Color(0x00FFFFF),
+            floating: false,
+            title: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Tất cả cửa hàng",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline3!
+                      .copyWith(fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (ctx, index) {
+                return _shopItems(state.shops[index]);
+              },
+              childCount: state.shops.length,
+              addAutomaticKeepAlives: true,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _shopItems(SearchShop shop) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: FadeInImage.assetNetwork(
+                  width: 130,
+                  height: 100,
+                  placeholder: 'assets/images/placeholder.png',
+                  image: shop.thumbUrl,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Container(
+              padding: EdgeInsets.only(left: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      shop.name,
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: RatingBar.builder(
+                      initialRating: shop.star,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemSize: 12,
+                      ignoreGestures: true,
+                      itemCount: 5,
+                      itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                      itemBuilder: (context, _) => Icon(
+                        Icons.star,
+                        size: 12,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {},
+                    ),
+                  ),
+                  Text(
+                    shop.address,
+                    style: Theme.of(context).textTheme.subtitle1,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
 

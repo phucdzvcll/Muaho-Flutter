@@ -49,6 +49,12 @@ class MyTheme {
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
+      headline3: TextStyle(
+        fontSize: 16,
+        color: Color(0xff4E4E4E),
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.normal,
+      ),
       subtitle1: TextStyle(
         fontSize: 16,
         color: Color(0xff4E4E4E),
