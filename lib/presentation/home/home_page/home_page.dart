@@ -8,7 +8,8 @@ import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String firebaseToken;
+  const HomePage({Key? key, required this.firebaseToken}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -130,11 +131,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          BlocBuilder<SlideBannerBloc, SlideBannerState>(
-            builder: (ctx, state) {
-              return _slideBannerBuilder(state, ctx);
-            },
-          ),
+          // BlocBuilder<SlideBannerBloc, SlideBannerState>(
+          //   builder: (ctx, state) {
+          //     return _slideBannerBuilder(state, ctx);
+          //   },
+          // ),
           // _titleCategory(),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
 import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart';
 
@@ -40,7 +41,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                 ),
               child: BlocBuilder<SearchShopBloc, SearchShopState>(
                 builder: (ctx, state) {
-                  return _handleRequestSearch(state);
+                  return _handleRequestSearch(state, ctx);
                 },
               ),
             ),
@@ -50,7 +51,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
     );
   }
 
-  Widget _handleRequestSearch(SearchShopState state) {
+  Widget _handleRequestSearch(SearchShopState state, BuildContext ctx) {
     if (state is SearchShopLoading) {
       return Center(
         child: CircularProgressIndicator(),
@@ -61,7 +62,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
           child: Text("Nothing here"),
         );
       } else {
-        return _requestSearchShopSuccessBuilder(state);
+        return _requestSearchShopSuccessBuilder(state, ctx);
       }
     } else {
       return Center(
@@ -71,7 +72,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
   }
 
   Container _appBar(BuildContext context) {
-    TextEditingController _controller = new TextEditingController();
+    // TextEditingController _controller = new TextEditingController();
     return Container(
       width: double.infinity,
       height: 60,
@@ -142,39 +143,101 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
     );
   }
 
-  Widget _requestSearchShopSuccessBuilder(SearchShopSuccess state) {
+  //  SliverAppBar(
+  //           automaticallyImplyLeading: false,
+  //           backgroundColor: Color(0x00FFFFF),
+  //           floating: false,
+  //           title: Padding(
+  //             padding: const EdgeInsets.only(left: 8),
+  //             child: Align(
+  //               alignment: Alignment.centerLeft,
+  //               child: Text(
+  //                 "Tất cả cửa hàng",
+  //                 style: Theme.of(context)
+  //                     .textTheme
+  //                     .headline3!
+  //                     .copyWith(fontSize: 20),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+
+  Widget _requestSearchShopSuccessBuilder(SearchShopSuccess state, BuildContext ctx) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24.0),
-      child: CustomScrollView(
-        scrollDirection: Axis.vertical,
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Color(0x00FFFFF),
-            floating: false,
-            title: Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Tất cả cửa hàng",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline3!
-                      .copyWith(fontSize: 20),
-                ),
-              ),
-            ),
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Column(
+        children: [
+          Container(
+            height: 60,
+            child: Padding(
+                padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Tất cả cửa hàng",
+                      textAlign: TextAlign.end,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline3!
+                          .copyWith(fontSize: 20),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 8, bottom: 16),
+                      child: Container(
+                        height: 28,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                                context: ctx,
+                                builder: (BuildContext ctx) {
+                                  return Center(
+                                    child: Container(
+                                      width: 200,
+                                      height: 200,
+                                      color: Colors.white
+                                    ),
+                                  );
+                                });
+                          },
+                          style: MyTheme.buttonStyleDisableLessImportant
+                              .copyWith(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  padding: MaterialStateProperty.all(
+                                    EdgeInsets.only(left: 16, right: 16),
+                                  )),
+                          child: Row(
+                            children: [
+                              Text("Bộ Lọc",
+                                  style: Theme.of(context).textTheme.subtitle2),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: Icon(
+                                  Icons.tune,
+                                  color: Theme.of(context).primaryColorLight,
+                                  size: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (ctx, index) {
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (ctx, index) {
                 return _shopItems(state.shops[index]);
               },
-              childCount: state.shops.length,
+              itemCount: state.shops.length,
               addAutomaticKeepAlives: true,
             ),
-          )
+          ),
         ],
       ),
     );

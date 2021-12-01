@@ -17,17 +17,18 @@ class SlideBannerBloc extends Bloc<SlideBannerEvent, SlideBannerState> {
   @override
   Stream<SlideBannerState> mapEventToState(SlideBannerEvent event) async* {
     if (event is RequestListBannerEvent) {
-      yield* _handleRequestListBanner();
+      yield* _handleRequestListBanner(token: event.jwt);
     }
     if (event is OnClickEvent) {
       yield SlideBannerOnClick(message: event.banner.subject);
     }
   }
 
-  Stream<SlideBannerState> _handleRequestListBanner() async* {
+  Stream<SlideBannerState> _handleRequestListBanner(
+      {required String token}) async* {
     yield SlideBannerLoading();
     Either<Failure, BannersResult> result =
-        await _bannerUseCase.execute(EmptyInput());
+        await _bannerUseCase.execute(GetBannerParam(token: token));
     if (result.isSuccess) {
       yield SlideBannerSuccess(slideBannerEntity: result.success.listBanner);
     } else {

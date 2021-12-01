@@ -8,7 +8,8 @@ class HomeRepositoryImpl implements HomePageRepository {
   HomeService homeService = GetIt.instance.get();
 
   @override
-  Future<Either<Failure, BannersResult>> getListSlideBanner() async {
+  Future<Either<Failure, BannersResult>> getListSlideBanner(
+      {required String token}) async {
     var requestGetSlideBanner = homeService.getSlideBanners();
     var result = await handleNetworkResult(requestGetSlideBanner);
     if (result.isSuccess()) {
