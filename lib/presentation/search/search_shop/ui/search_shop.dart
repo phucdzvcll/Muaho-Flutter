@@ -7,6 +7,7 @@ import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
 import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart';
 
 class SearchShopScreen extends StatefulWidget {
+  static const routeName = '/search_shop';
   const SearchShopScreen({Key? key}) : super(key: key);
 
   @override
@@ -162,7 +163,8 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
   //           ),
   //         ),
 
-  Widget _requestSearchShopSuccessBuilder(SearchShopSuccess state, BuildContext ctx) {
+  Widget _requestSearchShopSuccessBuilder(
+      SearchShopSuccess state, BuildContext ctx) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: Column(
@@ -193,10 +195,9 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                                 builder: (BuildContext ctx) {
                                   return Center(
                                     child: Container(
-                                      width: 200,
-                                      height: 200,
-                                      color: Colors.white
-                                    ),
+                                        width: 200,
+                                        height: 200,
+                                        color: Colors.white),
                                   );
                                 });
                           },

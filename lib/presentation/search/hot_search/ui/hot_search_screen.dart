@@ -7,8 +7,8 @@ import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 
 class SearchScreen extends StatefulWidget {
+  static const routeName = '/search';
   const SearchScreen({Key? key}) : super(key: key);
-
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }

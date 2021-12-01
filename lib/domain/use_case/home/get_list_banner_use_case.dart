@@ -2,20 +2,14 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain.dart';
 
-class GetListBannerUseCase extends BaseUseCase<GetBannerParam, BannersResult> {
+class GetListBannerUseCase extends BaseUseCase<EmptyInput, BannersResult> {
   final HomePageRepository repository = GetIt.instance.get();
 
   @override
   Future<Either<Failure, BannersResult>> executeInternal(
-      GetBannerParam input) async {
-    return await repository.getListSlideBanner(token: input.token);
+      EmptyInput input) async {
+    return await repository.getListSlideBanner();
   }
-}
-
-class GetBannerParam {
-  final String token;
-
-  GetBannerParam({required this.token});
 }
 
 class BannersResult {

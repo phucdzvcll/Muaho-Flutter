@@ -89,8 +89,8 @@ void _initDi() {
   final dio = Dio(baseOptions); // Provide a dio instance
 
   //Singleton
-  //homePage
-  GetIt.instance.registerSingleton<HomeService>(HomeService(dio));
+  // //homePage
+  // GetIt.instance.registerSingleton<HomeService>(HomeService(dio));
   GetIt.instance.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
   //searchPage
   GetIt.instance.registerSingleton<SearchService>(SearchService(dio));
@@ -116,18 +116,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return
-        // MultiBlocProvider(
-        //   providers: [
-        //     BlocProvider<SlideBannerBloc>(
-        //         create: (context) => SlideBannerBloc()
-        //           ..add(RequestListBannerEvent(jwt: firebaseToken))),
-        //     BlocProvider<ProductCategoryBloc>(
-        //         create: (context) => ProductCategoryBloc()
-        //           ..add(RequestProductCategoryEvent(token: firebaseToken))),
-        //   ],
-        //   child:
-        MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: context.locale,
       supportedLocales: context.supportedLocales,
@@ -136,12 +125,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       theme: MyTheme.lightTheme,
       routes: {
-        "/": (context) => SignIn(
-              firebaseToken: firebaseToken,
-            ),
-        "/home_screen": (context) => HomeScreen(jwt: firebaseToken),
-        "/search": (context) => SearchScreen(),
-        "/search_shop": (context) => SearchShopScreen(),
+        "/": (context) => SignIn(firebaseToken: firebaseToken),
+        HomeScreen.routeName: (context) => HomeScreen(),
+        SearchScreen.routeName: (context) => SearchScreen(),
+        SearchShopScreen.routeName: (context) => SearchShopScreen(),
       },
       // ),
     );

@@ -5,8 +5,9 @@ import 'package:muaho/presentation/home/notification_page/notification_page.dart
 import 'package:muaho/presentation/home/setting_page/setting_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String jwt;
-  const HomeScreen({Key? key, required this.jwt }) : super(key: key);
+  static const routeName = '/home_screen';
+
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _pageController,
               onPageChanged: (index) => {_currentPage.value = index},
               children: [
-                HomePage(firebaseToken: widget.jwt),
+                HomePage(),
                 NotificationPage(),
                 SettingPage(),
               ],
