@@ -10,4 +10,7 @@ abstract class SearchService {
 
   @GET("/getHotSearch")
   Future<HotSearchResponse> getHotSearch();
+
+  @GET("/searchShop")
+  Future<List<ShopResponse>> getShop(@Query("keyword") String keyword);
 }

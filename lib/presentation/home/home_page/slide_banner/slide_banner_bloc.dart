@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import 'package:muaho/domain/domain.dart';
 
 part 'slide_banner_event.dart';
-
 part 'slide_banner_state.dart';
 
 class SlideBannerBloc extends Bloc<SlideBannerEvent, SlideBannerState> {

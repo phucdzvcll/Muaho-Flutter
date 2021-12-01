@@ -1,4 +1,46 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import 'package:muaho/common/TokenStore.dart';
+
+Dio createDioInstance() {
+  final BaseOptions baseOptions = BaseOptions(
+    connectTimeout: 30000,
+    receiveTimeout: 30000,
+  );
+
+  final Dio dio = Dio(baseOptions);
+  dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) async {
+    String url = options.uri.toString();
+    String body = ((options.data is String)
+            ? options.data
+            : (options.data != null ? jsonEncode(options.data) : "")) ??
+        "";
+    HttpMethod method = HttpMethod.GET;
+    if (options.method == 'POST') {
+      method = HttpMethod.POST;
+    }
+
+    Map<String, dynamic> headers = await _buildHeaders(url, body, method);
+    options.headers.addAll(headers);
+    return handler.next(options);
+  }));
+  // if (kDebugMode) {
+  //   dio.interceptors.add(PrettyDioLogger());
+  // }
+
+  return dio;
+}
+
+Future<Map<String, String>> _buildHeaders(
+    String url, String body, HttpMethod method) async {
+  TokenStore token = GetIt.instance.get();
+
+  Map<String, String> headers = {"Authorization": "Bearer ${token.token} "};
+
+  return headers;
+}
 
 Future<NetworkResult<T>> handleNetworkResult<T>(
   Future<T> request,
@@ -56,4 +98,9 @@ class NetworkResult<T> {
   bool isSuccess() {
     return response != null;
   }
+}
+
+enum HttpMethod {
+  GET,
+  POST,
 }

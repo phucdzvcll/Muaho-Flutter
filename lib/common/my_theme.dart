@@ -24,6 +24,16 @@ class MyTheme {
   static final double radiusSize = 16;
   static final double paddingSize = 16;
   static final lightTheme = ThemeData(
+    primaryColorLight: primaryButtonColor,
+    appBarTheme: AppBarTheme(
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: backgroundColor,
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          color: Color(0xff4E4E4E),
+          fontStyle: FontStyle.normal,
+        )),
     scaffoldBackgroundColor: backgroundColor,
     backgroundColor: backgroundColor,
     fontFamily: 'OldStandardTT',
@@ -38,6 +48,12 @@ class MyTheme {
       headline2: TextStyle(
         fontSize: 18,
         color: Color(0xff4E4E4E),
+        fontStyle: FontStyle.normal,
+      ),
+      headline3: TextStyle(
+        fontSize: 16,
+        color: Color(0xff4E4E4E),
+        fontWeight: FontWeight.bold,
         fontStyle: FontStyle.normal,
       ),
       subtitle1: TextStyle(

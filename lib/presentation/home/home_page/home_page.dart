@@ -5,6 +5,7 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
+import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +20,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final SignInArguments arg =
+        ModalRoute.of(context)!.settings.arguments as SignInArguments;
+
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -26,61 +30,85 @@ class _HomePageState extends State<HomePage> {
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
-              child: _body(),
+              child: _body(arg),
             )),
       ),
     );
   }
 
-  Center _body() {
+  Center _body(SignInArguments arg) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                  child: FadeInImage.assetNetwork(
-                    width: 60,
-                    height: 60,
-                    placeholder: 'assets/images/placeholder.png',
-                    image: "https://picsum.photos/50",
-                    fit: BoxFit.fill,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<SlideBannerBloc>(
+              create: (context) =>
+                  SlideBannerBloc()..add(RequestListBannerEvent())),
+          BlocProvider<ProductCategoryBloc>(
+              create: (context) =>
+                  ProductCategoryBloc()..add(RequestProductCategoryEvent())),
+        ],
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+                    child: FadeInImage.assetNetwork(
+                      width: 60,
+                      height: 60,
+                      placeholder: 'assets/images/placeholder.png',
+                      image: "https://picsum.photos/50",
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Hello",
-                              style: Theme.of(context).textTheme.subtitle1,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Hello",
+                                style: Theme.of(context).textTheme.subtitle1,
+                              ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Ngọc Thanh",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(color: MyTheme.primaryColor)),
-                          ),
-                        ],
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(arg.userName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline1!
+                                      .copyWith(color: MyTheme.primaryColor)),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: DecoratedBox(
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: MyTheme.borderLineColor),
+                        borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+                      ),
+                      child: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                  DecoratedBox(
                     decoration: BoxDecoration(
                       border: Border.all(color: MyTheme.borderLineColor),
                       borderRadius: BorderRadius.circular(MyTheme.radiusSize),
@@ -88,60 +116,34 @@ class _HomePageState extends State<HomePage> {
                     child: SizedBox(
                       width: 40,
                       height: 40,
-                      child: Icon(
-                        Icons.shopping_cart_outlined,
-                        size: 24,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/search');
+                        },
+                        child: Icon(
+                          Icons.search_outlined,
+                          size: 24,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: MyTheme.borderLineColor),
-                    borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                  ),
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/search');
-                      },
-                      child: Icon(
-                        Icons.search_outlined,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.all(MyTheme.paddingSize),
-              child: Text(
-                "Mua gì hôm nay?",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(color: MyTheme.lessImportantTextColor),
+                ],
               ),
             ),
-          ),
-          BlocBuilder<SlideBannerBloc, SlideBannerState>(
-            builder: (ctx, state) {
-              return _slideBannerBuilder(state, ctx);
-            },
-          ),
-          // _titleCategory(),
-        ],
+            BlocBuilder<SlideBannerBloc, SlideBannerState>(
+              builder: (ctx, state) {
+                return _slideBannerBuilder(state, ctx);
+              },
+            ),
+            // _titleCategory(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _productCategoriesBuild(ProductCategoryState state) {
+  Widget _productCategoriesBuild(ProductCategoryState state, BuildContext ctx) {
+    final double imgSquareSize = (MediaQuery.of(ctx).size.width - 200) / 4;
     if (state is ProductCategoryError) {
       return Container(
         child: Text("Error"),
@@ -162,7 +164,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisCount: 4,
               mainAxisSpacing: 20,
               crossAxisSpacing: 20,
-              childAspectRatio: 100 / 150,
+              childAspectRatio: 0.7,
               physics: BouncingScrollPhysics(),
               children: state.productCategories
                   .map(
@@ -177,16 +179,28 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(11),
-                            child: FadeInImage.assetNetwork(
-                              placeholder: 'assets/images/placeholder.png',
-                              image: e.thumbUrl,
-                              fit: BoxFit.contain,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: FadeInImage.assetNetwork(
+                                imageErrorBuilder: (context, e, s) {
+                                  return Image.asset(
+                                      'assets/images/placeholder.png');
+                                },
+                                placeholder: 'assets/images/placeholder.png',
+                                width: imgSquareSize,
+                                height: imgSquareSize,
+                                image: e.thumbUrl,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(e.name),
+                          child: Text(
+                            e.name,
+                            textAlign: TextAlign.center,
+                          ),
                         )
                       ],
                     ),
@@ -207,11 +221,44 @@ class _HomePageState extends State<HomePage> {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
+        Visibility(
+          visible: slideBannerState is SlideBannerSuccess &&
+                  slideBannerState.slideBannerEntity.length > 0
+              ? true
+              : false,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.all(MyTheme.paddingSize),
+              child: Text(
+                "Mua gì hôm nay?",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(color: MyTheme.lessImportantTextColor),
+              ),
+            ),
+          ),
+        ),
         _buildStateSlideBanner(slideBannerState, ctx),
         _buildSlideBannerIndicator(slideBannerState, ctx),
+        Visibility(
+          visible: slideBannerState is SlideBannerSuccess &&
+                  slideBannerState.slideBannerEntity.length > 0
+              ? true
+              : false,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 32, top: 16, bottom: 8, right: 32),
+            child: Container(
+              height: 1.5,
+              color: MyTheme.spacingColor,
+            ),
+          ),
+        ),
         BlocBuilder<ProductCategoryBloc, ProductCategoryState>(
           builder: (ctx, state) {
-            return _productCategoriesBuild(state);
+            return _productCategoriesBuild(state, ctx);
           },
         ),
       ],
@@ -229,8 +276,11 @@ class _HomePageState extends State<HomePage> {
       );
     } else if (state is SlideBannerOnClick) {
       return Container();
+      //todo
     } else if (state is SlideBannerSuccess) {
-      return _buildPageView(state.slideBannerEntity, context);
+      return state.slideBannerEntity.length > 0
+          ? _buildPageView(state.slideBannerEntity, context)
+          : Container();
     } else {
       return Container();
     }
@@ -245,7 +295,9 @@ class _HomePageState extends State<HomePage> {
     } else if (state is SlideBannerOnClick) {
       return Container();
     } else if (state is SlideBannerSuccess) {
-      return _buildCircleIndicator(state.slideBannerEntity.length);
+      return state.slideBannerEntity.length > 0
+          ? _buildCircleIndicator(state.slideBannerEntity.length)
+          : Container();
     } else {
       return Container();
     }
@@ -273,6 +325,9 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(32),
                     child: FadeInImage.assetNetwork(
+                      imageErrorBuilder: (context, e, s) {
+                        return Image.asset('assets/images/placeholder.png');
+                      },
                       placeholder: 'assets/images/placeholder.png',
                       image: i.thumbUrl,
                       width: 600,
@@ -364,14 +419,6 @@ class _HomePageState extends State<HomePage> {
       child: Center(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 32, top: 16, bottom: 8, right: 32),
-              child: Container(
-                height: 1.5,
-                color: MyTheme.spacingColor,
-              ),
-            ),
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

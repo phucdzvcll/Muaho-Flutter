@@ -8,7 +8,7 @@ part of 'home_service.dart';
 
 class _HomeService implements HomeService {
   _HomeService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://virtserver.swaggerhub.com/TinyAppsTeam/Muaho/1.0.0/';
+    baseUrl ??= 'http://103.221.220.249:9000/api';
   }
 
   final Dio _dio;
