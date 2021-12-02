@@ -1,14 +1,15 @@
+import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/home/product_category_home.dart';
 
 class HomeRepositoryImpl implements HomePageRepository {
-  // HomeService homeService = GetIt.instance.get();
+  HomeService homeService = GetIt.instance.get();
 
   @override
   Future<Either<Failure, BannersResult>> getListSlideBanner() async {
-    var requestGetSlideBanner = apiHomeService.getSlideBanners();
+    var requestGetSlideBanner = homeService.getSlideBanners();
     var result = await handleNetworkResult(requestGetSlideBanner);
     if (result.isSuccess()) {
       List<SlideBannerEntity> slideBanner = [];
@@ -29,7 +30,7 @@ class HomeRepositoryImpl implements HomePageRepository {
   @override
   Future<Either<Failure, ProductCategoriesHomeResults>>
       getListProductCategoriesHome() async {
-    var requestGetSlideBanner = apiHomeService.getProductCategoriesHome();
+    var requestGetSlideBanner = homeService.getProductCategoriesHome();
     var result = await handleNetworkResult(requestGetSlideBanner);
     if (result.isSuccess()) {
       List<ProductCategoryHomeEntity> categories = [];

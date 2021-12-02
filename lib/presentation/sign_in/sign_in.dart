@@ -54,7 +54,7 @@ class SignIn extends StatelessWidget {
           //     content: Text(state.entity.jwtToken),
           //   ),
           // ),
-          Navigator.pushNamed(
+          Navigator.pushReplacementNamed(
             ctx,
             HomeScreen.routeName,
             arguments: SignInArguments(

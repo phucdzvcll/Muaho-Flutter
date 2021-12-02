@@ -4,12 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/TokenStore.dart';
 
-Dio createDioInstance() {
-  final BaseOptions baseOptions = BaseOptions(
-    connectTimeout: 30000,
-    receiveTimeout: 30000,
-  );
+final BaseOptions baseOptions = BaseOptions(
+  connectTimeout: 30000,
+  receiveTimeout: 30000,
+);
 
+Dio createDioInstance() {
   final Dio dio = Dio(baseOptions);
   dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) async {
     String url = options.uri.toString();

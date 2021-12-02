@@ -75,29 +75,31 @@ Future<void> main() async {
 void _initDi() {
   //data
   //singleton
-  final BaseOptions baseOptions = BaseOptions(
-    connectTimeout: 30000,
-    receiveTimeout: 30000,
-    responseType: ResponseType.json,
-  );
-  final BaseOptions postOptions = BaseOptions(
-    method: "POST",
-    connectTimeout: 30000,
-    receiveTimeout: 30000,
-    responseType: ResponseType.json,
-  );
-  final dio = Dio(baseOptions); // Provide a dio instance
+  // final BaseOptions baseOptions = BaseOptions(
+  //   connectTimeout: 30000,
+  //   receiveTimeout: 30000,
+  //   responseType: ResponseType.json,
+  // );
+  // final BaseOptions postOptions = BaseOptions(
+  //   method: "POST",
+  //   connectTimeout: 30000,
+  //   receiveTimeout: 30000,
+  //   responseType: ResponseType.json,
+  // );
+  // final dio = Dio(baseOptions); // Provide a dio instance
 
   //Singleton
   // //homePage
-  // GetIt.instance.registerSingleton<HomeService>(HomeService(dio));
+  GetIt.instance
+      .registerSingleton<HomeService>(HomeService(createDioInstance()));
   GetIt.instance.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
   //searchPage
-  GetIt.instance.registerSingleton<SearchService>(SearchService(dio));
+  GetIt.instance
+      .registerSingleton<SearchService>(SearchService(createDioInstance()));
   GetIt.instance.registerSingleton<SearchRepository>(SearchRepositoryImpl());
   //signIn
   GetIt.instance
-      .registerSingleton<SignInService>(SignInService(Dio(postOptions)));
+      .registerSingleton<SignInService>(SignInService(Dio(baseOptions)));
   GetIt.instance.registerSingleton<SignInRepository>(SignInRepositoryIplm());
 
   //Factory
