@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
 import 'package:muaho/presentation/shop/model/product_model.dart';
@@ -36,7 +37,7 @@ class ShopDetailBloc extends Bloc<ShopDetailEvent, ShopDetailState> {
         await _useCase.execute(ShopProductParam(shopID: event.shopID));
     yield ShopDetailLoading();
     if (result.isSuccess) {
-      _products.addAll(result.success.products.map((e) => mapProduct(e, 0)));
+      _products.addAll(result.success.products.map((e) => mapProduct(e)));
       _shopName = result.success.shopName;
       _address = result.success.shopAddress;
       _groups.addAll(result.success.groups);
@@ -53,15 +54,16 @@ class ShopDetailBloc extends Bloc<ShopDetailEvent, ShopDetailState> {
     }
   }
 
-  Product mapProduct(ProductEntity productEntity, int amount) {
+  Product mapProduct(ProductEntity productEntity) {
     return Product(
-        productId: productEntity.productId,
-        productName: productEntity.productName,
-        productPrice: productEntity.productPrice,
-        groupId: productEntity.groupId,
-        unit: productEntity.unit,
-        thumbUrl: productEntity.thumbUrl,
-        amount: amount);
+      productId: productEntity.productId,
+      productName: productEntity.productName,
+      productPrice: productEntity.productPrice,
+      groupId: productEntity.groupId,
+      thumbUrl: productEntity.thumbUrl,
+      price: productEntity.productPrice.formatDouble() +
+          "k/${productEntity.unit.toLowerCase()}",
+    );
   }
 
   Stream<ShopDetailState> _handleFilterEvent(FilterProductEvent event) async* {

@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
-import 'package:muaho/presentation/components/image_netword_builder.dart';
+import 'package:muaho/presentation/components/product_card.dart';
 import 'package:muaho/presentation/shop/model/product_model.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -42,10 +43,7 @@ class ShopScreen extends StatelessWidget {
               ),
               child: BlocBuilder<ShopDetailBloc, ShopDetailState>(
                 builder: (ctx, state) {
-                  return SizedBox(
-                      width: double.infinity,
-                      height: double.infinity,
-                      child: _handleStateResult(state, ctx));
+                  return Center(child: _handleStateResult(state, ctx));
                 },
               ),
             ),
@@ -59,7 +57,77 @@ class ShopScreen extends StatelessWidget {
     if (state is ShopDetailLoading) {
       return CircularProgressIndicator();
     } else if (state is ShopDetailSuccess) {
-      return _shopDetailBuilder(state, ctx);
+      return Stack(
+        children: [
+          _shopDetailBuilder(state, ctx),
+          Positioned(
+            bottom: 20,
+            left: 24,
+            right: 24,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(32),
+              child: Container(
+                width: double.infinity,
+                height: 90,
+                color: Theme.of(ctx).primaryColorLight,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "8 đơn vị - 4 sản phẩm",
+                              style: Theme.of(ctx)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(color: Colors.white),
+                            ),
+                            Text(
+                              (1050000.0).formatDouble() + " VNĐ",
+                              style: Theme.of(ctx)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 90,
+                      width: 90,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(32),
+                          child: Container(
+                            color: Colors.white,
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/images/shopping_cart_checkout_black_24dp.svg',
+                                width: 40,
+                                height: 40,
+                                color: Theme.of(ctx).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
     } else if (state is ShopDetailError) {
       return Text("Error");
     } else {
@@ -139,13 +207,14 @@ class ShopScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 32),
         child: GridView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
+          padding: const EdgeInsets.only(
+              top: 8.0, left: 12.0, right: 12, bottom: 130),
           physics: ScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             childAspectRatio: 0.73,
-            crossAxisCount: 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
+            crossAxisCount: 3,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
           ),
           shrinkWrap: true,
           itemCount: currentListProducts.length,
@@ -158,42 +227,9 @@ class ShopScreen extends StatelessWidget {
   }
 
   Widget _productCard(Product product, BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Theme.of(context).primaryColorLight),
-      ),
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: ImageNetworkBuilder(
-                imgUrl: product.thumbUrl,
-                width: 120,
-                height: 120,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              product.productName,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              product.productPrice.formatDouble() + " / " + product.unit,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
+    return ProductCard(
+      product: product,
+      onSelectedProduct: (productID, amount) {},
     );
   }
 }
