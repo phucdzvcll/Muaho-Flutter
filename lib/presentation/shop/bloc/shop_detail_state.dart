@@ -10,7 +10,7 @@ class ShopDetailLoading extends ShopDetailState {}
 class ShopDetailError extends ShopDetailState {}
 
 class ShopDetailSuccess extends ShopDetailState {
-  final ShopProductEntity shopProductEntity;
+  final ShopDetailModel shopDetailModel;
 
-  ShopDetailSuccess({required this.shopProductEntity});
+  ShopDetailSuccess({required this.shopDetailModel});
 }

@@ -14,18 +14,29 @@ class ShopRepositoryImpl implements ShopRepository {
     if (result.isSuccess()) {
       List<ProductGroupEntity> groups = [];
       List<VoucherEntity> vouchers = [];
+      List<ProductEntity> products = [];
+      groups.add(ProductGroupEntity(groupId: -1, groupName: "Tất Cả"));
+
       result.response?.vouchers?.defaultEmpty().forEach((element) {
         vouchers.add(mapVoucher(element));
       });
       result.response?.groups?.defaultEmpty().forEach((element) {
         groups.add(mapProductGroupEntity(element));
       });
+
+      (result.response?.groups).defaultEmpty().forEach((e) {
+        ProductGroupResponse groupResponse = e;
+        groupResponse.products.defaultEmpty().forEach((element) {
+          mapProductEntity(element, products, groupResponse.groupId);
+        });
+      });
       return SuccessValue(ShopProductEntity(
           groups: groups,
           shopAddress: (result.response?.shopAddress).defaultEmpty(),
           shopId: (result.response?.shopId).defaultZero(),
           shopName: (result.response?.shopName).defaultEmpty(),
-          vouchers: vouchers));
+          vouchers: vouchers,
+          products: products));
     } else {
       return FailValue(Failure());
     }
@@ -34,20 +45,20 @@ class ShopRepositoryImpl implements ShopRepository {
   ProductGroupEntity mapProductGroupEntity(ProductGroupResponse? productGroup) {
     return ProductGroupEntity(
         groupId: (productGroup?.groupId).defaultZero(),
-        groupName: (productGroup?.groupName).defaultEmpty(),
-        products: (productGroup?.products)
-            .defaultEmpty()
-            .map((e) => mapProductEntity(e))
-            .toList());
+        groupName: (productGroup?.groupName).defaultEmpty());
   }
 
-  ProductEntity mapProductEntity(ProductResponse? product) {
-    return ProductEntity(
+  ProductEntity mapProductEntity(
+      ProductResponse? product, List<ProductEntity> products, int groupId) {
+    var productEntity = ProductEntity(
+        groupId: groupId,
         productId: (product?.productId).defaultZero(),
         productName: (product?.productName).defaultEmpty(),
-        produtPrice: (product?.productPrice).defaultZero(),
+        productPrice: (product?.productPrice).defaultZero(),
         unit: (product?.unit).defaultEmpty(),
         thumbUrl: (product?.thumbUrl).defaultEmpty());
+    products.add(productEntity);
+    return productEntity;
   }
 
   VoucherEntity mapVoucher(ShopVoucherResponse? element) {

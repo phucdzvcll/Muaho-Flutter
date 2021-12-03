@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
+import 'package:muaho/presentation/components/app_bar_component.dart';
+import 'package:muaho/presentation/components/image_netword_builder.dart';
 import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart';
+import 'package:muaho/presentation/shop/shop_screen.dart';
 
 class SearchShopScreen extends StatefulWidget {
   static const routeName = '/search_shop';
@@ -26,9 +29,10 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
           appBar: new AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
-            title: _appBar(context),
+            title: AppBarComponent(title: "Chọn Cửa Hang"),
           ),
           body: Container(
+            margin: EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -71,78 +75,6 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
         child: Text("Error"),
       );
     }
-  }
-
-  Container _appBar(BuildContext context) {
-    // TextEditingController _controller = new TextEditingController();
-    return Container(
-      width: double.infinity,
-      height: 60,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8),
-        child: Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.navigate_before,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    "Chọn cửa hàng".toUpperCase(),
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.search_rounded,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   //  SliverAppBar(
@@ -246,72 +178,73 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
   }
 
   Widget _shopItems(SearchShop shop) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: FadeInImage.assetNetwork(
-                  imageErrorBuilder: (context, e, s) {
-                    return Image.asset('assets/images/placeholder.png');
-                  },
-                  width: 130,
-                  height: 130,
-                  placeholder: 'assets/images/placeholder.png',
-                  image: shop.thumbUrl,
-                  fit: BoxFit.fill,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, ShopScreen.routeName,
+            arguments: ShopArgument(shopId: shop.id));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: ImageNetworkBuilder(
+                    imgUrl: shop.thumbUrl,
+                    width: 130,
+                    height: 130,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Container(
-              padding: EdgeInsets.only(left: 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      shop.name,
-                      style: Theme.of(context).textTheme.headline3,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: RatingBar.builder(
-                      initialRating: shop.star,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemSize: 12,
-                      ignoreGestures: true,
-                      itemCount: 5,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-                      itemBuilder: (context, _) => Icon(
-                        Icons.star,
-                        size: 12,
-                        color: Colors.amber,
+            Expanded(
+              flex: 5,
+              child: Container(
+                padding: EdgeInsets.only(left: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        shop.name,
+                        style: Theme.of(context).textTheme.headline3,
                       ),
-                      onRatingUpdate: (rating) {},
                     ),
-                  ),
-                  Text(
-                    shop.address,
-                    style: Theme.of(context).textTheme.subtitle1,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: RatingBar.builder(
+                        initialRating: shop.star,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemSize: 12,
+                        ignoreGestures: true,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          size: 12,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {},
+                      ),
+                    ),
+                    Text(
+                      shop.address,
+                      style: Theme.of(context).textTheme.subtitle1,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/components/image_netword_builder.dart';
 import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/presentation/shop/shop_screen.dart';
@@ -137,24 +138,19 @@ class _SearchScreenState extends State<SearchScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, ShopScreen.routeName,
-            arguments: ShopArgument(shopIDd: hotShop.id));
+            arguments: ShopArgument(shopId: hotShop.id));
       },
       child: Container(
         padding: EdgeInsets.only(top: 10),
         child: Center(
           child: Column(
             children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: FadeInImage.assetNetwork(
-                    imageErrorBuilder: (context, e, s) {
-                      return Image.asset('assets/images/placeholder.png');
-                    },
-                    placeholder: 'assets/images/placeholder.png',
-                    image: hotShop.thumbUrl,
-                    fit: BoxFit.fill,
-                  ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: ImageNetworkBuilder(
+                  width: 150,
+                  height: 150,
+                  imgUrl: hotShop.thumbUrl,
                 ),
               ),
               Padding(

@@ -8,3 +8,9 @@ class GetShopDetailEvent extends ShopDetailEvent {
 
   GetShopDetailEvent({required this.shopID});
 }
+
+class FilterProductEvent extends ShopDetailEvent {
+  final int groupID;
+
+  FilterProductEvent({required this.groupID});
+}

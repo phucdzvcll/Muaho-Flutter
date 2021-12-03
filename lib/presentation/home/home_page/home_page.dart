@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/components/image_netword_builder.dart';
 import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
@@ -57,12 +58,10 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                    child: FadeInImage.assetNetwork(
-                      width: 60,
-                      height: 60,
-                      placeholder: 'assets/images/placeholder.png',
-                      image: "https://picsum.photos/50",
-                      fit: BoxFit.fill,
+                    child: ImageNetworkBuilder(
+                      imgUrl: "https://picsum.photos/50",
+                      width: 50,
+                      height: 50,
                     ),
                   ),
                   Expanded(
@@ -181,16 +180,10 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(11),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: FadeInImage.assetNetwork(
-                                imageErrorBuilder: (context, e, s) {
-                                  return Image.asset(
-                                      'assets/images/placeholder.png');
-                                },
-                                placeholder: 'assets/images/placeholder.png',
+                              child: ImageNetworkBuilder(
+                                imgUrl: e.thumbUrl,
                                 width: imgSquareSize,
                                 height: imgSquareSize,
-                                image: e.thumbUrl,
-                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
@@ -324,15 +317,10 @@ class _HomePageState extends State<HomePage> {
                 child: Stack(children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(32),
-                    child: FadeInImage.assetNetwork(
-                      imageErrorBuilder: (context, e, s) {
-                        return Image.asset('assets/images/placeholder.png');
-                      },
-                      placeholder: 'assets/images/placeholder.png',
-                      image: i.thumbUrl,
+                    child: ImageNetworkBuilder(
+                      imgUrl: i.thumbUrl,
                       width: 600,
                       height: 280,
-                      fit: BoxFit.cover,
                     ),
                   ),
                   Positioned(

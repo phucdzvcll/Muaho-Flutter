@@ -4,6 +4,8 @@ class ShopProductEntity {
   final String shopAddress;
   final List<ProductGroupEntity> groups;
   final List<VoucherEntity> vouchers;
+  final List<ProductEntity> products;
+
 //<editor-fold desc="Data Methods">
 
   const ShopProductEntity({
@@ -12,6 +14,7 @@ class ShopProductEntity {
     required this.shopAddress,
     required this.groups,
     required this.vouchers,
+    required this.products,
   });
 
   @override
@@ -23,7 +26,8 @@ class ShopProductEntity {
           shopName == other.shopName &&
           shopAddress == other.shopAddress &&
           groups == other.groups &&
-          vouchers == other.vouchers);
+          vouchers == other.vouchers &&
+          products == other.products);
 
   @override
   int get hashCode =>
@@ -31,7 +35,8 @@ class ShopProductEntity {
       shopName.hashCode ^
       shopAddress.hashCode ^
       groups.hashCode ^
-      vouchers.hashCode;
+      vouchers.hashCode ^
+      products.hashCode;
 
   @override
   String toString() {
@@ -41,6 +46,7 @@ class ShopProductEntity {
         ' shopAddress: $shopAddress,' +
         ' groups: $groups,' +
         ' vouchers: $vouchers,' +
+        ' products: $products,' +
         '}';
   }
 
@@ -50,6 +56,7 @@ class ShopProductEntity {
     String? shopAddress,
     List<ProductGroupEntity>? groups,
     List<VoucherEntity>? vouchers,
+    List<ProductEntity>? products,
   }) {
     return ShopProductEntity(
       shopId: shopId ?? this.shopId,
@@ -57,6 +64,7 @@ class ShopProductEntity {
       shopAddress: shopAddress ?? this.shopAddress,
       groups: groups ?? this.groups,
       vouchers: vouchers ?? this.vouchers,
+      products: products ?? this.products,
     );
   }
 
@@ -66,14 +74,12 @@ class ShopProductEntity {
 class ProductGroupEntity {
   final int groupId;
   final String groupName;
-  final List<ProductEntity> products;
 
 //<editor-fold desc="Data Methods">
 
   const ProductGroupEntity({
     required this.groupId,
     required this.groupName,
-    required this.products,
   });
 
   @override
@@ -82,18 +88,16 @@ class ProductGroupEntity {
       (other is ProductGroupEntity &&
           runtimeType == other.runtimeType &&
           groupId == other.groupId &&
-          groupName == other.groupName &&
-          products == other.products);
+          groupName == other.groupName);
 
   @override
-  int get hashCode => groupId.hashCode ^ groupName.hashCode ^ products.hashCode;
+  int get hashCode => groupId.hashCode ^ groupName.hashCode;
 
   @override
   String toString() {
     return 'ProductGroupEntity{' +
         ' groupId: $groupId,' +
         ' groupName: $groupName,' +
-        ' products: $products,' +
         '}';
   }
 
@@ -105,7 +109,6 @@ class ProductGroupEntity {
     return ProductGroupEntity(
       groupId: groupId ?? this.groupId,
       groupName: groupName ?? this.groupName,
-      products: products ?? this.products,
     );
   }
 
@@ -115,7 +118,8 @@ class ProductGroupEntity {
 class ProductEntity {
   final int productId;
   final String productName;
-  final double produtPrice;
+  final double productPrice;
+  final int groupId;
   final String unit;
   final String thumbUrl;
 
@@ -124,7 +128,8 @@ class ProductEntity {
   const ProductEntity({
     required this.productId,
     required this.productName,
-    required this.produtPrice,
+    required this.productPrice,
+    required this.groupId,
     required this.unit,
     required this.thumbUrl,
   });
@@ -136,7 +141,8 @@ class ProductEntity {
           runtimeType == other.runtimeType &&
           productId == other.productId &&
           productName == other.productName &&
-          produtPrice == other.produtPrice &&
+          productPrice == other.productPrice &&
+          groupId == other.groupId &&
           unit == other.unit &&
           thumbUrl == other.thumbUrl);
 
@@ -144,7 +150,8 @@ class ProductEntity {
   int get hashCode =>
       productId.hashCode ^
       productName.hashCode ^
-      produtPrice.hashCode ^
+      productPrice.hashCode ^
+      groupId.hashCode ^
       unit.hashCode ^
       thumbUrl.hashCode;
 
@@ -153,7 +160,8 @@ class ProductEntity {
     return 'ProductEntity{' +
         ' productId: $productId,' +
         ' productName: $productName,' +
-        ' produtPrice: $produtPrice,' +
+        ' productPrice: $productPrice,' +
+        ' groupId: $groupId,' +
         ' unit: $unit,' +
         ' thumbUrl: $thumbUrl,' +
         '}';
@@ -162,14 +170,16 @@ class ProductEntity {
   ProductEntity copyWith({
     int? productId,
     String? productName,
-    double? produtPrice,
+    double? productPrice,
+    int? groupId,
     String? unit,
     String? thumbUrl,
   }) {
     return ProductEntity(
       productId: productId ?? this.productId,
       productName: productName ?? this.productName,
-      produtPrice: produtPrice ?? this.produtPrice,
+      productPrice: productPrice ?? this.productPrice,
+      groupId: groupId ?? this.groupId,
       unit: unit ?? this.unit,
       thumbUrl: thumbUrl ?? this.thumbUrl,
     );
