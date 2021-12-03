@@ -5,10 +5,13 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
+import 'package:muaho/presentation/shop/shop_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
+
   const SearchScreen({Key? key}) : super(key: key);
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -118,7 +121,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _itemHotKeyword(HotKeyword hotKeyword) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, SearchShopScreen.routeName,
+            arguments: SearchArgument(keyword: hotKeyword.name));
+      },
       child: Text(
         hotKeyword.name,
         style: Theme.of(context).textTheme.subtitle1,
@@ -129,7 +135,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _itemHotShop(HotShop hotShop) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, ShopScreen.routeName,
+            arguments: ShopArgument(shopIDd: hotShop.id));
+      },
       child: Container(
         padding: EdgeInsets.only(top: 10),
         child: Center(
@@ -139,6 +148,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: FadeInImage.assetNetwork(
+                    imageErrorBuilder: (context, e, s) {
+                      return Image.asset('assets/images/placeholder.png');
+                    },
                     placeholder: 'assets/images/placeholder.png',
                     image: hotShop.thumbUrl,
                     fit: BoxFit.fill,
@@ -149,6 +161,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   hotShop.name,
+                  maxLines: 1,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .headline2!
@@ -159,6 +174,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
                 child: Text(
                   hotShop.address,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2!

@@ -1,3 +1,4 @@
+export 'constant.dart';
 export 'extensions/bool.dart';
 export 'extensions/list.dart';
 export 'extensions/network.dart';

@@ -4,7 +4,6 @@ NumberFormat _moneyNumberFormat = NumberFormat("#,##0.##", "en_US");
 
 extension IntNullUtils on int? {
   int defaultZero() => defaultIfNull(0);
-
   int defaultIfNull(int defaultNumber) => this ?? defaultNumber;
 }
 

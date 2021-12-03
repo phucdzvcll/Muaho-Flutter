@@ -8,7 +8,9 @@ import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart
 
 class SearchShopScreen extends StatefulWidget {
   static const routeName = '/search_shop';
-  const SearchShopScreen({Key? key}) : super(key: key);
+  final SearchArgument args;
+
+  const SearchShopScreen({Key? key, required this.args}) : super(key: key);
 
   @override
   _SearchShopScreenState createState() => _SearchShopScreenState();
@@ -17,7 +19,6 @@ class SearchShopScreen extends StatefulWidget {
 class _SearchShopScreenState extends State<SearchShopScreen> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as SearchArgument;
     return Container(
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
@@ -38,7 +39,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
             child: BlocProvider<SearchShopBloc>(
               create: (_) => SearchShopBloc()
                 ..add(
-                  SearchEvent(keyword: args.keyword),
+                  SearchEvent(keyword: widget.args.keyword),
                 ),
               child: BlocBuilder<SearchShopBloc, SearchShopState>(
                 builder: (ctx, state) {
@@ -255,8 +256,11 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
                 child: FadeInImage.assetNetwork(
+                  imageErrorBuilder: (context, e, s) {
+                    return Image.asset('assets/images/placeholder.png');
+                  },
                   width: 130,
-                  height: 100,
+                  height: 130,
                   placeholder: 'assets/images/placeholder.png',
                   image: shop.thumbUrl,
                   fit: BoxFit.fill,

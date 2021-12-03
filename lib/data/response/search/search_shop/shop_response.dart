@@ -7,6 +7,7 @@ class ShopResponse {
   final int? id;
   final String? name;
   final String? address;
+  @JsonKey(name: "thumb_url")
   final String? thumbUrl;
   final double? star;
 

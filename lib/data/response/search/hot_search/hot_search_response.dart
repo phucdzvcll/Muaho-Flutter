@@ -15,8 +15,8 @@ class HotSearchResponse {
 //<editor-fold desc="Data Methods">
 
   HotSearchResponse({
-    required this.keywords,
-    required this.shops,
+    this.keywords,
+    this.shops,
   });
 
   @override
@@ -42,7 +42,7 @@ class HotKeywordResponse {
 //<editor-fold desc="Data Methods">
 
   const HotKeywordResponse({
-    required this.name,
+    this.name,
   });
 
   @override
@@ -67,10 +67,10 @@ class HotShopResponse {
 //<editor-fold desc="Data Methods">
 
   const HotShopResponse({
-    required this.id,
-    required this.name,
-    required this.address,
-    required this.thumbUrl,
+    this.id,
+    this.name,
+    this.address,
+    this.thumbUrl,
   });
 
   @override

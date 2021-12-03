@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:retrofit/http.dart';
 
 part 'sign_in_service.g.dart';
 
-@RestApi(baseUrl: "http://103.221.220.249:9000/api/")
+@RestApi(baseUrl: baseUrl)
 abstract class SignInService {
   factory SignInService(Dio dio) = _SignInService;
 

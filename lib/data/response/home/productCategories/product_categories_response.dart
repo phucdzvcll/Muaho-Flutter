@@ -16,9 +16,9 @@ class ProductCategoryHomeResponse {
 //<editor-fold desc="Data Methods">
 
   const ProductCategoryHomeResponse({
-    required this.id,
-    required this.name,
-    required this.thumbUrl,
+    this.id,
+    this.name,
+    this.thumbUrl,
   });
 
   @override
