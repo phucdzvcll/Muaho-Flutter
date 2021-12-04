@@ -1,18 +1,19 @@
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/presentation/shop/model/cart_model.dart';
-import 'package:muaho/presentation/shop/model/product_model.dart';
+import 'package:muaho/presentation/order/model/product_model.dart';
 
-class ShopDetailModel {
+import 'cart_over_view_model.dart';
+
+class OrderDetailModel {
   final int currentGroupId;
   final String shopName;
   final String shopAddress;
   final List<ProductGroupEntity> groups;
-  final List<Product> currentListProducts;
+  final List<OrderProduct> currentListProducts;
   final CartOverViewModel cartOverView;
 
 //<editor-fold desc="Data Methods">
 
-  const ShopDetailModel({
+  const OrderDetailModel({
     required this.currentGroupId,
     required this.shopName,
     required this.shopAddress,
@@ -24,7 +25,7 @@ class ShopDetailModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ShopDetailModel &&
+      (other is OrderDetailModel &&
           runtimeType == other.runtimeType &&
           currentGroupId == other.currentGroupId &&
           shopName == other.shopName &&
@@ -54,15 +55,15 @@ class ShopDetailModel {
         '}';
   }
 
-  ShopDetailModel copyWith({
+  OrderDetailModel copyWith({
     int? currentIndex,
     String? shopName,
     String? shopAddress,
     List<ProductGroupEntity>? groups,
-    List<Product>? currentListProducts,
+    List<OrderProduct>? currentListProducts,
     CartOverViewModel? cartOverView,
   }) {
-    return ShopDetailModel(
+    return OrderDetailModel(
       currentGroupId: currentIndex ?? this.currentGroupId,
       shopName: shopName ?? this.shopName,
       shopAddress: shopAddress ?? this.shopAddress,

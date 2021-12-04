@@ -1,12 +1,16 @@
+import 'package:muaho/presentation/order/model/product_model.dart';
+
 class CartOverViewModel {
   final String amount;
   final String totalPrice;
+  final List<OrderProduct> products;
 
 //<editor-fold desc="Data Methods">
 
   const CartOverViewModel({
     required this.amount,
     required this.totalPrice,
+    required this.products,
   });
 
   @override
@@ -15,28 +19,32 @@ class CartOverViewModel {
       (other is CartOverViewModel &&
           runtimeType == other.runtimeType &&
           amount == other.amount &&
-          totalPrice == other.totalPrice);
+          totalPrice == other.totalPrice &&
+          products == other.products);
 
   @override
-  int get hashCode => amount.hashCode ^ totalPrice.hashCode;
+  int get hashCode => amount.hashCode ^ totalPrice.hashCode ^ products.hashCode;
 
   @override
   String toString() {
     return 'CartOverViewModel{' +
         ' amount: $amount,' +
         ' totalPrice: $totalPrice,' +
+        ' products: $products,' +
         '}';
   }
 
   CartOverViewModel copyWith({
-    String? amout,
-    String? totalItem,
+    String? amount,
     String? totalPrice,
+    List<OrderProduct>? products,
   }) {
     return CartOverViewModel(
-      amount: amout ?? this.amount,
+      amount: amount ?? this.amount,
       totalPrice: totalPrice ?? this.totalPrice,
+      products: products ?? this.products,
     );
   }
+
 //</editor-fold>
 }

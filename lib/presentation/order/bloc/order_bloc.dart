@@ -4,9 +4,9 @@ import 'package:meta/meta.dart';
 import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
-import 'package:muaho/presentation/shop/model/cart_model.dart';
-import 'package:muaho/presentation/shop/model/product_model.dart';
-import 'package:muaho/presentation/shop/model/shop_detail_model.dart';
+import 'package:muaho/presentation/order/model/cart_over_view_model.dart';
+import 'package:muaho/presentation/order/model/order_detail_model.dart';
+import 'package:muaho/presentation/order/model/product_model.dart';
 
 part 'order_event.dart';
 part 'order_state.dart';
@@ -16,8 +16,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   OrderBloc() : super(OrderInitial());
 
-  List<Product> _products = [];
-  List<Product> _currentProducts = [];
+  List<OrderProduct> _totalProducts = [];
+  List<OrderProduct> _currentProducts = [];
+  List<OrderProduct> _orderProducts = [];
 
   List<ProductGroupEntity> _groups = [];
 
@@ -41,7 +42,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     replaceProduct(event.product);
     filterProducts(currentGroupId);
     yield OrderSuccess(
-        shopDetailModel: ShopDetailModel(
+        shopDetailModel: OrderDetailModel(
             cartOverView: createCartOverView(),
             currentGroupId: currentGroupId,
             shopName: _shopName,
@@ -55,26 +56,26 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         await _useCase.execute(ShopProductParam(shopID: event.shopID));
     yield OrderLoading();
     if (result.isSuccess) {
-      _products.addAll(result.success.products.map((e) => mapProduct(e)));
+      _totalProducts.addAll(result.success.products.map((e) => mapProduct(e)));
       _shopName = result.success.shopName;
       _address = result.success.shopAddress;
       _groups.addAll(result.success.groups);
 
       yield OrderSuccess(
-          shopDetailModel: ShopDetailModel(
+          shopDetailModel: OrderDetailModel(
               cartOverView: createCartOverView(),
               currentGroupId: -1,
               shopName: _shopName,
               shopAddress: _address,
               groups: _groups,
-              currentListProducts: _products));
+              currentListProducts: _totalProducts));
     } else {
       yield OrderError();
     }
   }
 
-  Product mapProduct(ProductEntity productEntity) {
-    return Product(
+  OrderProduct mapProduct(ProductEntity productEntity) {
+    return OrderProduct(
       productId: productEntity.productId,
       productName: productEntity.productName,
       productPrice: productEntity.productPrice,
@@ -90,7 +91,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     filterProducts(event.groupID);
     currentGroupId = event.groupID;
     yield OrderSuccess(
-        shopDetailModel: ShopDetailModel(
+        shopDetailModel: OrderDetailModel(
             currentGroupId: currentGroupId,
             shopName: _shopName,
             shopAddress: _address,
@@ -100,13 +101,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   CartOverViewModel createCartOverView() {
+    _orderProducts.clear();
     int amount = 0;
     int totalItem = 0;
     double totalPrice = 0.0;
 
-    if (_products.isNotEmpty) {
-      _products.forEach((element) {
+    if (_totalProducts.isNotEmpty) {
+      _totalProducts.forEach((element) {
         if (element.amount > 0) {
+          _orderProducts.add(element);
           amount += element.amount;
           totalItem += 1;
           totalPrice += element.amount * element.productPrice;
@@ -116,14 +119,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
     return CartOverViewModel(
         amount: "$amount đơn vị - $totalItem sản phầm",
-        totalPrice: totalPrice.formatDouble() + " VNĐ");
+        totalPrice: totalPrice.formatDouble() + " VNĐ",
+        products: _totalProducts);
   }
 
-  void replaceProduct(Product newProduct) {
-    if (_products.isNotEmpty) {
-      for (var product in _products) {
+  void replaceProduct(OrderProduct newProduct) {
+    if (_totalProducts.isNotEmpty) {
+      for (var product in _totalProducts) {
         if (product.productId == newProduct.productId) {
-          _products[_products.indexOf(product)] = newProduct;
+          _totalProducts[_totalProducts.indexOf(product)] = newProduct;
           break;
         }
       }
@@ -131,12 +135,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   void filterProducts(int groupID) {
-    _currentProducts = [];
+    _currentProducts.clear();
     if (groupID == -1) {
-      _currentProducts.addAll(_products);
+      _currentProducts.addAll(_totalProducts);
     } else {
-      _currentProducts
-          .addAll(_products.where((element) => element.groupId == groupID));
+      _currentProducts.addAll(
+          _totalProducts.where((element) => element.groupId == groupID));
     }
   }
 }

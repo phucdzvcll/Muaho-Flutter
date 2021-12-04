@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/presentation/components/image_netword_builder.dart';
+import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(MyTheme.radiusSize),
                     child: ImageNetworkBuilder(
+                      isSquare: true,
                       imgUrl: "https://picsum.photos/50",
                       width: 50,
                       height: 50,
@@ -181,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ImageNetworkBuilder(
+                                isSquare: true,
                                 imgUrl: e.thumbUrl,
                                 width: imgSquareSize,
                                 height: imgSquareSize,
@@ -318,6 +320,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(32),
                     child: ImageNetworkBuilder(
+                      isSquare: false,
                       imgUrl: i.thumbUrl,
                       width: 600,
                       height: 280,

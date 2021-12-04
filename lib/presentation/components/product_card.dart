@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:muaho/presentation/shop/model/product_model.dart';
+import 'package:muaho/presentation/order/model/product_model.dart';
 
-import 'image_netword_builder.dart';
+import 'image_network_builder.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
-  final void Function(Product, bool) onSelectedProduct;
+  final OrderProduct product;
+  final void Function(OrderProduct, bool) onSelectedProduct;
 
   const ProductCard(
       {Key? key, required this.product, required this.onSelectedProduct})
@@ -33,6 +33,7 @@ class ProductCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: ImageNetworkBuilder(
+                    isSquare: true,
                     imgUrl: product.thumbUrl,
                     width: 50,
                     height: 50,
@@ -91,7 +92,7 @@ class ProductCard extends StatelessWidget {
         onTap: () {
           if (isIncrease) {
             onSelectedProduct(
-                Product(
+                OrderProduct(
                     amount: product.amount + 1,
                     productId: product.productId,
                     productName: product.productName,
@@ -104,7 +105,7 @@ class ProductCard extends StatelessWidget {
             if (product.amount > 0) {
               int newAmount = product.amount - 1;
               onSelectedProduct(
-                  Product(
+                  OrderProduct(
                       amount: newAmount,
                       productId: product.productId,
                       productName: product.productName,

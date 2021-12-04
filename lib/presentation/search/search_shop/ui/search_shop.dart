@@ -5,9 +5,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
-import 'package:muaho/presentation/components/image_netword_builder.dart';
+import 'package:muaho/presentation/components/image_network_builder.dart';
+import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart';
-import 'package:muaho/presentation/shop/order_screen.dart';
 
 class SearchShopScreen extends StatefulWidget {
   static const routeName = '/search_shop';
@@ -76,25 +76,6 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
       );
     }
   }
-
-  //  SliverAppBar(
-  //           automaticallyImplyLeading: false,
-  //           backgroundColor: Color(0x00FFFFF),
-  //           floating: false,
-  //           title: Padding(
-  //             padding: const EdgeInsets.only(left: 8),
-  //             child: Align(
-  //               alignment: Alignment.centerLeft,
-  //               child: Text(
-  //                 "Tất cả cửa hàng",
-  //                 style: Theme.of(context)
-  //                     .textTheme
-  //                     .headline3!
-  //                     .copyWith(fontSize: 20),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
 
   Widget _requestSearchShopSuccessBuilder(
       SearchShopSuccess state, BuildContext ctx) {
@@ -193,6 +174,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(24),
                   child: ImageNetworkBuilder(
+                    isSquare: true,
                     imgUrl: shop.thumbUrl,
                     width: 130,
                     height: 130,

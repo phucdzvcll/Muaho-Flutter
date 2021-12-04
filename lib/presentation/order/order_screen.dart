@@ -6,10 +6,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/product_card.dart';
-import 'package:muaho/presentation/shop/model/product_model.dart';
+import 'package:muaho/presentation/purchase/purchase_screen.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';
+import 'model/product_model.dart';
 
 class OrderScreen extends StatelessWidget {
   static const String routeName = "shop_screen";
@@ -57,81 +58,83 @@ class OrderScreen extends StatelessWidget {
       return CircularProgressIndicator();
     } else if (state is OrderSuccess) {
       return Stack(
-        children: [
-          _shopDetailBuilder(state, ctx),
-          Positioned(
-            bottom: 20,
-            left: 24,
-            right: 24,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(32),
-              child: Container(
-                width: double.infinity,
-                height: 90,
-                color: Theme.of(ctx).primaryColorLight,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              state.shopDetailModel.cartOverView.amount,
-                              style: Theme.of(ctx)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(color: Colors.white),
-                            ),
-                            Text(
-                              state.shopDetailModel.cartOverView.totalPrice,
-                              style: Theme.of(ctx)
-                                  .textTheme
-                                  .headline1!
-                                  .copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 90,
-                      width: 90,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(32),
-                          child: Container(
-                            color: Colors.white,
-                            child: Center(
-                              child: SvgPicture.asset(
-                                'assets/images/shopping_cart_checkout_black_24dp.svg',
-                                width: 40,
-                                height: 40,
-                                color: Theme.of(ctx).primaryColorLight,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        children: [_shopDetailBuilder(state, ctx), cartOverView(ctx, state)],
       );
     } else if (state is OrderError) {
       return Text("Error");
     } else {
       return Container();
     }
+  }
+
+  Positioned cartOverView(BuildContext ctx, OrderSuccess state) {
+    return Positioned(
+      bottom: 20,
+      left: 24,
+      right: 24,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(ctx, PurchaseScreen.routeName);
+        },
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(32),
+          child: Container(
+            width: double.infinity,
+            height: 90,
+            color: Theme.of(ctx).primaryColorLight,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          state.shopDetailModel.cartOverView.amount,
+                          style: Theme.of(ctx)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.white),
+                        ),
+                        Text(
+                          state.shopDetailModel.cartOverView.totalPrice,
+                          style: Theme.of(ctx).textTheme.headline1!.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 90,
+                  width: 90,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(32),
+                      child: Container(
+                        color: Colors.white,
+                        child: Center(
+                          child: SvgPicture.asset(
+                            'assets/images/shopping_cart_checkout_black_24dp.svg',
+                            width: 40,
+                            height: 40,
+                            color: Theme.of(ctx).primaryColorLight,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _shopDetailBuilder(OrderSuccess state, BuildContext ctx) {
@@ -200,7 +203,7 @@ class OrderScreen extends StatelessWidget {
     }
   }
 
-  Widget _productBuilder(List<Product> currentListProducts) {
+  Widget _productBuilder(List<OrderProduct> currentListProducts) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(top: 32),
@@ -224,7 +227,7 @@ class OrderScreen extends StatelessWidget {
     );
   }
 
-  Widget _productCard(Product product, BuildContext context) {
+  Widget _productCard(OrderProduct product, BuildContext context) {
     return ProductCard(
         product: product,
         onSelectedProduct: (productCart, isIncrease) {

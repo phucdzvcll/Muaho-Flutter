@@ -1,4 +1,4 @@
-class Product {
+class OrderProduct {
   final int productId;
   final String productName;
   final double productPrice;
@@ -9,7 +9,7 @@ class Product {
 
 //<editor-fold desc="Data Methods">
 
-  const Product({
+  const OrderProduct({
     required this.productId,
     required this.productName,
     required this.productPrice,
@@ -22,7 +22,7 @@ class Product {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Product &&
+      (other is OrderProduct &&
           runtimeType == other.runtimeType &&
           productId == other.productId &&
           productName == other.productName &&
@@ -55,7 +55,7 @@ class Product {
         '}';
   }
 
-  Product copyWith({
+  OrderProduct copyWith({
     int? productId,
     String? productName,
     double? productPrice,
@@ -64,7 +64,7 @@ class Product {
     int? amount,
     String? thumbUrl,
   }) {
-    return Product(
+    return OrderProduct(
       productId: productId ?? this.productId,
       productName: productName ?? this.productName,
       productPrice: productPrice ?? this.productPrice,
@@ -87,8 +87,8 @@ class Product {
     };
   }
 
-  factory Product.fromMap(Map<String, dynamic> map) {
-    return Product(
+  factory OrderProduct.fromMap(Map<String, dynamic> map) {
+    return OrderProduct(
       productId: map['productId'] as int,
       productName: map['productName'] as String,
       productPrice: map['productPrice'] as double,

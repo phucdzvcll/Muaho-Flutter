@@ -16,7 +16,7 @@ class FilterProductEvent extends OrderEvent {
 }
 
 class AddToCartEvent extends OrderEvent {
-  final Product product;
+  final OrderProduct product;
   final bool isIncrease;
 
   AddToCartEvent({required this.product, required this.isIncrease});
