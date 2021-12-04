@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/presentation/home/history/notification_page.dart';
 import 'package:muaho/presentation/home/home_page/home_page.dart';
-import 'package:muaho/presentation/home/notification_page/notification_page.dart';
 import 'package:muaho/presentation/home/setting_page/setting_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +13,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   final PageController _pageController = PageController();
   final _currentPage = ValueNotifier<int>(0);
 
@@ -23,6 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            child: Icon(
+              Icons.contact_support,
+              size: 32,
+            ),
+          ),
           backgroundColor: Colors.white,
           bottomNavigationBar: ValueListenableBuilder<int>(
             valueListenable: _currentPage,
@@ -84,4 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

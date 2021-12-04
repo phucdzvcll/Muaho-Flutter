@@ -23,7 +23,9 @@ class AppBarComponent extends StatelessWidget {
                   height: 32,
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                          color: Theme.of(context).backgroundColor, width: 1)),
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
@@ -59,6 +61,8 @@ class AppBarComponent extends StatelessWidget {
                   height: 32,
                   decoration: BoxDecoration(
                       color: Colors.white,
+                      border: Border.all(
+                          color: Theme.of(context).backgroundColor, width: 1),
                       borderRadius: BorderRadius.circular(8)),
                   child: IconButton(
                     padding: EdgeInsets.zero,

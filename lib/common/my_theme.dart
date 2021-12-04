@@ -26,6 +26,8 @@ class MyTheme {
   static final double paddingSize = 16;
   static final lightTheme = ThemeData(
     primaryColorLight: primaryButtonColor,
+    highlightColor: Colors.transparent,
+    splashColor: Colors.transparent,
     appBarTheme: AppBarTheme(
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),

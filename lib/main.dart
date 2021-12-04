@@ -24,7 +24,7 @@ import 'package:muaho/domain/use_case/sign_in/get_jwt_token_use_case.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
-import 'package:muaho/presentation/purchase/purchase_screen.dart';
+import 'package:muaho/presentation/purchase/cart/perchase_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
@@ -139,7 +139,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => SignIn(firebaseToken: firebaseToken),
         HomeScreen.routeName: (context) => HomeScreen(),
         SearchScreen.routeName: (context) => SearchScreen(),
-        PurchaseScreen.routeName: (context) => PurchaseScreen(),
+        CartScreen.routeName: (context) => CartScreen(),
       },
       // ),
     );

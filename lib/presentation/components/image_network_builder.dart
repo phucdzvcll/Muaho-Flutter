@@ -24,8 +24,8 @@ class ImageNetworkBuilder extends StatelessWidget {
             ? Image.asset('assets/images/placeholder_square.png')
             : Image.asset('assets/images/placeholder.png');
       },
-      fadeOutDuration: Duration(milliseconds: 200),
-      fadeInDuration: Duration(milliseconds: 200),
+      fadeOutDuration: Duration(milliseconds: 400),
+      fadeInDuration: Duration(milliseconds: 400),
       width: width,
       height: height,
       placeholder: (context, url) => isSquare

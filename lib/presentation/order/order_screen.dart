@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/product_card.dart';
-import 'package:muaho/presentation/purchase/purchase_screen.dart';
+import 'package:muaho/presentation/purchase/cart/perchase_screen.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';
@@ -58,7 +58,10 @@ class OrderScreen extends StatelessWidget {
       return CircularProgressIndicator();
     } else if (state is OrderSuccess) {
       return Stack(
-        children: [_shopDetailBuilder(state, ctx), cartOverView(ctx, state)],
+        children: [
+          _shopDetailBuilder(state, ctx),
+          cartOverView(ctx, state),
+        ],
       );
     } else if (state is OrderError) {
       return Text("Error");
@@ -74,7 +77,10 @@ class OrderScreen extends StatelessWidget {
       right: 24,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(ctx, PurchaseScreen.routeName);
+          Navigator.pushNamed(
+            ctx,
+            CartScreen.routeName,
+          );
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(32),

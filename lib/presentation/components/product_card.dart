@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
             ? Theme.of(context).backgroundColor
             : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: Colors.grey, width: 0.5),
       ),
       child: Center(
         child: Stack(
@@ -125,7 +125,7 @@ class ProductCard extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Theme.of(context).primaryColorLight),
+                border: Border.all(color: Theme.of(context).backgroundColor),
                 color: product.amount > 0
                     ? Colors.white
                     : Theme.of(context).backgroundColor),

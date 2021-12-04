@@ -1,71 +1,97 @@
 import 'package:flutter/material.dart';
+import 'package:muaho/presentation/components/app_bar_component.dart';
 
-class PurchaseScreen extends StatefulWidget {
+import 'cart/perchase_screen.dart';
+
+class PurchaseScreen extends StatelessWidget {
   static final String routeName = "purchase_screen";
 
   const PurchaseScreen({Key? key}) : super(key: key);
 
   @override
-  _PurchaseScreenState createState() => _PurchaseScreenState();
-}
-
-class _PurchaseScreenState extends State<PurchaseScreen>
-    with TickerProviderStateMixin {
-  late TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(
-      initialIndex: 0,
-      length: 3,
-      vsync: this,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: TabBar(
-          indicatorColor: Color(0x00000000),
-          labelColor: Color.fromRGBO(4, 2, 46, 1),
-          labelStyle: theme.textTheme.headline1,
-          unselectedLabelColor: Colors.grey,
-          automaticIndicatorColorAdjustment: false,
-          controller: tabController,
-          tabs: [
-            Text('Trong Giỏ'),
-            Text('Đang Giao'),
-            Text('Đã Giao'),
-          ],
-        ),
-      ),
-      body: Container(
-        child: TabBarView(
-          controller: tabController,
-          children: [
-            Container(
-              color: Colors.red,
+    PurchaseArgument argument =
+        ModalRoute.of(context)!.settings.arguments as PurchaseArgument;
+    return Container(
+      color: Colors.white,
+      child: DefaultTabController(
+        length: 3,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              automaticallyImplyLeading: false,
+              title: Container(
+                color: Colors.white,
+                child: AppBarComponent(title: "Giỏ Hàng Của Bạn"),
+              ),
             ),
-            Container(
-              color: Colors.orange,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    color: Colors.transparent,
+                    height: 40,
+                    child: TabBar(
+                      indicatorWeight: 0,
+                      unselectedLabelColor: Colors.grey,
+                      unselectedLabelStyle: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      labelStyle: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      indicator: BoxDecoration(
+                        color: Theme.of(context).primaryColorLight,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      tabs: [
+                        Container(child: Text("Trong giỏ")),
+                        Text("Đang giao"),
+                        Text("Đã giao"),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    height: 1.5,
+                    color: Color(0xffdadee8),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        CartScreen(
+                          argument: argument,
+                        ),
+                        Container(
+                          color: Colors.purple,
+                        ),
+                        Container(
+                          color: Colors.orange,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-            Container(
-              color: Colors.green,
-            ),
-          ],
+          ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
   }
 }
