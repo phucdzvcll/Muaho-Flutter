@@ -3,26 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/product_card.dart';
 import 'package:muaho/presentation/shop/model/product_model.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'bloc/shop_detail_bloc.dart';
+import 'bloc/order_bloc.dart';
 
-class ShopScreen extends StatelessWidget {
+class OrderScreen extends StatelessWidget {
   static const String routeName = "shop_screen";
   final ShopArgument shopArgument;
 
-  const ShopScreen({Key? key, required this.shopArgument}) : super(key: key);
+  const OrderScreen({Key? key, required this.shopArgument}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => ShopDetailBloc()
-        ..add(GetShopDetailEvent(shopID: shopArgument.shopId)),
+      create: (ctx) =>
+          OrderBloc()..add(GetShopDetailEvent(shopID: shopArgument.shopId)),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(
@@ -41,7 +40,7 @@ class ShopScreen extends StatelessWidget {
                   topRight: Radius.circular(48),
                 ),
               ),
-              child: BlocBuilder<ShopDetailBloc, ShopDetailState>(
+              child: BlocBuilder<OrderBloc, OrderState>(
                 builder: (ctx, state) {
                   return Center(child: _handleStateResult(state, ctx));
                 },
@@ -53,10 +52,10 @@ class ShopScreen extends StatelessWidget {
     );
   }
 
-  Widget _handleStateResult(ShopDetailState state, BuildContext ctx) {
-    if (state is ShopDetailLoading) {
+  Widget _handleStateResult(OrderState state, BuildContext ctx) {
+    if (state is OrderLoading) {
       return CircularProgressIndicator();
-    } else if (state is ShopDetailSuccess) {
+    } else if (state is OrderSuccess) {
       return Stack(
         children: [
           _shopDetailBuilder(state, ctx),
@@ -81,14 +80,14 @@ class ShopScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "8 đơn vị - 4 sản phẩm",
+                              state.shopDetailModel.cartOverView.amount,
                               style: Theme.of(ctx)
                                   .textTheme
                                   .subtitle1!
                                   .copyWith(color: Colors.white),
                             ),
                             Text(
-                              (1050000.0).formatDouble() + " VNĐ",
+                              state.shopDetailModel.cartOverView.totalPrice,
                               style: Theme.of(ctx)
                                   .textTheme
                                   .headline1!
@@ -128,14 +127,14 @@ class ShopScreen extends StatelessWidget {
           ),
         ],
       );
-    } else if (state is ShopDetailError) {
+    } else if (state is OrderError) {
       return Text("Error");
     } else {
       return Container();
     }
   }
 
-  Widget _shopDetailBuilder(ShopDetailSuccess state, BuildContext ctx) {
+  Widget _shopDetailBuilder(OrderSuccess state, BuildContext ctx) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,8 +150,7 @@ class ShopScreen extends StatelessWidget {
     );
   }
 
-  Widget _productGroupBuilder(
-      ShopDetailSuccess state, BuildContext blocContext) {
+  Widget _productGroupBuilder(OrderSuccess state, BuildContext blocContext) {
     ItemScrollController _controller = ItemScrollController();
     if (state.shopDetailModel.groups.length > 0) {
       return Container(
@@ -170,20 +168,20 @@ class ShopScreen extends StatelessWidget {
               onPressed: () {
                 _controller.scrollTo(
                     index: index, duration: Duration(milliseconds: 750));
-                BlocProvider.of<ShopDetailBloc>(blocContext).add(
+                BlocProvider.of<OrderBloc>(blocContext).add(
                     FilterProductEvent(groupID: productGroupEntity.groupId));
               },
               child: Text(
                 productGroupEntity.groupName,
                 style: Theme.of(ctx).textTheme.subtitle1!.copyWith(
                     color: productGroupEntity.groupId ==
-                            state.shopDetailModel.currentIndex
+                            state.shopDetailModel.currentGroupId
                         ? Colors.white
                         : Colors.black),
               ),
               style: MyTheme.buttonStyleDisableLessImportant.copyWith(
                 backgroundColor: productGroupEntity.groupId ==
-                        state.shopDetailModel.currentIndex
+                        state.shopDetailModel.currentGroupId
                     ? MaterialStateProperty.all<Color>(
                         Theme.of(ctx).primaryColorLight)
                     : MaterialStateProperty.all<Color>(Colors.white),
@@ -207,11 +205,11 @@ class ShopScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 32),
         child: GridView.builder(
+          cacheExtent: 0,
           padding: const EdgeInsets.only(
               top: 8.0, left: 12.0, right: 12, bottom: 130),
-          physics: ScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 0.73,
+            childAspectRatio: 0.7,
             crossAxisCount: 3,
             crossAxisSpacing: 5,
             mainAxisSpacing: 5,
@@ -228,9 +226,11 @@ class ShopScreen extends StatelessWidget {
 
   Widget _productCard(Product product, BuildContext context) {
     return ProductCard(
-      product: product,
-      onSelectedProduct: (productID, amount) {},
-    );
+        product: product,
+        onSelectedProduct: (productCart, isIncrease) {
+          BlocProvider.of<OrderBloc>(context).add(
+              AddToCartEvent(product: productCart, isIncrease: isIncrease));
+        });
   }
 }
 

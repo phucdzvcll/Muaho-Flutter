@@ -25,7 +25,7 @@ import 'package:muaho/generated/codegen_loader.g.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
-import 'package:muaho/presentation/shop/shop_screen.dart';
+import 'package:muaho/presentation/shop/order_screen.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
 
 //flutter pub run easy_localization:generate --source-dir ./assets/translations
@@ -127,10 +127,10 @@ class MyApp extends StatelessWidget {
             return SearchShopScreen(args: args);
           });
         }
-        if (settings.name == ShopScreen.routeName) {
+        if (settings.name == OrderScreen.routeName) {
           final args = settings.arguments as ShopArgument;
           return MaterialPageRoute(builder: (context) {
-            return ShopScreen(shopArgument: args);
+            return OrderScreen(shopArgument: args);
           });
         }
       },

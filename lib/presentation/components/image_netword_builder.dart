@@ -16,8 +16,8 @@ class ImageNetworkBuilder extends StatelessWidget {
       errorWidget: (context, e, s) {
         return Image.asset('assets/images/placeholder.png');
       },
-      fadeOutDuration: Duration(milliseconds: 0),
-      fadeInDuration: Duration(milliseconds: 0),
+      fadeOutDuration: Duration(milliseconds: 200),
+      fadeInDuration: Duration(milliseconds: 200),
       width: width,
       height: height,
       placeholder: (context, url) =>

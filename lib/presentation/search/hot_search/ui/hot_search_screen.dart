@@ -6,7 +6,7 @@ import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/components/image_netword_builder.dart';
 import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
-import 'package:muaho/presentation/shop/shop_screen.dart';
+import 'package:muaho/presentation/shop/order_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
@@ -137,7 +137,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget _itemHotShop(HotShop hotShop) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, ShopScreen.routeName,
+        Navigator.pushNamed(context, OrderScreen.routeName,
             arguments: ShopArgument(shopId: hotShop.id));
       },
       child: Container(

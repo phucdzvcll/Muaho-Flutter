@@ -4,6 +4,7 @@ class Product {
   final double productPrice;
   final String price;
   final int groupId;
+  final int amount;
   final String thumbUrl;
 
 //<editor-fold desc="Data Methods">
@@ -14,6 +15,7 @@ class Product {
     required this.productPrice,
     required this.price,
     required this.groupId,
+    required this.amount,
     required this.thumbUrl,
   });
 
@@ -27,6 +29,7 @@ class Product {
           productPrice == other.productPrice &&
           price == other.price &&
           groupId == other.groupId &&
+          amount == other.amount &&
           thumbUrl == other.thumbUrl);
 
   @override
@@ -36,6 +39,7 @@ class Product {
       productPrice.hashCode ^
       price.hashCode ^
       groupId.hashCode ^
+      amount.hashCode ^
       thumbUrl.hashCode;
 
   @override
@@ -46,6 +50,7 @@ class Product {
         ' productPrice: $productPrice,' +
         ' price: $price,' +
         ' groupId: $groupId,' +
+        ' amount: $amount,' +
         ' thumbUrl: $thumbUrl,' +
         '}';
   }
@@ -56,6 +61,7 @@ class Product {
     double? productPrice,
     String? price,
     int? groupId,
+    int? amount,
     String? thumbUrl,
   }) {
     return Product(
@@ -64,7 +70,32 @@ class Product {
       productPrice: productPrice ?? this.productPrice,
       price: price ?? this.price,
       groupId: groupId ?? this.groupId,
+      amount: amount ?? this.amount,
       thumbUrl: thumbUrl ?? this.thumbUrl,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': this.productId,
+      'productName': this.productName,
+      'productPrice': this.productPrice,
+      'price': this.price,
+      'groupId': this.groupId,
+      'amount': this.amount,
+      'thumbUrl': this.thumbUrl,
+    };
+  }
+
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      productId: map['productId'] as int,
+      productName: map['productName'] as String,
+      productPrice: map['productPrice'] as double,
+      price: map['price'] as String,
+      groupId: map['groupId'] as int,
+      amount: map['amount'] as int,
+      thumbUrl: map['thumbUrl'] as String,
     );
   }
 

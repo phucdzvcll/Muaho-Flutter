@@ -4,25 +4,21 @@ import 'package:muaho/presentation/shop/model/product_model.dart';
 
 import 'image_netword_builder.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends StatelessWidget {
   final Product product;
-  final void Function(int productID, int amount) onSelectedProduct;
+  final void Function(Product, bool) onSelectedProduct;
 
   const ProductCard(
       {Key? key, required this.product, required this.onSelectedProduct})
       : super(key: key);
 
   @override
-  State<ProductCard> createState() => _ProductCardState();
-}
-
-class _ProductCardState extends State<ProductCard> {
-  int amount = 0;
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: product.amount > 0
+            ? Theme.of(context).backgroundColor
+            : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey),
       ),
@@ -37,7 +33,7 @@ class _ProductCardState extends State<ProductCard> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: ImageNetworkBuilder(
-                    imgUrl: widget.product.thumbUrl,
+                    imgUrl: product.thumbUrl,
                     width: 50,
                     height: 50,
                   ),
@@ -45,31 +41,41 @@ class _ProductCardState extends State<ProductCard> {
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  widget.product.productName,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(fontSize: 12, color: Colors.grey),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                  child: Text(
+                    product.productName,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(fontSize: 12, color: Colors.grey),
+                  ),
                 ),
                 SizedBox(
                   width: double.infinity,
                   height: 5,
                 ),
-                Text(
-                  widget.product.price,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
               ],
             ),
             Positioned.fill(
+              bottom: 45,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  product.price,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Positioned.fill(
               bottom: 10,
-              child:
-                  amount == 0 ? _upDownButton(isPlus: true) : _upDownWidget(),
+              child: product.amount == 0
+                  ? _upDownButton(isIncrease: true, context: context)
+                  : _upDownWidget(context),
             )
           ],
         ),
@@ -77,45 +83,68 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 
-  Widget _upDownButton({required bool isPlus}) {
+  Widget _upDownButton(
+      {required bool isIncrease, required BuildContext context}) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: GestureDetector(
         onTap: () {
-          if (isPlus) {
-            setState(() {
-              amount++;
-            });
+          if (isIncrease) {
+            onSelectedProduct(
+                Product(
+                    amount: product.amount + 1,
+                    productId: product.productId,
+                    productName: product.productName,
+                    productPrice: product.productPrice,
+                    price: product.price,
+                    groupId: product.groupId,
+                    thumbUrl: product.thumbUrl),
+                isIncrease);
           } else {
-            setState(() {
-              if (amount > 0) {
-                amount--;
-              }
-            });
+            if (product.amount > 0) {
+              int newAmount = product.amount - 1;
+              onSelectedProduct(
+                  Product(
+                      amount: newAmount,
+                      productId: product.productId,
+                      productName: product.productName,
+                      productPrice: product.productPrice,
+                      price: product.price,
+                      groupId: product.groupId,
+                      thumbUrl: product.thumbUrl),
+                  isIncrease);
+            }
           }
         },
         child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Theme.of(context).primaryColorLight),
-              color: Theme.of(context).backgroundColor),
-          width: 24,
-          height: 24,
-          child: isPlus
-              ? Icon(
-                  Icons.add,
-                  color: Theme.of(context).primaryColorLight,
-                  size: 16,
-                )
-              : Icon(Icons.remove,
-                  color: Theme.of(context).primaryColorLight, size: 16),
+          width: 32,
+          height: 32,
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Theme.of(context).primaryColorLight),
+                color: product.amount > 0
+                    ? Colors.white
+                    : Theme.of(context).backgroundColor),
+            width: 24,
+            height: 24,
+            child: isIncrease
+                ? Icon(
+                    Icons.add,
+                    color: Theme.of(context).primaryColorLight,
+                    size: 16,
+                  )
+                : Icon(Icons.remove,
+                    color: Theme.of(context).primaryColorLight, size: 16),
+          ),
         ),
       ),
     );
   }
 
-  Widget _upDownWidget() {
+  Widget _upDownWidget(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Row(
@@ -123,16 +152,19 @@ class _ProductCardState extends State<ProductCard> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _upDownButton(isPlus: false),
-          Text(
-            amount.toString(),
-            textAlign: TextAlign.end,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(color: Colors.black),
+          _upDownButton(isIncrease: false, context: context),
+          Padding(
+            padding: EdgeInsets.only(bottom: 6),
+            child: Text(
+              product.amount.toString(),
+              textAlign: TextAlign.end,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1!
+                  .copyWith(color: Colors.black),
+            ),
           ),
-          _upDownButton(isPlus: true),
+          _upDownButton(isIncrease: true, context: context),
         ],
       ),
     );

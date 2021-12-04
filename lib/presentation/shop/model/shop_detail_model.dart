@@ -1,21 +1,24 @@
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/shop/model/cart_model.dart';
 import 'package:muaho/presentation/shop/model/product_model.dart';
 
 class ShopDetailModel {
-  final int currentIndex;
+  final int currentGroupId;
   final String shopName;
   final String shopAddress;
   final List<ProductGroupEntity> groups;
   final List<Product> currentListProducts;
+  final CartOverViewModel cartOverView;
 
 //<editor-fold desc="Data Methods">
 
   const ShopDetailModel({
-    required this.currentIndex,
+    required this.currentGroupId,
     required this.shopName,
     required this.shopAddress,
     required this.groups,
     required this.currentListProducts,
+    required this.cartOverView,
   });
 
   @override
@@ -23,28 +26,31 @@ class ShopDetailModel {
       identical(this, other) ||
       (other is ShopDetailModel &&
           runtimeType == other.runtimeType &&
-          currentIndex == other.currentIndex &&
+          currentGroupId == other.currentGroupId &&
           shopName == other.shopName &&
           shopAddress == other.shopAddress &&
           groups == other.groups &&
-          currentListProducts == other.currentListProducts);
+          currentListProducts == other.currentListProducts &&
+          cartOverView == other.cartOverView);
 
   @override
   int get hashCode =>
-      currentIndex.hashCode ^
+      currentGroupId.hashCode ^
       shopName.hashCode ^
       shopAddress.hashCode ^
       groups.hashCode ^
-      currentListProducts.hashCode;
+      currentListProducts.hashCode ^
+      cartOverView.hashCode;
 
   @override
   String toString() {
     return 'ShopDetailModel{' +
-        ' currentIndex: $currentIndex,' +
+        ' currentIndex: $currentGroupId,' +
         ' shopName: $shopName,' +
         ' shopAddress: $shopAddress,' +
         ' groups: $groups,' +
         ' currentListProducts: $currentListProducts,' +
+        ' cartOverView: $cartOverView,' +
         '}';
   }
 
@@ -54,13 +60,15 @@ class ShopDetailModel {
     String? shopAddress,
     List<ProductGroupEntity>? groups,
     List<Product>? currentListProducts,
+    CartOverViewModel? cartOverView,
   }) {
     return ShopDetailModel(
-      currentIndex: currentIndex ?? this.currentIndex,
+      currentGroupId: currentIndex ?? this.currentGroupId,
       shopName: shopName ?? this.shopName,
       shopAddress: shopAddress ?? this.shopAddress,
       groups: groups ?? this.groups,
       currentListProducts: currentListProducts ?? this.currentListProducts,
+      cartOverView: cartOverView ?? this.cartOverView,
     );
   }
 
