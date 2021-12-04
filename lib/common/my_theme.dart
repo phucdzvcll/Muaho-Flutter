@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyTheme {
   /*
@@ -36,52 +37,51 @@ class MyTheme {
         )),
     scaffoldBackgroundColor: backgroundColor,
     backgroundColor: backgroundColor,
-    fontFamily: 'OldStandardTT',
     brightness: Brightness.light,
     primaryColor: primaryColor,
     textTheme: TextTheme(
-      headline1: TextStyle(
+      headline1: GoogleFonts.mulish(
         fontSize: 24,
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
-      headline2: TextStyle(
+      headline2: GoogleFonts.mulish(
         fontSize: 18,
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
-      headline3: TextStyle(
+      headline3: GoogleFonts.mulish(
         fontSize: 16,
         color: Color(0xff4E4E4E),
         fontWeight: FontWeight.bold,
         fontStyle: FontStyle.normal,
       ),
-      subtitle1: TextStyle(
+      subtitle1: GoogleFonts.mulish(
         fontSize: 16,
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
-      subtitle2: TextStyle(
+      subtitle2: GoogleFonts.mulish(
         fontSize: 14,
         color: Color(0xff4E4E4E),
         fontStyle: FontStyle.normal,
       ),
-      bodyText1: TextStyle(
+      bodyText1: GoogleFonts.mulish(
         fontSize: 16,
         fontStyle: FontStyle.normal,
         color: Color(0xff4E4E4E),
       ),
-      bodyText2: TextStyle(
+      bodyText2: GoogleFonts.mulish(
         fontSize: 14,
         fontStyle: FontStyle.normal,
         color: Color(0xff4E4E4E),
       ),
-      caption: TextStyle(
+      caption: GoogleFonts.mulish(
         fontSize: 12,
         fontStyle: FontStyle.normal,
         color: Color(0xff4E4E4E),
       ),
-      button: TextStyle(
+      button: GoogleFonts.mulish(
         fontSize: 14,
         fontStyle: FontStyle.normal,
         color: Color(0xffffffff),

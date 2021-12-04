@@ -11,15 +11,20 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/data/remote/search/search_service.dart';
+import 'package:muaho/data/remote/shop/shop_service.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:muaho/data/repository/search_repository.dart';
+import 'package:muaho/data/repository/shop_repository.dart';
 import 'package:muaho/data/repository/sign_in_repository.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/repository/search_repository.dart';
 import 'package:muaho/domain/use_case/search/get_list_hot_search_use_case.dart';
+import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
 import 'package:muaho/domain/use_case/sign_in/get_jwt_token_use_case.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
+import 'package:muaho/presentation/order/order_screen.dart';
+import 'package:muaho/presentation/purchase/purchase_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
@@ -73,21 +78,6 @@ Future<void> main() async {
 }
 
 void _initDi() {
-  //data
-  //singleton
-  // final BaseOptions baseOptions = BaseOptions(
-  //   connectTimeout: 30000,
-  //   receiveTimeout: 30000,
-  //   responseType: ResponseType.json,
-  // );
-  // final BaseOptions postOptions = BaseOptions(
-  //   method: "POST",
-  //   connectTimeout: 30000,
-  //   receiveTimeout: 30000,
-  //   responseType: ResponseType.json,
-  // );
-  // final dio = Dio(baseOptions); // Provide a dio instance
-
   //Singleton
   // //homePage
   GetIt.instance
@@ -101,6 +91,10 @@ void _initDi() {
   GetIt.instance
       .registerSingleton<SignInService>(SignInService(Dio(baseOptions)));
   GetIt.instance.registerSingleton<SignInRepository>(SignInRepositoryIplm());
+  //shop
+  GetIt.instance
+      .registerSingleton<ShopService>(ShopService(createDioInstance()));
+  GetIt.instance.registerSingleton<ShopRepository>(ShopRepositoryImpl());
 
   //Factory
   GetIt.instance.registerFactory(() => GetListBannerUseCase());
@@ -108,6 +102,7 @@ void _initDi() {
   GetIt.instance.registerFactory(() => GetHotSearchUseCase());
   GetIt.instance.registerFactory(() => GetListShopBySearchUseCase());
   GetIt.instance.registerFactory(() => GetJwtTokenUseCase());
+  GetIt.instance.registerFactory(() => GetShopProductUseCase());
 }
 
 class MyApp extends StatelessWidget {
@@ -123,14 +118,28 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
-      title: 'Flutter Demo',
+      title: 'Mua Ho',
       initialRoute: '/',
       theme: MyTheme.lightTheme,
+      onGenerateRoute: (settings) {
+        if (settings.name == SearchShopScreen.routeName) {
+          final args = settings.arguments as SearchArgument;
+          return MaterialPageRoute(builder: (context) {
+            return SearchShopScreen(args: args);
+          });
+        }
+        if (settings.name == OrderScreen.routeName) {
+          final args = settings.arguments as ShopArgument;
+          return MaterialPageRoute(builder: (context) {
+            return OrderScreen(shopArgument: args);
+          });
+        }
+      },
       routes: {
         "/": (context) => SignIn(firebaseToken: firebaseToken),
         HomeScreen.routeName: (context) => HomeScreen(),
         SearchScreen.routeName: (context) => SearchScreen(),
-        SearchShopScreen.routeName: (context) => SearchShopScreen(),
+        PurchaseScreen.routeName: (context) => PurchaseScreen(),
       },
       // ),
     );

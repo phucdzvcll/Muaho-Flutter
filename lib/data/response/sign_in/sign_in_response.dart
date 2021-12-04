@@ -13,11 +13,7 @@ class SignInResponse {
 
   Map<String, dynamic> toJson() => _$SignInResponseToJson(this);
 
-  SignInResponse({
-    required this.jwtToken,
-    required this.userName,
-    required this.refreshToken
-  });
+  SignInResponse({this.jwtToken, this.userName, this.refreshToken});
 
   @override
   String toString() =>

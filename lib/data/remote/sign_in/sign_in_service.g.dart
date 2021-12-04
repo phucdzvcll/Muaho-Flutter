@@ -20,7 +20,7 @@ Map<String, dynamic> _$BodyParamToJson(BodyParam instance) => <String, dynamic>{
 
 class _SignInService implements SignInService {
   _SignInService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://103.221.220.249:9000/api/';
+    baseUrl ??= 'http://103.221.220.249:9000/api';
   }
 
   final Dio _dio;
