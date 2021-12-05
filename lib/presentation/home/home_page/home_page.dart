@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
 import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
-import 'package:muaho/presentation/purchase/cart/perchase_screen.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/presentation/home/history/notification_page.dart';
+import 'package:muaho/presentation/home/history/history_page.dart';
 import 'package:muaho/presentation/home/home_page/home_page.dart';
 import 'package:muaho/presentation/home/setting_page/setting_page.dart';
 
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen>
               onPageChanged: (index) => {_currentPage.value = index},
               children: [
                 HomePage(),
-                NotificationPage(),
+                HistoryPage(),
                 SettingPage(),
               ],
             ),

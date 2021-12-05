@@ -4,9 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/my_theme.dart';
+import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/product_card.dart';
-import 'package:muaho/presentation/purchase/cart/perchase_screen.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';

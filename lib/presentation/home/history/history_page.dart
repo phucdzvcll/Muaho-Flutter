@@ -1,32 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:muaho/presentation/components/app_bar_component.dart';
 
-import 'cart/perchase_screen.dart';
-
-class PurchaseScreen extends StatelessWidget {
+class HistoryPage extends StatelessWidget {
   static final String routeName = "purchase_screen";
 
-  const PurchaseScreen({Key? key}) : super(key: key);
+  const HistoryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    PurchaseArgument argument =
-        ModalRoute.of(context)!.settings.arguments as PurchaseArgument;
     return Container(
       color: Colors.white,
       child: DefaultTabController(
-        length: 3,
+        length: 2,
         child: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              automaticallyImplyLeading: false,
-              title: Container(
-                color: Colors.white,
-                child: AppBarComponent(title: "Giỏ Hàng Của Bạn"),
-              ),
-            ),
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -53,7 +40,6 @@ class PurchaseScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       tabs: [
-                        Container(child: Text("Trong giỏ")),
                         Text("Đang giao"),
                         Text("Đã giao"),
                       ],
@@ -74,9 +60,6 @@ class PurchaseScreen extends StatelessWidget {
                     child: TabBarView(
                       physics: NeverScrollableScrollPhysics(),
                       children: [
-                        CartScreen(
-                          argument: argument,
-                        ),
                         Container(
                           color: Colors.purple,
                         ),
