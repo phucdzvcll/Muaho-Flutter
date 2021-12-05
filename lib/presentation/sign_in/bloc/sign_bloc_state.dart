@@ -3,14 +3,20 @@ part of 'sign_bloc_bloc.dart';
 @immutable
 abstract class SignBlocState {}
 
-class SignBlocInitial extends SignBlocState {}
+class SignInitial extends SignBlocState {}
 
-class SignBlocLoading extends SignBlocState {}
+class SignLoading extends SignBlocState {}
 
-class SignBlocSuccess extends SignBlocState {
+class SignSuccess extends SignBlocState {
   final SignInEntity entity;
 
-  SignBlocSuccess({required this.entity});
+  SignSuccess({required this.entity});
 }
 
-class SignBlocError extends SignBlocState {}
+class SignedState extends SignBlocState {}
+
+class SignError extends SignBlocState {
+  final String errorMss;
+
+  SignError({required this.errorMss});
+}

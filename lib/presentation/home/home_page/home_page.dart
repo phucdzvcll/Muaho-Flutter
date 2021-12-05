@@ -5,8 +5,7 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
-import 'package:muaho/presentation/home/home_page/product_catrgory/product_category_bloc.dart';
-import 'package:muaho/presentation/home/home_page/slide_banner/slide_banner_bloc.dart';
+import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -17,8 +16,12 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   final _currentBannerIndexNotifier = ValueNotifier<int>(0);
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,108 +43,16 @@ class _HomePageState extends State<HomePage> {
 
   Center _body(SignInArguments arg) {
     return Center(
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<SlideBannerBloc>(
-              create: (context) =>
-                  SlideBannerBloc()..add(RequestListBannerEvent())),
-          BlocProvider<ProductCategoryBloc>(
-              create: (context) =>
-                  ProductCategoryBloc()..add(RequestProductCategoryEvent())),
-        ],
+      child: BlocProvider<HomePageBloc>(
+        create: (ctx) => HomePageBloc()..add(HomePageRequestEvent()),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                    child: ImageNetworkBuilder(
-                      isSquare: true,
-                      imgUrl: "https://picsum.photos/50",
-                      width: 50,
-                      height: 50,
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Hello",
-                                style: Theme.of(context).textTheme.subtitle1,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(arg.userName,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(color: MyTheme.primaryColor)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: MyTheme.borderLineColor),
-                        borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                      ),
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              CartScreen.routeName,
-                            );
-                          },
-                          child: Icon(
-                            Icons.shopping_cart_outlined,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: MyTheme.borderLineColor),
-                      borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-                    ),
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/search');
-                        },
-                        child: Icon(
-                          Icons.search_outlined,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            BlocBuilder<SlideBannerBloc, SlideBannerState>(
+            _userInfo(arg),
+            BlocBuilder<HomePageBloc, HomePageState>(
               builder: (ctx, state) {
-                return _slideBannerBuilder(state, ctx);
+                return _handleHomePageBuilder(state, ctx);
               },
             ),
             // _titleCategory(),
@@ -151,17 +62,102 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _productCategoriesBuild(ProductCategoryState state, BuildContext ctx) {
+  Padding _userInfo(SignInArguments arg) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+            child: ImageNetworkBuilder(
+              isSquare: true,
+              imgUrl: "https://picsum.photos/50",
+              width: 50,
+              height: 50,
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Center(
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Hello",
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(arg.userName,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline1!
+                              .copyWith(color: MyTheme.primaryColor)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: MyTheme.borderLineColor),
+                borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+              ),
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      CartScreen.routeName,
+                    );
+                  },
+                  child: Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 24,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(color: MyTheme.borderLineColor),
+              borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+            ),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/search');
+                },
+                child: Icon(
+                  Icons.search_outlined,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _productCategoriesBuild(HomePageState state, BuildContext ctx) {
     final double imgSquareSize = (MediaQuery.of(ctx).size.width - 200) / 4;
-    if (state is ProductCategoryError) {
-      return Container(
-        child: Text("Error"),
-      );
-    } else if (state is ProductCategoryLoading) {
+    if (state is HomePageLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (state is ProductCategorySuccess) {
+    } else if (state is HomePageSuccessState) {
       return Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -175,7 +171,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisSpacing: 20,
               childAspectRatio: 0.7,
               physics: BouncingScrollPhysics(),
-              children: state.productCategories
+              children: state.homePageModel.productCategories
                   .map(
                     (e) => Column(
                       children: [
@@ -221,13 +217,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  _slideBannerBuilder(SlideBannerState slideBannerState, BuildContext ctx) {
+  _handleHomePageBuilder(HomePageState homePageState, BuildContext ctx) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         Visibility(
-          visible: slideBannerState is SlideBannerSuccess &&
-                  slideBannerState.slideBannerEntity.length > 0
+          visible: homePageState is HomePageSuccessState &&
+                  homePageState.homePageModel.slideBannerEntity.length > 0
               ? true
               : false,
           child: Align(
@@ -244,11 +240,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        _buildStateSlideBanner(slideBannerState, ctx),
-        _buildSlideBannerIndicator(slideBannerState, ctx),
+        _buildStateSlideBanner(homePageState, ctx),
+        _buildSlideBannerIndicator(homePageState, ctx),
         Visibility(
-          visible: slideBannerState is SlideBannerSuccess &&
-                  slideBannerState.slideBannerEntity.length > 0
+          visible: homePageState is HomePageSuccessState &&
+                  homePageState.homePageModel.slideBannerEntity.length > 0
               ? true
               : false,
           child: Padding(
@@ -260,47 +256,36 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        BlocBuilder<ProductCategoryBloc, ProductCategoryState>(
-          builder: (ctx, state) {
-            return _productCategoriesBuild(state, ctx);
-          },
-        ),
+        _productCategoriesBuild(homePageState, ctx),
       ],
     );
   }
 
-  Widget _buildStateSlideBanner(SlideBannerState state, BuildContext context) {
-    if (state is SlideBannerLoading) {
+  Widget _buildStateSlideBanner(HomePageState state, BuildContext context) {
+    if (state is HomePageLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else if (state is SlideBannerError) {
-      return Container(
-        child: Text("Error"),
-      );
-    } else if (state is SlideBannerOnClick) {
+    } else if (state is HomePageOnClick) {
       return Container();
       //todo
-    } else if (state is SlideBannerSuccess) {
-      return state.slideBannerEntity.length > 0
-          ? _buildPageView(state.slideBannerEntity, context)
+    } else if (state is HomePageSuccessState) {
+      return state.homePageModel.slideBannerEntity.length > 0
+          ? _buildPageView(state.homePageModel.slideBannerEntity, context)
           : Container();
     } else {
       return Container();
     }
   }
 
-  Widget _buildSlideBannerIndicator(
-      SlideBannerState state, BuildContext context) {
-    if (state is SlideBannerLoading) {
+  Widget _buildSlideBannerIndicator(HomePageState state, BuildContext context) {
+    if (state is HomePageLoading) {
       return Center();
-    } else if (state is SlideBannerError) {
+    } else if (state is HomePageOnClick) {
       return Container();
-    } else if (state is SlideBannerOnClick) {
-      return Container();
-    } else if (state is SlideBannerSuccess) {
-      return state.slideBannerEntity.length > 0
-          ? _buildCircleIndicator(state.slideBannerEntity.length)
+    } else if (state is HomePageSuccessState) {
+      return state.homePageModel.slideBannerEntity.length > 0
+          ? _buildCircleIndicator(state.homePageModel.slideBannerEntity.length)
           : Container();
     } else {
       return Container();

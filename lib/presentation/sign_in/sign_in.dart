@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:muaho/common/TokenStore.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 
 import 'bloc/sign_bloc_bloc.dart';
 
 class SignIn extends StatelessWidget {
-  final String firebaseToken;
-
-  const SignIn({Key? key, required this.firebaseToken}) : super(key: key);
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +16,7 @@ class SignIn extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: BlocProvider<SignBloc>(
-            create: (ctx) =>
-                SignBloc()..add(GetJwtTokenEvent(firebaseToken: firebaseToken)),
+            create: (ctx) => SignBloc()..add(GetJwtTokenEvent()),
             child: BlocBuilder<SignBloc, SignBlocState>(
               builder: (ctx, state) {
                 return Center(
@@ -38,13 +33,9 @@ class SignIn extends StatelessWidget {
   }
 
   Widget _signInBuilder(SignBlocState state, BuildContext ctx) {
-    if (state is SignBlocLoading) {
+    if (state is SignLoading) {
       return CircularProgressIndicator();
-    } else if (state is SignBlocSuccess) {
-      //di singleton token
-      GetIt.instance.registerSingleton<TokenStore>(
-          TokenStore(token: state.entity.jwtToken));
-
+    } else if (state is SignSuccess) {
       return showAlertDialog(
         ctx,
         "Đăng Nhập Thành Công",
@@ -54,12 +45,8 @@ class SignIn extends StatelessWidget {
           //     content: Text(state.entity.jwtToken),
           //   ),
           // ),
-          Navigator.pushReplacementNamed(
-            ctx,
-            HomeScreen.routeName,
-            arguments: SignInArguments(
-                jwt: state.entity.jwtToken, userName: state.entity.userName),
-          )
+          Navigator.pushReplacementNamed(ctx, HomeScreen.routeName,
+              arguments: SignInArguments(userName: state.entity.userName))
         },
       );
     } else {
@@ -104,8 +91,7 @@ class SignIn extends StatelessWidget {
 }
 
 class SignInArguments {
-  final String jwt;
   final String userName;
 
-  SignInArguments({required this.jwt, required this.userName});
+  SignInArguments({required this.userName});
 }
