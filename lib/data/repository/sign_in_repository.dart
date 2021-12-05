@@ -3,12 +3,12 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:muaho/domain/domain.dart';
 
-class SignInRepositoryIplm implements SignInRepository {
+class SignInRepositoryImpl implements SignInRepository {
   SignInService service = GetIt.instance.get();
   @override
   Future<Either<Failure, SignInEntity>> getJwtToken(
       {required String firebaseToken}) async {
-    var signInRequest = service.signIn(BodyParam(firebaseToken: firebaseToken));
+    var signInRequest = service.signIn(SignInBodyParam(firebaseToken: firebaseToken));
     var result = await handleNetworkResult(signInRequest);
     if (result.isSuccess()) {
       SignInEntity entity = SignInEntity(

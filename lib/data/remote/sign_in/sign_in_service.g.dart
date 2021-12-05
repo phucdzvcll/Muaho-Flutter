@@ -6,11 +6,25 @@ part of 'sign_in_service.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-BodyParam _$BodyParamFromJson(Map<String, dynamic> json) => BodyParam(
+RefreshTokenBodyParam _$RefreshTokenBodyParamFromJson(
+        Map<String, dynamic> json) =>
+    RefreshTokenBodyParam(
+      refreshToken: json['refresh_token'] as String,
+    );
+
+Map<String, dynamic> _$RefreshTokenBodyParamToJson(
+        RefreshTokenBodyParam instance) =>
+    <String, dynamic>{
+      'refresh_token': instance.refreshToken,
+    };
+
+SignInBodyParam _$SignInBodyParamFromJson(Map<String, dynamic> json) =>
+    SignInBodyParam(
       firebaseToken: json['firebase_token'] as String,
     );
 
-Map<String, dynamic> _$BodyParamToJson(BodyParam instance) => <String, dynamic>{
+Map<String, dynamic> _$SignInBodyParamToJson(SignInBodyParam instance) =>
+    <String, dynamic>{
       'firebase_token': instance.firebaseToken,
     };
 
@@ -41,6 +55,23 @@ class _SignInService implements SignInService {
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = SignInResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<RefreshTokenResponse> refreshToken(bodyParam) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(bodyParam.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<RefreshTokenResponse>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/user/refresh_token',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = RefreshTokenResponse.fromJson(_result.data!);
     return value;
   }
 

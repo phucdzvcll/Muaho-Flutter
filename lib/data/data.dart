@@ -8,4 +8,5 @@ export 'response/home/slide_banner/slide_banner_response.dart';
 export 'response/search/hot_search/hot_search_response.dart';
 export 'response/search/search_shop/shop_response.dart';
 export 'response/shop/shop_product_response.dart';
+export 'response/sign_in/refresh_token_response.dart';
 export 'response/sign_in/sign_in_response.dart';

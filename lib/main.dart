@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/common/my_theme.dart';
@@ -32,6 +30,9 @@ import 'package:muaho/presentation/sign_in/sign_in.dart';
 //flutter pub run easy_localization:generate --source-dir ./assets/translations
 //flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
 //flutter pub run build_runner build --delete-conflicting-outputs
+final storage = new FlutterSecureStorage();
+final getIt = GetIt.instance;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -48,22 +49,6 @@ Future<void> main() async {
       statusBarBrightness: Brightness.dark,
     ),
   );
-  IdTokenResult? token;
-  var auth = FirebaseAuth.instance;
-  try {
-    if (auth.currentUser != null) {
-      await auth.signOut();
-    }
-    // await auth.signInWithEmailAndPassword(
-    //     email: 'phuc1@gmail.com', password: '111111');
-    await auth.signInAnonymously();
-  } on FirebaseAuthException catch (e) {
-    log("Login Error");
-  }
-  if (FirebaseAuth.instance.currentUser != null) {
-    token = await FirebaseAuth.instance.currentUser!.getIdTokenResult(true);
-    log(token.token!);
-  } else {}
 
   runApp(
     EasyLocalization(
@@ -72,43 +57,40 @@ Future<void> main() async {
         startLocale: Locale('vi'),
         fallbackLocale: Locale('vi'),
         assetLoader: CodegenLoader(),
-        child: MyApp(
-            firebaseToken: token == null ? "" : token.token.defaultEmpty())),
+        child: MyApp()),
   );
 }
 
 void _initDi() {
   //Singleton
-  // //homePage
-  GetIt.instance
-      .registerSingleton<HomeService>(HomeService(createDioInstance()));
-  GetIt.instance.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
-  //searchPage
-  GetIt.instance
-      .registerSingleton<SearchService>(SearchService(createDioInstance()));
-  GetIt.instance.registerSingleton<SearchRepository>(SearchRepositoryImpl());
-  //signIn
-  GetIt.instance
-      .registerSingleton<SignInService>(SignInService(Dio(baseOptions)));
-  GetIt.instance.registerSingleton<SignInRepository>(SignInRepositoryIplm());
-  //shop
-  GetIt.instance
-      .registerSingleton<ShopService>(ShopService(createDioInstance()));
-  GetIt.instance.registerSingleton<ShopRepository>(ShopRepositoryImpl());
 
+  //token expired handler
+  getIt.registerSingleton<TokenExpiredHandler>(TokenExpiredHandler());
+  // //homePage
+  getIt.registerSingleton<HomeService>(HomeService(createDioInstance()));
+  getIt.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
+  //searchPage
+  getIt.registerSingleton<SearchService>(SearchService(createDioInstance()));
+  getIt.registerSingleton<SearchRepository>(SearchRepositoryImpl());
+  //signIn
+  getIt.registerSingleton<SignInService>(SignInService(Dio(baseOptions)));
+  getIt.registerSingleton<SignInRepository>(SignInRepositoryImpl());
+  //shop
+  getIt.registerSingleton<ShopService>(ShopService(createDioInstance()));
+  getIt.registerSingleton<ShopRepository>(ShopRepositoryImpl());
+  //jwt
+  getIt.registerSingleton<TokenStore>(TokenStore(""));
   //Factory
-  GetIt.instance.registerFactory(() => GetListBannerUseCase());
-  GetIt.instance.registerFactory(() => GetListProductCategoriesHomeUseCase());
-  GetIt.instance.registerFactory(() => GetHotSearchUseCase());
-  GetIt.instance.registerFactory(() => GetListShopBySearchUseCase());
-  GetIt.instance.registerFactory(() => GetJwtTokenUseCase());
-  GetIt.instance.registerFactory(() => GetShopProductUseCase());
+  getIt.registerFactory(() => GetListBannerUseCase());
+  getIt.registerFactory(() => GetListProductCategoriesHomeUseCase());
+  getIt.registerFactory(() => GetHotSearchUseCase());
+  getIt.registerFactory(() => GetListShopBySearchUseCase());
+  getIt.registerFactory(() => GetJwtTokenUseCase());
+  getIt.registerFactory(() => GetShopProductUseCase());
 }
 
 class MyApp extends StatelessWidget {
-  final String firebaseToken;
-
-  const MyApp({Key? key, required this.firebaseToken}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -136,7 +118,7 @@ class MyApp extends StatelessWidget {
         }
       },
       routes: {
-        "/": (context) => SignIn(firebaseToken: firebaseToken),
+        "/": (context) => SignIn(),
         HomeScreen.routeName: (context) => HomeScreen(),
         SearchScreen.routeName: (context) => SearchScreen(),
         CartScreen.routeName: (context) => CartScreen(),
