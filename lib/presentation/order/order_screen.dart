@@ -27,10 +27,12 @@ class OrderScreen extends StatelessWidget {
         color: Theme.of(context).backgroundColor,
         child: SafeArea(
           child: Scaffold(
-            appBar: new AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: AppBarComponent(title: "Chọn Sản Phẩm"),
+            appBar: AppBarComponent(
+              title: "Chọn Sản Phẩm",
+              backAction: () {
+                Navigator.pop(context);
+              },
+              searchAction: () {},
             ),
             body: Container(
               margin: EdgeInsets.only(top: 32),

@@ -26,10 +26,12 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          appBar: new AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: AppBarComponent(title: "Chọn Cửa Hang"),
+          appBar: AppBarComponent(
+            title: "Chọn Cửa Hàng",
+            backAction: () {
+              Navigator.pop(context);
+            },
+            searchAction: () {},
           ),
           body: Container(
             margin: EdgeInsets.only(top: 16),

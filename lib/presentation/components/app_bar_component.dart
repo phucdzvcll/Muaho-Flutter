@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
-class AppBarComponent extends StatelessWidget {
+class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final Function backAction;
+  final Function searchAction;
 
-  const AppBarComponent({Key? key, required this.title}) : super(key: key);
+  const AppBarComponent(
+      {Key? key,
+      required this.title,
+      required this.backAction,
+      required this.searchAction})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +18,7 @@ class AppBarComponent extends StatelessWidget {
       width: double.infinity,
       height: 60,
       child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: Center(
           child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -33,7 +40,7 @@ class AppBarComponent extends StatelessWidget {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      backAction();
                     },
                   ),
                 ),
@@ -70,7 +77,9 @@ class AppBarComponent extends StatelessWidget {
                       Icons.search_rounded,
                       color: Colors.black,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      searchAction();
+                    },
                   ),
                 ),
               ),
@@ -80,4 +89,7 @@ class AppBarComponent extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(45);
 }

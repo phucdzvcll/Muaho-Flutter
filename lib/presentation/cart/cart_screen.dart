@@ -12,10 +12,12 @@ class CartScreen extends StatelessWidget {
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: AppBarComponent(title: "Giở hàng"),
-          ),
+          appBar: AppBarComponent(
+              searchAction: () {},
+              title: "Giở hàng",
+              backAction: () {
+                Navigator.pop(context);
+              }),
           backgroundColor: Colors.white,
           body: Center(
             child: Column(
