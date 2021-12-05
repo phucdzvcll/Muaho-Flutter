@@ -56,7 +56,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final FocusNode _focusNode = FocusNode();
   bool _isComposing = false;
 
-  void _handleSubmitted(String text) {
+  void _handleSubmitted(String text, BuildContext context) {
+    BlocProvider.of<ChatBloc>(context).add(SendChatMsgEvent(msg: text));
     _textController.clear();
     setState(() {
       _isComposing = false;
@@ -105,13 +106,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              decoration: Theme.of(context).platform == TargetPlatform.iOS
-                  ? BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: Colors.grey[200]!),
-                      ),
-                    )
-                  : null,
+              decoration: null,
             ),
           );
         },
@@ -120,39 +115,45 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTextComposer() {
-    return IconTheme(
-      data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          children: [
-            Flexible(
-              child: TextField(
-                controller: _textController,
-                onChanged: (text) {
-                  setState(() {
-                    _isComposing = text.isNotEmpty;
-                  });
-                },
-                onSubmitted: _isComposing ? _handleSubmitted : null,
-                decoration:
-                    const InputDecoration.collapsed(hintText: 'Send a message'),
-                focusNode: _focusNode,
+    return Builder(builder: (context) {
+      return IconTheme(
+        data: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            children: [
+              Flexible(
+                child: TextField(
+                  controller: _textController,
+                  onChanged: (text) {
+                    setState(() {
+                      _isComposing = text.isNotEmpty;
+                    });
+                  },
+                  onSubmitted: _isComposing
+                      ? (text) {
+                          _handleSubmitted(text, context);
+                        }
+                      : null,
+                  decoration: const InputDecoration.collapsed(
+                      hintText: 'Send a message'),
+                  focusNode: _focusNode,
+                ),
               ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: _isComposing
-                    ? () => _handleSubmitted(_textController.text)
-                    : null,
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _isComposing
+                      ? () => _handleSubmitted(_textController.text, context)
+                      : null,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   @override
