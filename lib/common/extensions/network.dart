@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
@@ -48,7 +46,7 @@ Dio createDioInstance() {
 }
 
 Map<String, String> _buildHeaders(String token) {
-  Map<String, String> headers = {"Authorization": "Bearer $token "};
+  Map<String, String> headers = {"Authorization": "Bearer $token"};
 
   return headers;
 }
@@ -59,9 +57,7 @@ class TokenExpiredHandler {
 
   Future<Response<dynamic>?> handleTokenExpired(DioError error) async {
     try {
-      log("lock outside - $_currentJwt");
       await lock.synchronized(() async {
-        log("lock inside - $_currentJwt");
         if (error.requestOptions.headers["Authorization"] ==
                 "Bearer $_currentJwt" ||
             _currentJwt.isEmpty) {
@@ -70,11 +66,9 @@ class TokenExpiredHandler {
               RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
           getIt.get<TokenStore>().setToken(jwt.jwtToken.defaultEmpty());
           _currentJwt = jwt.jwtToken.defaultEmpty();
-          log("lock inside done - $_currentJwt");
         }
       });
-      log("lock outsize done - $_currentJwt");
-      return _retry(error, _currentJwt);
+      return await _retry(error, _currentJwt);
     } on Exception catch (e) {
       return null;
     }

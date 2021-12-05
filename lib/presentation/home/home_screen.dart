@@ -15,8 +15,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with AutomaticKeepAliveClientMixin {
-  final PageController _pageController = PageController();
-  final _currentPage = ValueNotifier<int>(0);
+  final PageController _pageController = PageController(keepPage: false);
+
+  @override
+  bool get wantKeepAlive => true;
+
+  ValueNotifier<int> _currentPage = ValueNotifier<int>(0);
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +36,21 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           backgroundColor: Colors.white,
-          bottomNavigationBar: ValueListenableBuilder<int>(
-            valueListenable: _currentPage,
-            builder: (_, value, child) => Padding(
-              padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: MyTheme.primaryButtonColor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildNavigationBarItem(Icons.home, 0),
-                    _buildNavigationBarItem(Icons.dynamic_feed_rounded, 1),
-                    _buildNavigationBarItem(Icons.settings, 2),
-                  ],
-                ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+            child: Container(
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: MyTheme.primaryButtonColor,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavigationBarItem(Icons.home, 0),
+                  _buildNavigationBarItem(Icons.dynamic_feed_rounded, 1),
+                  _buildNavigationBarItem(Icons.settings, 2),
+                ],
               ),
             ),
           ),
@@ -58,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen>
               controller: _pageController,
               onPageChanged: (index) => {_currentPage.value = index},
               children: [
-                HomePage(),
-                HistoryPage(),
-                SettingPage(),
+                const HomePage(),
+                const HistoryPage(),
+                const SettingPage(),
               ],
             ),
           ),
@@ -73,26 +74,27 @@ class _HomeScreenState extends State<HomeScreen>
     return Center(
       child: GestureDetector(
         onTap: () {
-          _pageController.animateToPage(id,
+          _currentPage.value = id;
+          _pageController.animateToPage(_currentPage.value,
               duration: Duration(milliseconds: 300), curve: Curves.ease);
         },
-        child: Container(
-          height: 40,
-          width: 40,
-          decoration: BoxDecoration(
-              color: id == _currentPage.value
-                  ? MyTheme.activeButtonColor
-                  : MyTheme.primaryButtonColor,
-              borderRadius: BorderRadius.circular(12)),
-          child: Icon(
-            icon,
-            color: Colors.white,
+        child: ValueListenableBuilder<int>(
+          valueListenable: _currentPage,
+          builder: (_, value, child) => Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+                color: id == _currentPage.value
+                    ? MyTheme.activeButtonColor
+                    : MyTheme.primaryButtonColor,
+                borderRadius: BorderRadius.circular(12)),
+            child: Icon(
+              icon,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
