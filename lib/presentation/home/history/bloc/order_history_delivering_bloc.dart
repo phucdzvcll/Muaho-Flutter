@@ -32,8 +32,9 @@ class OrderHistoryDeliveringBloc
       yield OrderHistoryDeliveringSuccess(
           orderHistoryDeliveries: result.success
               .map((e) => OrderHistoryDeliveringModel(
+                  orderID: e.orderId,
                   shopName: e.shopName,
-                  subText: "${e.itemCount} Đơn vị",
+                  subText: "${e.itemCount} Đơn vị - ${e.status}",
                   totalPrice: e.total.formatDouble() + " VNĐ"))
               .toList());
     } else {

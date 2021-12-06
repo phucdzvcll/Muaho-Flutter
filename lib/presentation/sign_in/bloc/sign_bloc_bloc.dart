@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -52,7 +54,7 @@ class SignBloc extends Bloc<SignBlocEvent, SignBlocState> {
           RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
       //Di singleton JWT
       getIt.get<TokenStore>().setToken(jwt.jwtToken.defaultEmpty());
-
+      log(jwt.jwtToken.defaultEmpty());
       String? userName = await storage.read(key: userNameKey);
 
       yield SignSuccess(

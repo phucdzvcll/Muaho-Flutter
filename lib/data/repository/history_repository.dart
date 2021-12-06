@@ -1,3 +1,4 @@
+import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/main.dart';
@@ -15,17 +16,24 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
   @override
   Future<Either<Failure, List<OrderHistoryDelivering>>>
       getOrderHistoryDelivering() async {
-    var result = new List<OrderHistoryDelivering>.generate(
-        10,
-        (i) => OrderHistoryDelivering(
-            orderId: i + 1,
-            orderCode: "Code ${i + 1}",
-            shopName: "shopName ${i + 1}",
-            itemCount: 10 + i + 1,
-            total: 2500.0 * (i + 1),
-            status: i / 2 == 0 ? "Accepted" : "Tracking",
-            thumbUrl: "https://picsum.photos/600/280?id=${i + 1}"));
+    var request = service.getOrderHistoryDelivering();
+    var result = await handleNetworkResult(request);
 
-    return SuccessValue(result);
+    if (result.isSuccess()) {
+      List<OrderHistoryDelivering> list = [];
+      result.response?.forEach((element) {
+        list.add(OrderHistoryDelivering(
+            orderId: element.orderId.defaultZero(),
+            orderCode: element.orderCode.defaultEmpty(),
+            shopName: element.shopName.defaultEmpty(),
+            itemCount: element.itemCount.defaultZero(),
+            total: element.total.defaultZero(),
+            status: element.status.defaultEmpty(),
+            thumbUrl: element.thumbUrl.defaultEmpty()));
+      });
+      return SuccessValue(list);
+    } else {
+      return FailValue(Failure());
+    }
   }
 }
