@@ -36,8 +36,10 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     _productCategories.clear();
     _slideBannerEntity.clear();
     if (productCategoriesResult.isSuccess) {
-      _productCategories
-          .addAll(productCategoriesResult.success.listProductCategory);
+      var endIndex = productCategoriesResult.success.listProductCategory.length;
+      _productCategories.addAll(productCategoriesResult
+          .success.listProductCategory
+          .sublist(0, endIndex > 8 ? 8 : endIndex));
     }
     if (bannersResult.isSuccess) {
       _slideBannerEntity.addAll(bannersResult.success.listBanner);

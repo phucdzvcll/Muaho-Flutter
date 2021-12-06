@@ -1,3 +1,5 @@
+import 'package:animated_widgets/widgets/rotation_animated.dart';
+import 'package:animated_widgets/widgets/shake_animated_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/presentation/home/history/history_page.dart';
@@ -30,9 +32,15 @@ class _HomeScreenState extends State<HomeScreen>
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
-            child: Icon(
-              Icons.contact_support,
-              size: 32,
+            child: ShakeAnimatedWidget(
+              enabled: true,
+              duration: Duration(milliseconds: 1500),
+              shakeAngle: Rotation.deg(z: 40),
+              curve: Curves.linear,
+              child: Icon(
+                Icons.contact_support,
+                size: 32,
+              ),
             ),
           ),
           backgroundColor: Colors.white,

@@ -16,6 +16,7 @@ import 'package:muaho/data/repository/shop_repository.dart';
 import 'package:muaho/data/repository/sign_in_repository.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/repository/search_repository.dart';
+import 'package:muaho/domain/use_case/history/get_order_history_delivery_use_case.dart';
 import 'package:muaho/domain/use_case/search/get_list_hot_search_use_case.dart';
 import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
 import 'package:muaho/domain/use_case/sign_in/get_jwt_token_use_case.dart';
@@ -66,7 +67,7 @@ void _initDi() {
 
   //token expired handler
   getIt.registerSingleton<TokenExpiredHandler>(TokenExpiredHandler());
-  // //homePage
+  //homePage
   getIt.registerSingleton<HomeService>(HomeService(createDioInstance()));
   getIt.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
   //searchPage
@@ -80,6 +81,10 @@ void _initDi() {
   getIt.registerSingleton<ShopRepository>(ShopRepositoryImpl());
   //jwt
   getIt.registerSingleton<TokenStore>(TokenStore(""));
+  //history
+  getIt.registerSingleton<HistoryService>(HistoryService(createDioInstance()));
+  getIt.registerSingleton<HistoryPageRepository>(HistoryRepositoryImpl());
+
   //Factory
   getIt.registerFactory(() => GetListBannerUseCase());
   getIt.registerFactory(() => GetListProductCategoriesHomeUseCase());
@@ -87,6 +92,8 @@ void _initDi() {
   getIt.registerFactory(() => GetListShopBySearchUseCase());
   getIt.registerFactory(() => GetJwtTokenUseCase());
   getIt.registerFactory(() => GetShopProductUseCase());
+  getIt.registerFactory(() => GetOrderHistoryDeliveryUseCase());
+  getIt.registerFactory(() => GetOrderHistoryCompleteUseCase());
 }
 
 class MyApp extends StatelessWidget {
