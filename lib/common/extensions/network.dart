@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
@@ -68,6 +70,7 @@ class TokenExpiredHandler {
           _currentJwt = jwt.jwtToken.defaultEmpty();
         }
       });
+      log(_currentJwt);
       return await _retry(error, _currentJwt);
     } on Exception catch (e) {
       return null;

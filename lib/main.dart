@@ -66,7 +66,7 @@ void _initDi() {
 
   //token expired handler
   getIt.registerSingleton<TokenExpiredHandler>(TokenExpiredHandler());
-  // //homePage
+  //homePage
   getIt.registerSingleton<HomeService>(HomeService(createDioInstance()));
   getIt.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
   //searchPage
@@ -80,6 +80,10 @@ void _initDi() {
   getIt.registerSingleton<ShopRepository>(ShopRepositoryImpl());
   //jwt
   getIt.registerSingleton<TokenStore>(TokenStore(""));
+  //history
+  getIt.registerSingleton<HistoryService>(HistoryService(createDioInstance()));
+  getIt.registerSingleton<HistoryPageRepository>(HistoryRepositoryImpl());
+
   //Factory
   getIt.registerFactory(() => GetListBannerUseCase());
   getIt.registerFactory(() => GetListProductCategoriesHomeUseCase());
@@ -87,6 +91,7 @@ void _initDi() {
   getIt.registerFactory(() => GetListShopBySearchUseCase());
   getIt.registerFactory(() => GetJwtTokenUseCase());
   getIt.registerFactory(() => GetShopProductUseCase());
+  getIt.registerFactory(() => GetOrderHistoryCompleteUseCase());
 }
 
 class MyApp extends StatelessWidget {
