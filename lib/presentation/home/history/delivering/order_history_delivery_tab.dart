@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/presentation/home/history/bloc/order_history_delivering_bloc.dart';
-import 'package:muaho/presentation/home/history/model/order_history_delivering_model.dart';
+import 'package:muaho/presentation/home/history/models/order_history_delivering_model.dart';
+
+import 'bloc/order_history_delivering_bloc.dart';
 
 class OrderHistoryDeliveryTab extends StatefulWidget {
   const OrderHistoryDeliveryTab({Key? key}) : super(key: key);

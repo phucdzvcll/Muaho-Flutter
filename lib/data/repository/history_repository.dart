@@ -8,9 +8,25 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
 
   @override
   Future<Either<Failure, List<OrderHistoryComplete>>>
-      getOrderHistoryComplete() {
-    // TODO: implement getOrderHistoryComplete
-    throw UnimplementedError();
+      getOrderHistoryComplete() async {
+    var request = service.getOrderHistoryComplete();
+    var result = await handleNetworkResult(request);
+    if (result.isSuccess()) {
+      List<OrderHistoryComplete> list = [];
+      result.response?.forEach((element) {
+        list.add(OrderHistoryComplete(
+            orderId: element.orderId.defaultZero(),
+            orderCode: element.orderCode.defaultEmpty(),
+            shopName: element.shopName.defaultEmpty(),
+            itemCount: element.itemCount.defaultZero(),
+            total: element.total.defaultZero(),
+            status: element.status.defaultEmpty(),
+            thumbUrl: element.thumbUrl.defaultEmpty()));
+      });
+      return SuccessValue(list);
+    } else {
+      return FailValue(Failure());
+    }
   }
 
   @override

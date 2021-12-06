@@ -2,8 +2,8 @@ class OrderHistoryComplete {
   final int orderId;
   final String orderCode;
   final String shopName;
-  final String itemCount;
-  final String total;
+  final int itemCount;
+  final double total;
   final String status;
   final String thumbUrl;
 
@@ -44,7 +44,7 @@ class OrderHistoryComplete {
 
   @override
   String toString() {
-    return 'OrderHistoryDelivering{' +
+    return 'OrderHistoryComplete{' +
         ' orderId: $orderId,' +
         ' orderCode: $orderCode,' +
         ' shopName: $shopName,' +
@@ -59,8 +59,8 @@ class OrderHistoryComplete {
     int? orderId,
     String? orderCode,
     String? shopName,
-    String? itemCount,
-    String? total,
+    int? itemCount,
+    double? total,
     String? status,
     String? thumbUrl,
   }) {

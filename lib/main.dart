@@ -16,6 +16,7 @@ import 'package:muaho/data/repository/shop_repository.dart';
 import 'package:muaho/data/repository/sign_in_repository.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/repository/search_repository.dart';
+import 'package:muaho/domain/use_case/history/get_order_history_delivery_use_case.dart';
 import 'package:muaho/domain/use_case/search/get_list_hot_search_use_case.dart';
 import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
 import 'package:muaho/domain/use_case/sign_in/get_jwt_token_use_case.dart';
@@ -91,6 +92,7 @@ void _initDi() {
   getIt.registerFactory(() => GetListShopBySearchUseCase());
   getIt.registerFactory(() => GetJwtTokenUseCase());
   getIt.registerFactory(() => GetShopProductUseCase());
+  getIt.registerFactory(() => GetOrderHistoryDeliveryUseCase());
   getIt.registerFactory(() => GetOrderHistoryCompleteUseCase());
 }
 

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/data/data.dart';
 import 'package:muaho/data/response/history/OrderHistoryDeliveryResponse.dart';
 import 'package:retrofit/http.dart';
 
@@ -11,4 +12,7 @@ abstract class HistoryService {
 
   @GET("/order/history/delivering")
   Future<List<OrderHistoryDeliveringResponse>> getOrderHistoryDelivering();
+
+  @GET("/order/history/complete")
+  Future<List<OrderHistoryCompleteResponse>> getOrderHistoryComplete();
 }

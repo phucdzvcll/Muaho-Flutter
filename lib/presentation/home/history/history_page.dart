@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:muaho/presentation/home/history/tab/order_history_delivery_tab.dart';
+import 'package:muaho/presentation/home/history/delivering/order_history_delivery_tab.dart';
+
+import 'complete/order_history_complete_tab.dart';
 
 class HistoryPage extends StatelessWidget {
   static final String routeName = "purchase_screen";
@@ -62,9 +64,7 @@ class HistoryPage extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       children: [
                         OrderHistoryDeliveryTab(),
-                        Container(
-                          color: Colors.orange,
-                        ),
+                        OrderHistoryCompleteTab()
                       ],
                     ),
                   )

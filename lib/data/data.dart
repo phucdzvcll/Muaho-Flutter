@@ -10,6 +10,7 @@ export 'repository/home_repository.dart';
 export 'repository/search_repository.dart';
 export 'repository/shop_repository.dart';
 export 'repository/sign_in_repository.dart';
+export 'response/history/OrderHistoryCompleteResponse.dart';
 export 'response/history/OrderHistoryDeliveryResponse.dart';
 //response
 export 'response/home/productCategories/product_categories_response.dart';

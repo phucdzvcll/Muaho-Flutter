@@ -3,7 +3,7 @@ import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/repository/history_page_repository.dart';
 import 'package:muaho/main.dart';
 
-class GetOrderHistoryCompleteUseCase
+class GetOrderHistoryDeliveryUseCase
     extends BaseUseCase<EmptyInput, List<OrderHistoryDelivering>> {
   HistoryPageRepository _repository = getIt.get();
 
