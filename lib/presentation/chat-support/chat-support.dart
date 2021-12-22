@@ -20,20 +20,34 @@ class ChatMessage extends StatelessWidget {
       sizeFactor:
           CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(child: Text(_name[0])),
-            ),
-            Expanded(
-              child: Text(text),
-            ),
-          ],
-        ),
+      child: ChatMessageNoAnimation(text: text),
+    );
+  }
+}
+
+class ChatMessageNoAnimation extends StatelessWidget {
+  const ChatMessageNoAnimation({
+    Key? key,
+    required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(child: Text(_name[0])),
+          ),
+          Expanded(
+            child: Text(text),
+          ),
+        ],
       ),
     );
   }
@@ -51,7 +65,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
-  final List<ChatMessage> _messages = [];
+  final List<ChatMessageNoAnimation> _messages = [];
   final _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _isComposing = false;
@@ -62,55 +76,92 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     setState(() {
       _isComposing = false;
     });
-    var message = ChatMessage(
-      text: text,
-      animationController: AnimationController(
-        duration: const Duration(milliseconds: 700),
-        vsync: this,
-      ),
-    );
-    setState(() {
-      _messages.insert(0, message);
-    });
-    _focusNode.requestFocus();
-    message.animationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ChatBloc()..add(InitEvent()),
-      child: BlocBuilder<ChatBloc, ChatState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('FriendlyChat'),
-              elevation: 4.0,
-            ),
-            body: Container(
-              child: Column(
-                children: [
-                  Flexible(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(8.0),
-                      reverse: true,
-                      itemBuilder: (_, index) => _messages[index],
-                      itemCount: _messages.length,
-                    ),
-                  ),
-                  const Divider(height: 1.0),
-                  Container(
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).cardColor),
-                    child: _buildTextComposer(),
-                  ),
-                ],
-              ),
-              decoration: null,
-            ),
-          );
+      child: BlocListener<ChatBloc, ChatState>(
+        listenWhen: (pre, current) {
+          return current is InsertChatMsgState;
         },
+        listener: (context, state) {
+          if (state is InsertChatMsgState) {
+            var message = _buildChatMessage(state.msg);
+            setState(() {
+              _messages.insert(0, message);
+            });
+            _focusNode.requestFocus();
+          }
+        },
+        child: _buildScaffold(context),
       ),
+    );
+  }
+
+  ChatMessageNoAnimation _buildChatMessage(MessageModel msg) {
+    return ChatMessageNoAnimation(
+      text: msg.msg,
+    );
+  }
+
+  Scaffold _buildScaffold(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat with supporters'),
+        elevation: 4.0,
+      ),
+      body: Container(
+        child: Column(
+          children: [
+            Flexible(
+              child: _buildBody(),
+            ),
+            const Divider(height: 1.0),
+            Container(
+              decoration: BoxDecoration(color: Theme.of(context).cardColor),
+              child: _buildTextComposer(),
+            ),
+          ],
+        ),
+        decoration: null,
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    return BlocBuilder<ChatBloc, ChatState>(
+      buildWhen: (pre, current) {
+        return !(current is InsertChatMsgState);
+      },
+      builder: (context, state) {
+        if (state is ChatMsgListState) {
+          _messages.clear();
+          state.msgs.forEach((msg) {
+            ChatMessageNoAnimation chatMessage = _buildChatMessage(msg);
+            _messages.add(chatMessage);
+          });
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(8.0),
+            reverse: true,
+            itemBuilder: (_, index) {
+              var message = _messages[index];
+              return message;
+            },
+            itemCount: _messages.length,
+          );
+        } else if (state is ChatLostConnectionState) {
+          return Center(
+            child: Text("Lost connection!"),
+          );
+        } else {
+          return Center(
+            child: Text("Let's connect & chat with supporters."),
+          );
+        }
+      },
     );
   }
 
@@ -154,13 +205,5 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
       );
     });
-  }
-
-  @override
-  void dispose() {
-    for (var message in _messages) {
-      message.animationController.dispose();
-    }
-    super.dispose();
   }
 }

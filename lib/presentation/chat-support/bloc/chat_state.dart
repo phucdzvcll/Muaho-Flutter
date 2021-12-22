@@ -17,9 +17,25 @@ class ChatInitState extends ChatState {
 }
 
 @immutable
-class ChatMsgState {
-  final bool isOpen;
+class ChatNeedCreateTicketState extends ChatState {
+  
+}
+
+@immutable
+class ChatLostConnectionState extends ChatState {
+  
+}
+
+@immutable
+class ChatMsgListState extends ChatState {
   final List<MessageModel> msgs;
 
-  ChatMsgState({required this.isOpen, required this.msgs});
+  ChatMsgListState({required this.msgs});
+}
+
+@immutable
+class InsertChatMsgState extends ChatState {
+  final MessageModel msg;
+
+  InsertChatMsgState({required this.msg});
 }
