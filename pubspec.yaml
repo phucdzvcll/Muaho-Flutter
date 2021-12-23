@@ -49,6 +49,9 @@ dependencies:
   scrollable_positioned_list: ^0.2.3
   cached_network_image: ^3.2.0
   flutter_svg: ^1.0.0
+  flutter_secure_storage: ^5.0.2
+  synchronized: ^3.0.0
+  animated_widgets: ^1.1.0
 
   # socket.io
   socket_io_client: ^2.0.0-beta.4-nullsafety.0

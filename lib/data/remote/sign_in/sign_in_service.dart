@@ -6,23 +6,42 @@ import 'package:retrofit/http.dart';
 
 part 'sign_in_service.g.dart';
 
+final apiSignInService = SignInService(Dio(baseOptions));
+
 @RestApi(baseUrl: baseUrl)
 abstract class SignInService {
   factory SignInService(Dio dio) = _SignInService;
 
   @POST("/user/signin")
-  Future<SignInResponse> signIn(@Body() BodyParam bodyParam);
+  Future<SignInResponse> signIn(@Body() SignInBodyParam bodyParam);
+
+  @POST("/user/refresh_token")
+  Future<RefreshTokenResponse> refreshToken(
+      @Body() RefreshTokenBodyParam bodyParam);
 }
 
 @JsonSerializable()
-class BodyParam {
+class RefreshTokenBodyParam {
+  @JsonKey(name: 'refresh_token')
+  final String refreshToken;
+
+  RefreshTokenBodyParam({required this.refreshToken});
+
+  factory RefreshTokenBodyParam.fromJson(Map<String, dynamic> json) =>
+      _$RefreshTokenBodyParamFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RefreshTokenBodyParamToJson(this);
+}
+
+@JsonSerializable()
+class SignInBodyParam {
   @JsonKey(name: 'firebase_token')
   final String firebaseToken;
 
-  BodyParam({required this.firebaseToken});
+  SignInBodyParam({required this.firebaseToken});
 
-  factory BodyParam.fromJson(Map<String, dynamic> json) =>
-      _$BodyParamFromJson(json);
+  factory SignInBodyParam.fromJson(Map<String, dynamic> json) =>
+      _$SignInBodyParamFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BodyParamToJson(this);
+  Map<String, dynamic> toJson() => _$SignInBodyParamToJson(this);
 }
