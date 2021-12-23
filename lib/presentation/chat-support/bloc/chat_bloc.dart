@@ -16,17 +16,23 @@ part 'chat_state.dart';
 class _ChatNeedCreateTicketEvent extends ChatEvent {}
 class _ChatLostConnectionEvent extends ChatEvent {}
 class _ChatMsgListEvent extends ChatEvent {}
+class _OpenChatSessionEvent extends ChatEvent {
+  final int userId;
+
+  _OpenChatSessionEvent({required this.userId});
+}
+
 class _InsertChatMsgEvent extends ChatEvent {
   final MessageModel msg;
 
   _InsertChatMsgEvent({required this.msg});
-
 }
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   IO.Socket? _socket;
   List<MessageModel> _chatMsgs = [];
   Timer? _timerPingSocket;
+  int _chatUserId = 0;
 
   ChatBloc() : super(ChatInitState()) {
     on<InitEvent>((event, emit) {
@@ -37,11 +43,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       _handleOpenTicketEvent(emit, event.displayName);
     });
 
+    on<_OpenChatSessionEvent>((event, emit) {
+      _chatUserId = event.userId;
+    });
+
     on<SendChatMsgEvent>((event, emit) {
       _handleSendChatEvent(emit, event.msg);
     });
 
     on<_ChatLostConnectionEvent>((event, emit) {
+      _chatUserId = 0;
       emit(ChatLostConnectionState());
     });
 
@@ -77,8 +88,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _socket?.onConnect((_) {
       log('connect');
       //add(_ChatNeedCreateTicketEvent());
-      _socket?.emit("open_ticket", {"name": "Guest"});
+      _socket?.emit("open_chat_session", {"name": "Guest"});
 
+      _timerPingSocket?.cancel();
       _timerPingSocket = Timer.periodic(Duration(seconds: 5000), (timer) {
         _socket?.emit("ping");
       });
@@ -92,25 +104,33 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _socket?.onDisconnect((data) {
       log('onDisconnect $data');
       add(_ChatLostConnectionEvent());
+      _timerPingSocket?.cancel();
     });
 
-    _socket?.on('old_news', (data) {
-      log("old_news: $data");
+    _socket?.on('open_chat_session_success', (data) {
+      log("open_chat_session_success: $data");
+
+      add(_OpenChatSessionEvent(userId: data["userId"] ?? 0));
+    });
+
+    _socket?.on('chats_history', (data) {
+      log("chats_history: $data");
       _chatMsgs.clear();
       ListMsg listMsg = ListMsg.fromJson(data);
       listMsg.msgList?.forEach((msg) {
-        _chatMsgs.add(_mapChat(msg));
+        _chatMsgs.insert(0, _mapChat(msg));
       });
 
      add(_ChatMsgListEvent());
     });
-    _socket?.on('news', (data) {
-      log("news: $data");
+
+    _socket?.on('new_chats', (data) {
+      log("new_chats: $data");
       if (data != null) {
         data.forEach((v) {
           var newsChat = NewsChat.fromJson(v);
           var msg = _mapNewsChat(newsChat);
-          _chatMsgs.add(msg);
+          _chatMsgs.insert(0, msg);
           //add(_InsertChatMsgEvent(msg: msg));
         });
 
@@ -130,10 +150,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   MessageModel _mapNewsChat(NewsChat newsChat) {
-    return MessageModel(isMyMsg: false, msg: newsChat.msg ?? '');
+    return MessageModel(isMyMsg: newsChat.senderId == _chatUserId, msg: newsChat.msg ?? '');
   }
 
   MessageModel _mapChat(MsgList msg) {
-    return MessageModel(isMyMsg: false, msg: msg.msg ?? '');
+    return MessageModel(isMyMsg: msg.senderId == _chatUserId, msg: msg.msg ?? '');
   }
 }

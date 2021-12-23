@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/chat_bloc.dart';
 
-String _name = 'Your Name';
-
 class ChatMessage extends StatelessWidget {
   const ChatMessage({
     required this.text,
+    required this.isMine,
     required this.animationController,
     Key? key,
   }) : super(key: key);
   final String text;
+  final bool isMine;
   final AnimationController animationController;
 
   @override
@@ -20,7 +20,7 @@ class ChatMessage extends StatelessWidget {
       sizeFactor:
           CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
-      child: ChatMessageNoAnimation(text: text),
+      child: ChatMessageNoAnimation(text: text, isMine: isMine,),
     );
   }
 }
@@ -29,27 +29,50 @@ class ChatMessageNoAnimation extends StatelessWidget {
   const ChatMessageNoAnimation({
     Key? key,
     required this.text,
+    required this.isMine,
   }) : super(key: key);
 
   final String text;
+  final bool isMine;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(child: Text(_name[0])),
-          ),
-          Expanded(
-            child: Text(text),
-          ),
-        ],
-      ),
-    );
+    if (isMine) {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                text,
+                textAlign: TextAlign.end,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 16.0),
+              child: CircleAvatar(child: Text("I")),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 16.0),
+              child: CircleAvatar(child: Text("CS")),
+            ),
+            Expanded(
+              child: Text(text),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 
@@ -103,6 +126,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   ChatMessageNoAnimation _buildChatMessage(MessageModel msg) {
     return ChatMessageNoAnimation(
       text: msg.msg,
+      isMine: msg.isMyMsg,
     );
   }
 
