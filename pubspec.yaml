@@ -51,7 +51,11 @@ dependencies:
   flutter_svg: ^1.0.0
   flutter_secure_storage: ^5.0.2
   synchronized: ^3.0.0
-  animated_widgets: ^1.1.0
+  animate_do: ^2.0.0
+  flutter_slidable: ^1.1.0
+  geolocator: ^8.0.1
+  geocoding: ^2.0.1
+  google_maps_flutter: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +66,9 @@ dev_dependencies:
   google_fonts: ^2.1.0
 
 flutter_native_splash:
+  #flutter pub run flutter_native_splash:create
   color: "#ffffff"
-  image: assets/images/flash_screen_higt_quality.png
+  image: assets/images/flash_screen_high_quality.png
   android: true
   ios: true
   android_gravity: fill

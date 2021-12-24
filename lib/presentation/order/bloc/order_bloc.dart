@@ -2,29 +2,31 @@ import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/extensions/number.dart';
+import 'package:muaho/common/model/cart_store.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
-import 'package:muaho/presentation/order/model/cart_over_view_model.dart';
+import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
 import 'package:muaho/presentation/order/model/order_detail_model.dart';
-import 'package:muaho/presentation/order/model/product_model.dart';
+
+import '../../../main.dart';
 
 part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   GetShopProductUseCase _useCase = GetIt.instance.get();
+  CartStore cartStore = getIt.get<CartStore>();
 
   OrderBloc() : super(OrderInitial());
 
-  List<OrderProduct> _totalProducts = [];
-  List<OrderProduct> _currentProducts = [];
-  List<OrderProduct> _orderProducts = [];
+  List<ProductStore> _totalProducts = [];
+  List<ProductStore> _currentProducts = [];
 
   List<ProductGroupEntity> _groups = [];
 
   String _shopName = "";
   String _address = "";
-
+  int _shopID = -1;
   int currentGroupId = -1;
 
   @override
@@ -35,15 +37,41 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       yield* _handleFilterEvent(event);
     } else if (event is AddToCartEvent) {
       yield* _handleAddToCartEvent(event);
+    } else if (event is ChangeShopEvent) {
+      yield* _handleChangeShopEvent(event);
     }
   }
 
-  Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {
-    replaceProduct(event.product);
-    filterProducts(currentGroupId);
+  Stream<OrderState> _handleChangeShopEvent(ChangeShopEvent event) async* {
+    cartStore.shopId = _shopID;
+    cartStore.shopAddress = _address;
+    cartStore.shopName = _shopName;
+    cartStore.productStores.clear();
+    cartStore.editCart(event.product);
+    filterProductsByProductStore();
     yield OrderSuccess(
         shopDetailModel: OrderDetailModel(
-            cartOverView: createCartOverView(),
+            shopID: _shopID,
+            cartOverView: getCartOverView(),
+            currentGroupId: currentGroupId,
+            shopName: _shopName,
+            shopAddress: _address,
+            groups: _groups,
+            currentListProducts: _currentProducts));
+  }
+
+  Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {
+    if (cartStore.shopId == -1) {
+      cartStore.shopId = _shopID;
+      cartStore.shopAddress = _address;
+      cartStore.shopName = _shopName;
+    }
+    cartStore.editCart(event.product);
+    filterProductsByProductStore();
+    yield OrderSuccess(
+        shopDetailModel: OrderDetailModel(
+            shopID: _shopID,
+            cartOverView: getCartOverView(),
             currentGroupId: currentGroupId,
             shopName: _shopName,
             shopAddress: _address,
@@ -56,85 +84,108 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         await _useCase.execute(ShopProductParam(shopID: event.shopID));
     yield OrderLoading();
     if (result.isSuccess) {
+      _totalProducts.clear();
       _totalProducts.addAll(result.success.products.map((e) => mapProduct(e)));
       _shopName = result.success.shopName;
       _address = result.success.shopAddress;
+      _groups.clear();
       _groups.addAll(result.success.groups);
-
+      _shopID = event.shopID;
+      filterProductsByGroup(-1);
+      filterProductsByProductStore();
       yield OrderSuccess(
           shopDetailModel: OrderDetailModel(
-              cartOverView: createCartOverView(),
+              shopID: event.shopID,
+              cartOverView: getCartOverView(),
               currentGroupId: -1,
               shopName: _shopName,
               shopAddress: _address,
               groups: _groups,
-              currentListProducts: _totalProducts));
+              currentListProducts: _currentProducts));
     } else {
       yield OrderError();
     }
   }
 
-  OrderProduct mapProduct(ProductEntity productEntity) {
-    return OrderProduct(
+  ProductStore mapProduct(ProductEntity productEntity) {
+    return ProductStore(
       productId: productEntity.productId,
       productName: productEntity.productName,
       productPrice: productEntity.productPrice,
       groupId: productEntity.groupId,
       thumbUrl: productEntity.thumbUrl,
-      price: productEntity.productPrice.formatDouble() +
-          "đ / ${productEntity.unit.toLowerCase()}",
-      amount: 0,
+      quantity: 0,
+      unit: productEntity.unit,
     );
   }
 
   Stream<OrderState> _handleFilterEvent(FilterProductEvent event) async* {
-    filterProducts(event.groupID);
+    filterProductsByGroup(event.groupID);
+    filterProductsByProductStore();
     currentGroupId = event.groupID;
     yield OrderSuccess(
         shopDetailModel: OrderDetailModel(
+            shopID: _shopID,
             currentGroupId: currentGroupId,
             shopName: _shopName,
             shopAddress: _address,
             groups: _groups,
             currentListProducts: _currentProducts,
-            cartOverView: createCartOverView()));
+            cartOverView: getCartOverView()));
   }
 
-  CartOverViewModel createCartOverView() {
-    _orderProducts.clear();
+  CartOverViewModel getCartOverView() {
     int amount = 0;
     int totalItem = 0;
     double totalPrice = 0.0;
 
-    if (_totalProducts.isNotEmpty) {
-      _totalProducts.forEach((element) {
-        if (element.amount > 0) {
-          _orderProducts.add(element);
-          amount += element.amount;
+    if (cartStore.productStores.isNotEmpty) {
+      cartStore.productStores.forEach((element) {
+        if (element.quantity > 0) {
+          amount += element.quantity;
           totalItem += 1;
-          totalPrice += element.amount * element.productPrice;
+          totalPrice += element.quantity * element.productPrice;
         }
       });
     }
 
     return CartOverViewModel(
         amount: "$amount đơn vị - $totalItem sản phầm",
-        totalPrice: totalPrice.formatDouble() + " VNĐ",
-        products: _totalProducts);
+        totalPrice: totalPrice.formatDouble() + " VNĐ");
   }
 
-  void replaceProduct(OrderProduct newProduct) {
-    if (_totalProducts.isNotEmpty) {
-      for (var product in _totalProducts) {
-        if (product.productId == newProduct.productId) {
-          _totalProducts[_totalProducts.indexOf(product)] = newProduct;
-          break;
+  void filterProductsByProductStore() {
+    if (cartStore.productStores.length > 0) {
+      for (var currentProduct in _currentProducts) {
+        bool isExistInCartStore = false;
+        for (var productStore in cartStore.productStores) {
+          if (currentProduct.productId == productStore.productId) {
+            isExistInCartStore = true;
+            _currentProducts[_currentProducts.indexOf(currentProduct)] =
+                productStore;
+            break;
+          }
         }
+        if (!isExistInCartStore && currentProduct.quantity > 0) {
+          ProductStore productZeroQuantity =
+              currentProduct.copyWith(quantity: 0);
+          _currentProducts[_currentProducts.indexOf(currentProduct)] =
+              productZeroQuantity;
+        }
+      }
+    } else {
+      if (_currentProducts.length > 0) {
+        _currentProducts.forEach((element) {
+          if (element.quantity > 0) {
+            var newElement = element.copyWith(quantity: 0);
+            _currentProducts[_currentProducts.indexOf(element)] = newElement;
+          }
+        });
       }
     }
   }
 
-  void filterProducts(int groupID) {
+  void filterProductsByGroup(int groupID) {
     _currentProducts.clear();
     if (groupID == -1) {
       _currentProducts.addAll(_totalProducts);

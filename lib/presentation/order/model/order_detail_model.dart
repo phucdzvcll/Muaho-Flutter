@@ -1,19 +1,21 @@
+import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/presentation/order/model/product_model.dart';
 
-import 'cart_over_view_model.dart';
+import '../../components/model/cart_over_view_model.dart';
 
 class OrderDetailModel {
   final int currentGroupId;
   final String shopName;
   final String shopAddress;
+  final int shopID;
   final List<ProductGroupEntity> groups;
-  final List<OrderProduct> currentListProducts;
+  final List<ProductStore> currentListProducts;
   final CartOverViewModel cartOverView;
 
 //<editor-fold desc="Data Methods">
 
   const OrderDetailModel({
+    required this.shopID,
     required this.currentGroupId,
     required this.shopName,
     required this.shopAddress,
@@ -52,6 +54,7 @@ class OrderDetailModel {
         ' groups: $groups,' +
         ' currentListProducts: $currentListProducts,' +
         ' cartOverView: $cartOverView,' +
+        ' shopID: $shopID,' +
         '}';
   }
 
@@ -60,10 +63,12 @@ class OrderDetailModel {
     String? shopName,
     String? shopAddress,
     List<ProductGroupEntity>? groups,
-    List<OrderProduct>? currentListProducts,
+    List<ProductStore>? currentListProducts,
     CartOverViewModel? cartOverView,
+    int? shopID,
   }) {
     return OrderDetailModel(
+      shopID: shopID ?? this.shopID,
       currentGroupId: currentIndex ?? this.currentGroupId,
       shopName: shopName ?? this.shopName,
       shopAddress: shopAddress ?? this.shopAddress,
