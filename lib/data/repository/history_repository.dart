@@ -2,10 +2,11 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
-import 'package:muaho/main.dart';
 
 class HistoryRepositoryImpl implements HistoryPageRepository {
-  HistoryService service = getIt.get();
+  final HistoryService service;
+
+  HistoryRepositoryImpl({required this.service});
 
   @override
   Future<Either<Failure, List<OrderHistoryComplete>>>

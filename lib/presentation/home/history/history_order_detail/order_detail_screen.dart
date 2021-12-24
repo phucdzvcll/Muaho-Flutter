@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
@@ -38,7 +39,7 @@ class _OrderDetailState extends State<OrderDetail>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => OrderDetailBloc()
+      create: (ctx) => OrderDetailBloc(getOrderDetailUseCase: getIt.get())
         ..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
       child: Container(
         color: Theme.of(context).backgroundColor,

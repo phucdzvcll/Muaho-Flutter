@@ -16,7 +16,9 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PaymentBloc()..add(RequestLocationPermission()),
+      create: (context) =>
+          PaymentBloc(cartStore: getIt.get(), createOrderUseCase: getIt.get())
+            ..add(RequestLocationPermission()),
       child: BlocBuilder<PaymentBloc, PaymentState>(
         builder: (ctx, state) {
           return Container(

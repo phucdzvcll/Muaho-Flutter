@@ -6,16 +6,15 @@ import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/use_case/history/get_order_history_delivery_use_case.dart';
 import 'package:muaho/presentation/home/history/models/order_history_complete_model.dart';
 
-import '../../../../../main.dart';
-
 part 'order_history_complete_event.dart';
 part 'order_history_complete_state.dart';
 
 class OrderHistoryCompleteBloc
     extends Bloc<OrderHistoryCompleteEvent, OrderHistoryCompleteState> {
-  OrderHistoryCompleteBloc() : super(OrderHistoryCompleteInitial());
+  OrderHistoryCompleteBloc({required this.getOrderHistoryCompleteUseCase})
+      : super(OrderHistoryCompleteInitial());
 
-  GetOrderHistoryCompleteUseCase _useCase = getIt.get();
+  final GetOrderHistoryCompleteUseCase getOrderHistoryCompleteUseCase;
 
   @override
   Stream<OrderHistoryCompleteState> mapEventToState(
@@ -29,7 +28,7 @@ class OrderHistoryCompleteBloc
       GetOrderHistoryCompleteEvent event) async* {
     yield OrderHistoryCompleteLoading();
     Either<Failure, List<OrderHistoryComplete>> result =
-        await _useCase.execute(EmptyInput());
+        await getOrderHistoryCompleteUseCase.execute(EmptyInput());
     if (result.isSuccess) {
       yield OrderHistoryCompleteSuccess(
           orderHistoryDeliveries: result.success

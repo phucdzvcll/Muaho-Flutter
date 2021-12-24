@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:muaho/domain/domain.dart';
@@ -7,7 +6,9 @@ import 'package:muaho/domain/models/sign_in/jwt_entity.dart';
 import 'package:muaho/main.dart';
 
 class SignInRepositoryImpl implements SignInRepository {
-  SignInService service = GetIt.instance.get();
+  final SignInService service;
+
+  SignInRepositoryImpl({required this.service});
 
   @override
   Future<Either<Failure, JwtEntity>> getJwtToken(

@@ -1,15 +1,15 @@
-import 'package:get_it/get_it.dart';
-
 import '../../domain.dart';
 
 class GetShopProductUseCase
     extends BaseUseCase<ShopProductParam, ShopProductEntity> {
-  final ShopRepository repository = GetIt.instance.get();
+  final ShopRepository shopRepository;
+
+  GetShopProductUseCase({required this.shopRepository});
 
   @override
   Future<Either<Failure, ShopProductEntity>> executeInternal(
       ShopProductParam input) async {
-    return await repository.getShopProducts(input.shopID);
+    return await shopRepository.getShopProducts(input.shopID);
   }
 }
 

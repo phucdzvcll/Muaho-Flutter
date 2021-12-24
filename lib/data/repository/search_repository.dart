@@ -1,10 +1,11 @@
-import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/search/search_service.dart';
 import 'package:muaho/domain/domain.dart';
 
 class SearchRepositoryImpl implements SearchRepository {
-  SearchService searchService = GetIt.instance.get();
+  final SearchService searchService;
+
+  SearchRepositoryImpl({required this.searchService});
 
   @override
   Future<Either<Failure, HostSearchResult>> getListHotSearch() async {

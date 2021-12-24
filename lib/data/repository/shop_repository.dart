@@ -1,11 +1,12 @@
-import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/data/remote/shop/shop_service.dart';
 import 'package:muaho/domain/domain.dart';
 
 class ShopRepositoryImpl implements ShopRepository {
-  final ShopService service = GetIt.instance.get();
+  final ShopService service;
+
+  ShopRepositoryImpl({required this.service});
 
   @override
   Future<Either<Failure, ShopProductEntity>> getShopProducts(int shopId) async {

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/order_product_builder.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
@@ -20,8 +21,9 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrderHistoryDeliveringBloc>(
-      create: (context) =>
-          OrderHistoryDeliveringBloc()..add(GetOrderHistoryDeliveringEvent()),
+      create: (context) => OrderHistoryDeliveringBloc(
+          getOrderHistoryDeliveryUseCase: getIt.get())
+        ..add(GetOrderHistoryDeliveringEvent()),
       child:
           BlocBuilder<OrderHistoryDeliveringBloc, OrderHistoryDeliveringState>(
         builder: (context, state) {

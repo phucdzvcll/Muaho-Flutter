@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/adjustment_auantity_Button.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
@@ -33,7 +34,8 @@ class _CartScreenState extends State<CartScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CartBloc>(
-      create: (context) => CartBloc()..add(RequestCartEvent()),
+      create: (context) =>
+          CartBloc(cartStore: getIt.get())..add(RequestCartEvent()),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

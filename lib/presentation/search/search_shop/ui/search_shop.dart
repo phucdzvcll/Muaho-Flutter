@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
@@ -43,10 +44,11 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
               ),
             ),
             child: BlocProvider<SearchShopBloc>(
-              create: (_) => SearchShopBloc()
-                ..add(
-                  SearchEvent(keyword: widget.args.keyword),
-                ),
+              create: (_) =>
+                  SearchShopBloc(getListShopBySearchUseCase: getIt.get())
+                    ..add(
+                      SearchEvent(keyword: widget.args.keyword),
+                    ),
               child: BlocBuilder<SearchShopBloc, SearchShopState>(
                 builder: (ctx, state) {
                   return _handleRequestSearch(state, ctx);

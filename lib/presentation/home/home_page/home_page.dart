@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
@@ -37,7 +38,10 @@ class _HomePageState extends State<HomePage>
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: BlocProvider<HomePageBloc>(
-                create: (ctx) => HomePageBloc()..add(HomePageRequestEvent()),
+                create: (ctx) => HomePageBloc(
+                    bannerUseCase: getIt.get(),
+                    useCaseProductCategories: getIt.get())
+                  ..add(HomePageRequestEvent()),
                 child: BlocBuilder<HomePageBloc, HomePageState>(
                   builder: (ctx, state) {
                     return _handleBuilder(state, ctx, arg);

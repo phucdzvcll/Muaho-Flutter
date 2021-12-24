@@ -6,17 +6,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/use_case/order/create_oreder_use_case.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/payment/model/payment_info.dart';
 
 part 'payment_event.dart';
 part 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
-  PaymentBloc() : super(PaymentInitial());
+  PaymentBloc({required this.cartStore, required this.createOrderUseCase})
+      : super(PaymentInitial());
   String _userAddress = "";
-  CartStore cartStore = getIt.get<CartStore>();
-  CreateOrderUseCase _useCase = getIt.get();
+  final CartStore cartStore;
+  final CreateOrderUseCase createOrderUseCase;
 
   @override
   Stream<PaymentState> mapEventToState(PaymentEvent event) async* {
@@ -75,7 +75,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   }
 
   Stream<PaymentState> _handleCreateOrder() async* {
-    var result = await _useCase.execute(cartStore);
+    var result = await createOrderUseCase.execute(cartStore);
     if (result.isSuccess) {
       yield CreateOrderSuccess();
     } else {

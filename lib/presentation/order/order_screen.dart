@@ -39,8 +39,9 @@ class _OrderScreenState extends State<OrderScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => OrderBloc()
-        ..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
+      create: (ctx) =>
+          OrderBloc(cartStore: getIt.get(), getShopProductUseCase: getIt.get())
+            ..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

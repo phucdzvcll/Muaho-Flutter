@@ -3,10 +3,11 @@ import 'package:muaho/common/model/cart_store.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/data/remote/order/order_service.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/main.dart';
 
 class OrderRepositoryImpl implements CreateOrderRepository {
-  OrderService service = getIt.get<OrderService>();
+  final OrderService service;
+
+  OrderRepositoryImpl({required this.service});
 
   @override
   Future<Either<Failure, OrderStatusResult>> createOrder(

@@ -75,42 +75,54 @@ void _initDi() {
   //homePage
   getIt.registerLazySingleton<HomeService>(
       () => HomeService(createDioInstance()));
-  getIt.registerLazySingleton<HomePageRepository>(() => HomeRepositoryImpl());
+  getIt.registerLazySingleton<HomePageRepository>(
+      () => HomeRepositoryImpl(homeService: getIt.get()));
   //searchPage
   getIt.registerLazySingleton<SearchService>(
       () => SearchService(createDioInstance()));
-  getIt.registerLazySingleton<SearchRepository>(() => SearchRepositoryImpl());
+  getIt.registerLazySingleton<SearchRepository>(
+      () => SearchRepositoryImpl(searchService: getIt.get()));
   //signIn
   getIt.registerLazySingleton<SignInService>(
       () => SignInService(Dio(baseOptions)));
-  getIt.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl());
+  getIt.registerLazySingleton<SignInRepository>(
+      () => SignInRepositoryImpl(service: getIt.get()));
   //shop
   getIt.registerLazySingleton<ShopService>(
       () => ShopService(createDioInstance()));
-  getIt.registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
+  getIt.registerLazySingleton<ShopRepository>(
+      () => ShopRepositoryImpl(service: getIt.get()));
   //history
   getIt.registerLazySingleton<HistoryService>(
       () => HistoryService(createDioInstance()));
   getIt.registerLazySingleton<HistoryPageRepository>(
-      () => HistoryRepositoryImpl());
+      () => HistoryRepositoryImpl(service: getIt.get()));
   //oder
   getIt.registerLazySingleton<OrderService>(
       () => OrderService(createDioInstance()));
   getIt.registerLazySingleton<CreateOrderRepository>(
-      () => OrderRepositoryImpl());
+      () => OrderRepositoryImpl(service: getIt.get()));
 
   //Factory
-  getIt.registerFactory(() => GetListBannerUseCase());
-  getIt.registerFactory(() => GetListProductCategoriesHomeUseCase());
-  getIt.registerFactory(() => GetHotSearchUseCase());
-  getIt.registerFactory(() => GetListShopBySearchUseCase());
-  getIt.registerFactory(() => SignInUseCase());
-  getIt.registerFactory(() => GetShopProductUseCase());
+  getIt.registerFactory(
+      () => GetListBannerUseCase(homePageRepository: getIt.get()));
+  getIt.registerFactory(() =>
+      GetListProductCategoriesHomeUseCase(homePageRepository: getIt.get()));
+  getIt.registerFactory(
+      () => GetHotSearchUseCase(searchRepository: getIt.get()));
+  getIt.registerFactory(
+      () => GetListShopBySearchUseCase(searchRepository: getIt.get()));
+  getIt.registerFactory(() => SignInUseCase(signInRepository: getIt.get()));
+  getIt.registerFactory(
+      () => GetShopProductUseCase(shopRepository: getIt.get()));
   getIt.registerFactory(
       () => GetOrderHistoryDeliveryUseCase(historyRepository: getIt.get()));
-  getIt.registerFactory(() => GetOrderHistoryCompleteUseCase());
-  getIt.registerFactory(() => GetOrderDetailUseCase());
-  getIt.registerFactory(() => CreateOrderUseCase());
+  getIt.registerFactory(
+      () => GetOrderHistoryCompleteUseCase(historyPageRepository: getIt.get()));
+  getIt.registerFactory(
+      () => GetOrderDetailUseCase(historyPageRepository: getIt.get()));
+  getIt.registerFactory(
+      () => CreateOrderUseCase(createOrderRepository: getIt.get()));
 }
 
 class MyApp extends StatelessWidget {

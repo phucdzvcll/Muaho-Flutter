@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/home_page/model/home_page_model.dart';
@@ -10,10 +9,11 @@ part 'home_page_event.dart';
 part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc() : super(HomePageInitial());
-  final GetListProductCategoriesHomeUseCase _useCaseProductCategories =
-      GetIt.instance.get();
-  final GetListBannerUseCase _bannerUseCase = GetIt.instance.get();
+  HomePageBloc(
+      {required this.useCaseProductCategories, required this.bannerUseCase})
+      : super(HomePageInitial());
+  final GetListProductCategoriesHomeUseCase useCaseProductCategories;
+  final GetListBannerUseCase bannerUseCase;
 
   List<ProductCategoryHomeEntity> _productCategories = [];
   List<SlideBannerEntity> _slideBannerEntity = [];
@@ -29,10 +29,10 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     yield HomePageLoading();
 
     Either<Failure, ProductCategoriesHomeResults> productCategoriesResult =
-        await _useCaseProductCategories.execute(EmptyInput());
+        await useCaseProductCategories.execute(EmptyInput());
 
     Either<Failure, BannersResult> bannersResult =
-        await _bannerUseCase.execute(EmptyInput());
+        await bannerUseCase.execute(EmptyInput());
     _productCategories.clear();
     _slideBannerEntity.clear();
     if (productCategoriesResult.isSuccess) {

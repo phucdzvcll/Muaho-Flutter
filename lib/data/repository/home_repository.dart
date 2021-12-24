@@ -1,11 +1,12 @@
-import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/home/product_category_home.dart';
 
 class HomeRepositoryImpl implements HomePageRepository {
-  HomeService homeService = GetIt.instance.get();
+  final HomeService homeService;
+
+  HomeRepositoryImpl({required this.homeService});
 
   @override
   Future<Either<Failure, BannersResult>> getListSlideBanner() async {

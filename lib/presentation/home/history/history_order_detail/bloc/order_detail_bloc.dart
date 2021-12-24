@@ -5,16 +5,16 @@ import 'package:meta/meta.dart';
 import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
 
 part 'order_detail_event.dart';
 part 'order_detail_state.dart';
 
 class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
-  OrderDetailBloc() : super(OrderDetailInitial());
+  OrderDetailBloc({required this.getOrderDetailUseCase})
+      : super(OrderDetailInitial());
 
-  GetOrderDetailUseCase _useCase = getIt.get();
+  final GetOrderDetailUseCase getOrderDetailUseCase;
 
   @override
   Stream<OrderDetailState> mapEventToState(OrderDetailEvent event) async* {
@@ -26,8 +26,8 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
   Stream<OrderDetailState> _handleRequestEvent(
       GetOrderDetailEvent event) async* {
     yield OrderDetailLoading();
-    Either<Failure, OrderDetailEntity> result =
-        await _useCase.execute(OrderDetailParam(orderID: event.orderID));
+    Either<Failure, OrderDetailEntity> result = await getOrderDetailUseCase
+        .execute(OrderDetailParam(orderID: event.orderID));
     if (result.isSuccess) {
       yield OrderDetailSuccess(
           orderDetailSuccessModel: OrderDetailSuccessModel(

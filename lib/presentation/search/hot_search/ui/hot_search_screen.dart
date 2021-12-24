@@ -8,6 +8,8 @@ import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 
+import '../../../../main.dart';
+
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
 
@@ -21,7 +23,8 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HotSearchBloc>(
-      create: (_) => HotSearchBloc()..add(HotSearchRequestEvent()),
+      create: (_) => HotSearchBloc(getHotSearchUseCase: getIt.get())
+        ..add(HotSearchRequestEvent()),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

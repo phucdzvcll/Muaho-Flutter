@@ -3,16 +3,17 @@ import 'package:muaho/domain/common/failure.dart';
 import 'package:muaho/domain/common/use_case.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
-import 'package:muaho/main.dart';
 
 class GetOrderDetailUseCase
     extends BaseUseCase<OrderDetailParam, OrderDetailEntity> {
-  HistoryPageRepository _repository = getIt.get();
+  final HistoryPageRepository historyPageRepository;
+
+  GetOrderDetailUseCase({required this.historyPageRepository});
 
   @override
   Future<Either<Failure, OrderDetailEntity>> executeInternal(
       OrderDetailParam input) async {
-    return await _repository.getOrderDetail(input.orderID);
+    return await historyPageRepository.getOrderDetail(input.orderID);
   }
 }
 

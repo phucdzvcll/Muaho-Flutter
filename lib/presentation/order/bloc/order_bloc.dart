@@ -1,22 +1,20 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/model/cart_store.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
 import 'package:muaho/presentation/order/model/order_detail_model.dart';
 
-import '../../../main.dart';
-
 part 'order_event.dart';
 part 'order_state.dart';
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
-  GetShopProductUseCase _useCase = GetIt.instance.get();
-  CartStore cartStore = getIt.get<CartStore>();
+  final GetShopProductUseCase getShopProductUseCase;
+  final CartStore cartStore;
 
-  OrderBloc() : super(OrderInitial());
+  OrderBloc({required this.getShopProductUseCase, required this.cartStore})
+      : super(OrderInitial());
 
   List<ProductStore> _totalProducts = [];
   List<ProductStore> _currentProducts = [];
@@ -63,8 +61,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Stream<OrderState> _handleRequestEvent(GetShopDetailEvent event) async* {
-    Either<Failure, ShopProductEntity> result =
-        await _useCase.execute(ShopProductParam(shopID: event.shopID));
+    Either<Failure, ShopProductEntity> result = await getShopProductUseCase
+        .execute(ShopProductParam(shopID: event.shopID));
     yield OrderLoading();
     if (result.isSuccess) {
       _totalProducts.clear();

@@ -1,15 +1,15 @@
-import 'package:get_it/get_it.dart';
-
 import '../../domain.dart';
 
 class GetListShopBySearchUseCase
     extends BaseUseCase<GetListShopBySearchParam, List<SearchShop>> {
-  final SearchRepository repository = GetIt.instance.get();
+  final SearchRepository searchRepository;
+
+  GetListShopBySearchUseCase({required this.searchRepository});
 
   @override
   Future<Either<Failure, List<SearchShop>>> executeInternal(
       GetListShopBySearchParam input) async {
-    return await repository.getListShop(input.keyword);
+    return await searchRepository.getListShop(input.keyword);
   }
 }
 
