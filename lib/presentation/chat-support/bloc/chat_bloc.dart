@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
-import 'package:muaho/common/TokenStore.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/chat/list_msg.dart';
 import 'package:muaho/data/remote/chat/msg_list.dart';
 import 'package:muaho/data/remote/chat/news.dart';
@@ -14,8 +14,11 @@ part 'chat_event.dart';
 part 'chat_state.dart';
 
 class _ChatNeedCreateTicketEvent extends ChatEvent {}
+
 class _ChatLostConnectionEvent extends ChatEvent {}
+
 class _ChatMsgListEvent extends ChatEvent {}
+
 class _OpenChatSessionEvent extends ChatEvent {
   final int userId;
 
@@ -30,7 +33,7 @@ class _InsertChatMsgEvent extends ChatEvent {
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   IO.Socket? _socket;
-  List<MessageModel> _chatMsgs = [];
+  List<MessageModel> _chatMss = [];
   Timer? _timerPingSocket;
   int _chatUserId = 0;
 
@@ -57,7 +60,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     on<_ChatMsgListEvent>((event, emit) {
-      emit(ChatMsgListState(msgs: _chatMsgs));
+      emit(ChatMsgListState(msgs: _chatMss));
     });
 
     on<_InsertChatMsgEvent>((event, emit) {
@@ -76,7 +79,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _handleInitEvent(Emitter<ChatState> emit) {
-    String token = GetIt.instance.get<TokenStore>().token;
+    String token = GetIt.instance.get<TokenStore>().getToken();
     _socket = IO.io(
         'http://103.221.220.249:3000',
         IO.OptionBuilder()
@@ -115,13 +118,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     _socket?.on('chats_history', (data) {
       log("chats_history: $data");
-      _chatMsgs.clear();
+      _chatMss.clear();
       ListMsg listMsg = ListMsg.fromJson(data);
       listMsg.msgList?.forEach((msg) {
-        _chatMsgs.insert(0, _mapChat(msg));
+        _chatMss.insert(0, _mapChat(msg));
       });
 
-     add(_ChatMsgListEvent());
+      add(_ChatMsgListEvent());
     });
 
     _socket?.on('new_chats', (data) {
@@ -130,7 +133,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         data.forEach((v) {
           var newsChat = NewsChat.fromJson(v);
           var msg = _mapNewsChat(newsChat);
-          _chatMsgs.insert(0, msg);
+          _chatMss.insert(0, msg);
           //add(_InsertChatMsgEvent(msg: msg));
         });
 
@@ -150,10 +153,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   MessageModel _mapNewsChat(NewsChat newsChat) {
-    return MessageModel(isMyMsg: newsChat.senderId == _chatUserId, msg: newsChat.msg ?? '');
+    return MessageModel(
+        isMyMsg: newsChat.senderId == _chatUserId, msg: newsChat.msg ?? '');
   }
 
   MessageModel _mapChat(MsgList msg) {
-    return MessageModel(isMyMsg: msg.senderId == _chatUserId, msg: msg.msg ?? '');
+    return MessageModel(
+        isMyMsg: msg.senderId == _chatUserId, msg: msg.msg ?? '');
   }
 }
