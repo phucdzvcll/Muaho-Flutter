@@ -24,6 +24,8 @@ import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
 
+import 'presentation/chat-support/chat-support.dart';
+
 //flutter pub run easy_localization:generate --source-dir ./assets/translations
 //flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
 //flutter pub run build_runner build --delete-conflicting-outputs
@@ -142,6 +144,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (context) => HomeScreen(),
         SearchScreen.routeName: (context) => SearchScreen(),
         CartScreen.routeName: (context) => CartScreen(),
+        ChatScreen.routeName: (context) => ChatScreen(),
         PaymentScreen.routeName: (context) => PaymentScreen(),
       },
       // ),
