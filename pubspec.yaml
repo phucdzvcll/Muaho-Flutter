@@ -53,9 +53,6 @@ dependencies:
   synchronized: ^3.0.0
   animated_widgets: ^1.1.0
 
-  # socket.io
-  socket_io_client: ^2.0.0-beta.4-nullsafety.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
