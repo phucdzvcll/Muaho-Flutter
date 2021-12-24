@@ -65,31 +65,39 @@ void _initDi() {
   getIt.registerLazySingleton<FlutterSecureStorage>(
       () => FlutterSecureStorage());
   //jwt
-  getIt.registerSingleton<UserStore>(UserStore(storage: getIt.get()));
+  getIt.registerLazySingleton<UserStore>(() => UserStore(storage: getIt.get()));
   //Cart store
-  getIt.registerSingleton<CartStore>(
+  getIt.registerLazySingleton<CartStore>(() =>
       CartStore(shopId: -1, shopName: "", shopAddress: "", productStores: []));
   //token expired handler
-  getIt.registerSingleton<TokenExpiredHandler>(
-      TokenExpiredHandler(userStore: getIt.get()));
+  getIt.registerLazySingleton<TokenExpiredHandler>(
+      () => TokenExpiredHandler(userStore: getIt.get()));
   //homePage
-  getIt.registerSingleton<HomeService>(HomeService(createDioInstance()));
-  getIt.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
+  getIt.registerLazySingleton<HomeService>(
+      () => HomeService(createDioInstance()));
+  getIt.registerLazySingleton<HomePageRepository>(() => HomeRepositoryImpl());
   //searchPage
-  getIt.registerSingleton<SearchService>(SearchService(createDioInstance()));
-  getIt.registerSingleton<SearchRepository>(SearchRepositoryImpl());
+  getIt.registerLazySingleton<SearchService>(
+      () => SearchService(createDioInstance()));
+  getIt.registerLazySingleton<SearchRepository>(() => SearchRepositoryImpl());
   //signIn
-  getIt.registerSingleton<SignInService>(SignInService(Dio(baseOptions)));
-  getIt.registerSingleton<SignInRepository>(SignInRepositoryImpl());
+  getIt.registerLazySingleton<SignInService>(
+      () => SignInService(Dio(baseOptions)));
+  getIt.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl());
   //shop
-  getIt.registerSingleton<ShopService>(ShopService(createDioInstance()));
-  getIt.registerSingleton<ShopRepository>(ShopRepositoryImpl());
+  getIt.registerLazySingleton<ShopService>(
+      () => ShopService(createDioInstance()));
+  getIt.registerLazySingleton<ShopRepository>(() => ShopRepositoryImpl());
   //history
-  getIt.registerSingleton<HistoryService>(HistoryService(createDioInstance()));
-  getIt.registerSingleton<HistoryPageRepository>(HistoryRepositoryImpl());
+  getIt.registerLazySingleton<HistoryService>(
+      () => HistoryService(createDioInstance()));
+  getIt.registerLazySingleton<HistoryPageRepository>(
+      () => HistoryRepositoryImpl());
   //oder
-  getIt.registerSingleton<OrderService>(OrderService(createDioInstance()));
-  getIt.registerSingleton<CreateOrderRepository>(OrderRepositoryImpl());
+  getIt.registerLazySingleton<OrderService>(
+      () => OrderService(createDioInstance()));
+  getIt.registerLazySingleton<CreateOrderRepository>(
+      () => OrderRepositoryImpl());
 
   //Factory
   getIt.registerFactory(() => GetListBannerUseCase());
