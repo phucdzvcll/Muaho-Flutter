@@ -1,6 +1,7 @@
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/domain/models/history/order_detail.dart';
 import 'package:muaho/main.dart';
 
 class HistoryRepositoryImpl implements HistoryPageRepository {
@@ -48,6 +49,43 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
             thumbUrl: element.thumbUrl.defaultEmpty()));
       });
       return SuccessValue(list);
+    } else {
+      return FailValue(Failure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, OrderDetailEntity>> getOrderDetail(int orderID) async {
+    var request = service.getOrderHistoryDetail(orderID);
+    var result = await handleNetworkResult(request);
+    if (result.isSuccess()) {
+      List<Product> products =
+          (result.response?.products).defaultEmpty().map((e) {
+        ProductDetailResponse response = e as ProductDetailResponse;
+        return Product(
+            productId: response.productId.defaultZero(),
+            price: response.price.defaultZero(),
+            quantity: response.quantity.defaultZero(),
+            total: response.total.defaultZero(),
+            productName: (response.productName).defaultEmpty(),
+            thumbUrl: (response.productThumbUrl).defaultEmpty());
+      }).toList();
+      OrderDetailEntity orderDetailEntity = OrderDetailEntity(
+          orderId: (result.response?.orderId).defaultZero(),
+          voucherCode: (result.response?.voucherCode).defaultEmpty(),
+          totalBeforeDiscount:
+              (result.response?.totalBeforeDiscount).defaultZero(),
+          voucherDiscount: (result.response?.voucherDiscount).defaultZero(),
+          total: (result.response?.total).defaultZero(),
+          deliveryAddress: (result.response?.deliveryAddress).defaultEmpty(),
+          deliveryPhoneNumber:
+              (result.response?.deliveryPhoneNumber).defaultEmpty(),
+          shopId: (result.response?.shopId).defaultZero(),
+          shopName: (result.response?.shopName).defaultEmpty(),
+          shopAddress: (result.response?.shopAddress).defaultEmpty(),
+          status: (result.response?.status).defaultEmpty(),
+          products: products);
+      return SuccessValue(orderDetailEntity);
     } else {
       return FailValue(Failure());
     }

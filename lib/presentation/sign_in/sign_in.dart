@@ -17,14 +17,23 @@ class SignIn extends StatelessWidget {
           backgroundColor: Colors.white,
           body: BlocProvider<SignBloc>(
             create: (ctx) => SignBloc()..add(GetJwtTokenEvent()),
-            child: BlocBuilder<SignBloc, SignBlocState>(
-              builder: (ctx, state) {
-                return Center(
-                  child: Container(
-                    child: _signInBuilder(state, ctx),
-                  ),
-                );
+            child: BlocListener<SignBloc, SignBlocState>(
+              listener: (ctx, state) {
+                if (state is SignSuccess) {
+                  Navigator.pushReplacementNamed(ctx, HomeScreen.routeName,
+                      arguments:
+                          SignInArguments(userName: state.entity.userName));
+                }
               },
+              child: BlocBuilder<SignBloc, SignBlocState>(
+                builder: (ctx, state) {
+                  return Center(
+                    child: Container(
+                      child: _signInBuilder(state, ctx),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -35,27 +44,8 @@ class SignIn extends StatelessWidget {
   Widget _signInBuilder(SignBlocState state, BuildContext ctx) {
     if (state is SignLoading) {
       return CircularProgressIndicator();
-    } else if (state is SignSuccess) {
-      return showAlertDialog(
-        ctx,
-        "Đăng Nhập Thành Công",
-        () => {
-          // ScaffoldMessenger.of(ctx).showSnackBar(
-          //   SnackBar(
-          //     content: Text(state.entity.jwtToken),
-          //   ),
-          // ),
-          Navigator.pushReplacementNamed(ctx, HomeScreen.routeName,
-              arguments: SignInArguments(userName: state.entity.userName))
-        },
-      );
     } else {
-      return showAlertDialog(
-          ctx,
-          "Đăng Nhập Không Thành Công",
-          () => {
-                //todo resend request or turn back to login page
-              });
+      return SizedBox.shrink();
     }
   }
 

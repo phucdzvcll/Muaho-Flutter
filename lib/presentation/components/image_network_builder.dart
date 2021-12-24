@@ -32,7 +32,7 @@ class ImageNetworkBuilder extends StatelessWidget {
           ? Image.asset('assets/images/placeholder_square.png')
           : Image.asset('assets/images/placeholder.png'),
       imageUrl: imgUrl,
-      fit: BoxFit.cover,
+      fit: BoxFit.fill,
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,22 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/data/data.dart';
-import 'package:muaho/data/remote/search/search_service.dart';
-import 'package:muaho/data/remote/shop/shop_service.dart';
-import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
-import 'package:muaho/data/repository/search_repository.dart';
-import 'package:muaho/data/repository/shop_repository.dart';
-import 'package:muaho/data/repository/sign_in_repository.dart';
+import 'package:muaho/data/remote/order/order_service.dart';
+import 'package:muaho/data/repository/order_repository.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/domain/repository/search_repository.dart';
-import 'package:muaho/domain/use_case/history/get_order_history_delivery_use_case.dart';
-import 'package:muaho/domain/use_case/search/get_list_hot_search_use_case.dart';
-import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
-import 'package:muaho/domain/use_case/sign_in/get_jwt_token_use_case.dart';
+import 'package:muaho/domain/use_case/order/create_oreder_use_case.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
+import 'package:muaho/presentation/%20payment/payment_screen.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
+import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
+import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
@@ -35,8 +31,11 @@ import 'presentation/chat-support/chat-support.dart';
 //flutter pub run build_runner build --delete-conflicting-outputs
 final storage = new FlutterSecureStorage();
 final getIt = GetIt.instance;
+int startTime = 0;
 
 Future<void> main() async {
+  startTime = DateTime.now().millisecondsSinceEpoch;
+  log("Start $startTime");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
@@ -66,7 +65,8 @@ Future<void> main() async {
 
 void _initDi() {
   //Singleton
-
+  getIt.registerSingleton<CartStore>(
+      CartStore(shopId: -1, shopName: "", shopAddress: "", productStores: []));
   //token expired handler
   getIt.registerSingleton<TokenExpiredHandler>(TokenExpiredHandler());
   //homePage
@@ -86,6 +86,9 @@ void _initDi() {
   //history
   getIt.registerSingleton<HistoryService>(HistoryService(createDioInstance()));
   getIt.registerSingleton<HistoryPageRepository>(HistoryRepositoryImpl());
+  //oder
+  getIt.registerSingleton<OrderService>(OrderService(createDioInstance()));
+  getIt.registerSingleton<CreateOrderRepository>(OrderRepositoryImpl());
 
   //Factory
   getIt.registerFactory(() => GetListBannerUseCase());
@@ -96,6 +99,8 @@ void _initDi() {
   getIt.registerFactory(() => GetShopProductUseCase());
   getIt.registerFactory(() => GetOrderHistoryDeliveryUseCase());
   getIt.registerFactory(() => GetOrderHistoryCompleteUseCase());
+  getIt.registerFactory(() => GetOrderDetailUseCase());
+  getIt.registerFactory(() => CreateOrderUseCase());
 }
 
 class MyApp extends StatelessWidget {
@@ -104,6 +109,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    log("result ${DateTime.now().millisecondsSinceEpoch - startTime} " +
+        " Start $startTime");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: context.locale,
@@ -125,6 +132,12 @@ class MyApp extends StatelessWidget {
             return OrderScreen(shopArgument: args);
           });
         }
+        if (settings.name == OrderDetail.routeName) {
+          final args = settings.arguments as OrderDetailArgument;
+          return MaterialPageRoute(builder: (context) {
+            return OrderDetail(argument: args);
+          });
+        }
       },
       routes: {
         "/": (context) => SignIn(),
@@ -132,6 +145,7 @@ class MyApp extends StatelessWidget {
         SearchScreen.routeName: (context) => SearchScreen(),
         CartScreen.routeName: (context) => CartScreen(),
         ChatScreen.routeName: (context) => ChatScreen(),
+        PaymentScreen.routeName: (context) => PaymentScreen(),
       },
       // ),
     );

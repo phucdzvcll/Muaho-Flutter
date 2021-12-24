@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:muaho/presentation/order/model/product_model.dart';
+import 'package:muaho/common/common.dart';
 
 import 'image_network_builder.dart';
 
 class ProductCard extends StatelessWidget {
-  final OrderProduct product;
-  final void Function(OrderProduct, bool) onSelectedProduct;
+  final ProductStore product;
+  final void Function(ProductStore, bool) onSelectedProduct;
 
   const ProductCard(
       {Key? key, required this.product, required this.onSelectedProduct})
@@ -16,7 +16,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: product.amount > 0
+        color: product.quantity > 0
             ? Theme.of(context).backgroundColor
             : Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -66,7 +66,7 @@ class ProductCard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  product.price,
+                  product.productPrice.formatDouble(),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -74,7 +74,7 @@ class ProductCard extends StatelessWidget {
             ),
             Positioned.fill(
               bottom: 10,
-              child: product.amount == 0
+              child: product.quantity == 0
                   ? _upDownButton(isIncrease: true, context: context)
                   : _upDownWidget(context),
             )
@@ -92,25 +92,25 @@ class ProductCard extends StatelessWidget {
         onTap: () {
           if (isIncrease) {
             onSelectedProduct(
-                OrderProduct(
-                    amount: product.amount + 1,
+                ProductStore(
+                    quantity: product.quantity + 1,
                     productId: product.productId,
                     productName: product.productName,
                     productPrice: product.productPrice,
-                    price: product.price,
+                    unit: product.unit,
                     groupId: product.groupId,
                     thumbUrl: product.thumbUrl),
                 isIncrease);
           } else {
-            if (product.amount > 0) {
-              int newAmount = product.amount - 1;
+            if (product.quantity > 0) {
+              int newAmount = product.quantity - 1;
               onSelectedProduct(
-                  OrderProduct(
-                      amount: newAmount,
+                  ProductStore(
+                      quantity: newAmount,
                       productId: product.productId,
                       productName: product.productName,
                       productPrice: product.productPrice,
-                      price: product.price,
+                      unit: product.unit,
                       groupId: product.groupId,
                       thumbUrl: product.thumbUrl),
                   isIncrease);
@@ -126,7 +126,7 @@ class ProductCard extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Theme.of(context).backgroundColor),
-                color: product.amount > 0
+                color: product.quantity > 0
                     ? Colors.white
                     : Theme.of(context).backgroundColor),
             width: 24,
@@ -157,7 +157,7 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 6),
             child: Text(
-              product.amount.toString(),
+              product.quantity.toString(),
               textAlign: TextAlign.end,
               style: Theme.of(context)
                   .textTheme

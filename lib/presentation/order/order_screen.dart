@@ -1,32 +1,51 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/common/my_theme.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
+import 'package:muaho/presentation/components/cart_over_view.dart';
 import 'package:muaho/presentation/components/product_card.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';
-import 'model/product_model.dart';
+import 'model/order_detail_model.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   static const String routeName = "shop_screen";
   final ShopArgument shopArgument;
 
   const OrderScreen({Key? key, required this.shopArgument}) : super(key: key);
 
   @override
+  State<OrderScreen> createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _cartOverviewController;
+
+  @override
+  void initState() {
+    super.initState();
+    _cartOverviewController = AnimationController(vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) =>
-          OrderBloc()..add(GetShopDetailEvent(shopID: shopArgument.shopId)),
+      create: (ctx) => OrderBloc()
+        ..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(
           child: Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
             appBar: AppBarComponent(
               title: "Chọn Sản Phẩm",
               backAction: () {
@@ -77,67 +96,33 @@ class OrderScreen extends StatelessWidget {
       bottom: 20,
       left: 24,
       right: 24,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(
-            ctx,
-            CartScreen.routeName,
-          );
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(32),
-          child: Container(
-            width: double.infinity,
-            height: 90,
-            color: Theme.of(ctx).primaryColorLight,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          state.shopDetailModel.cartOverView.amount,
-                          style: Theme.of(ctx)
-                              .textTheme
-                              .subtitle1!
-                              .copyWith(color: Colors.white),
-                        ),
-                        Text(
-                          state.shopDetailModel.cartOverView.totalPrice,
-                          style: Theme.of(ctx).textTheme.headline1!.copyWith(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 90,
-                  width: 90,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(32),
-                      child: Container(
-                        color: Colors.white,
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/images/shopping_cart_checkout_black_24dp.svg',
-                            width: 40,
-                            height: 40,
-                            color: Theme.of(ctx).primaryColorLight,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
+      child: FadeInUp(
+        manualTrigger: true,
+        duration: Duration(milliseconds: 400),
+        controller: (controller) => _cartOverviewController = controller,
+        child: CartOverView(
+          onClick: () {
+            Navigator.pushNamed(
+              ctx,
+              CartScreen.routeName,
+            ).whenComplete(() {
+              BlocProvider.of<OrderBloc>(ctx)
+                  .add(GetShopDetailEvent(shopID: widget.shopArgument.shopId));
+            });
+          },
+          cartOverViewModel: state.shopDetailModel.cartOverView,
+          icon: FadeInDown(
+            delay: Duration(milliseconds: 300),
+            duration: Duration(milliseconds: 1000),
+            child: Swing(
+              delay: Duration(milliseconds: 1400),
+              duration: Duration(milliseconds: 1500),
+              child: SvgPicture.asset(
+                "assets/images/shopping_cart_checkout_black_24dp.svg",
+                width: 40,
+                height: 40,
+                color: Theme.of(ctx).primaryColorLight,
+              ),
             ),
           ),
         ),
@@ -156,7 +141,7 @@ class OrderScreen extends StatelessWidget {
           height: 16,
         ),
         _productGroupBuilder(state, ctx),
-        _productBuilder(state.shopDetailModel.currentListProducts)
+        _productBuilder(state.shopDetailModel)
       ],
     );
   }
@@ -211,36 +196,90 @@ class OrderScreen extends StatelessWidget {
     }
   }
 
-  Widget _productBuilder(List<OrderProduct> currentListProducts) {
+  Widget _productBuilder(OrderDetailModel orderDetailModel) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 32),
-        child: GridView.builder(
-          cacheExtent: 0,
-          padding: const EdgeInsets.only(
-              top: 8.0, left: 12.0, right: 12, bottom: 130),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 0.7,
-            crossAxisCount: 3,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          print(notification);
+          if (notification is ScrollStartNotification) {
+            _cartOverviewController.reverse();
+            return false;
+          } else if (notification is ScrollEndNotification) {
+            _cartOverviewController.forward();
+            return true;
+          }
+          return false;
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 32),
+          child: GridView.builder(
+            cacheExtent: 0,
+            padding: const EdgeInsets.only(
+                top: 8.0, left: 12.0, right: 12, bottom: 130),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 0.7,
+              crossAxisCount: 3,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+            ),
+            shrinkWrap: true,
+            itemCount: orderDetailModel.currentListProducts.length,
+            itemBuilder: (ctx, index) {
+              return _productCard(
+                  orderDetailModel.currentListProducts[index],
+                  ctx,
+                  orderDetailModel.shopID != getIt.get<CartStore>().shopId,
+                  getIt.get<CartStore>().shopId);
+            },
           ),
-          shrinkWrap: true,
-          itemCount: currentListProducts.length,
-          itemBuilder: (ctx, index) {
-            return _productCard(currentListProducts[index], ctx);
-          },
         ),
       ),
     );
   }
 
-  Widget _productCard(OrderProduct product, BuildContext context) {
+  Widget _productCard(ProductStore product, BuildContext context,
+      bool isChangeShop, int shopId) {
     return ProductCard(
         product: product,
         onSelectedProduct: (productCart, isIncrease) {
-          BlocProvider.of<OrderBloc>(context).add(
-              AddToCartEvent(product: productCart, isIncrease: isIncrease));
+          if (isChangeShop && shopId != -1) {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                backgroundColor: MyTheme.backgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                title: Text(
+                  "Bạn có muốn đổi cửa hàng?",
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+                content: Text(
+                  "Những món bạn chọn ở cửa hàng trước sẽ bị xóa.",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text("Yes"),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      BlocProvider.of<OrderBloc>(context)
+                          .add(ChangeShopEvent(product: productCart));
+                    },
+                  ),
+                  CupertinoDialogAction(
+                    child: Text("No"),
+                  )
+                ],
+              ),
+            );
+          } else if (shopId == -1) {
+            BlocProvider.of<OrderBloc>(context)
+                .add(ChangeShopEvent(product: productCart));
+          } else {
+            BlocProvider.of<OrderBloc>(context).add(
+                AddToCartEvent(product: productCart, isIncrease: isIncrease));
+          }
         });
   }
 }

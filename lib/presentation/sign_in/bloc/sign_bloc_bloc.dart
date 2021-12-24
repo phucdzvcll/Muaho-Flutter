@@ -50,6 +50,7 @@ class SignBloc extends Bloc<SignBlocEvent, SignBlocState> {
 
     if (auth.currentUser != null) {
       String? rToken = await storage.read(key: rJTW);
+      log(rToken.defaultEmpty());
       var jwt = await apiSignInService.refreshToken(
           RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
       //Di singleton JWT
