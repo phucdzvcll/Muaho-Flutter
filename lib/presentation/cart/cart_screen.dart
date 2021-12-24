@@ -211,16 +211,22 @@ class _CartScreenState extends State<CartScreen>
       ),
       child: Container(
         height: 120,
-        margin: EdgeInsets.all(8),
+        margin: EdgeInsets.all(4),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: ImageNetworkBuilder(
-                imgUrl: product.thumbUrl,
-                isSquare: true,
-                width: 120,
-                height: 120,
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                      color: Theme.of(context).primaryColorLight, width: 0.75)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: ImageNetworkBuilder(
+                  imgUrl: product.thumbUrl,
+                  isSquare: true,
+                  width: 120,
+                  height: 120,
+                ),
               ),
             ),
             Expanded(

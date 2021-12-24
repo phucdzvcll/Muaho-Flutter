@@ -161,16 +161,22 @@ class _OrderDetailState extends State<OrderDetail>
   Widget _itemProductDetailBuilder(Product product, BuildContext context) {
     return Container(
       height: 120,
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(4),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: ImageNetworkBuilder(
-              imgUrl: product.thumbUrl,
-              isSquare: true,
-              width: 120,
-              height: 120,
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: Theme.of(context).primaryColorLight, width: 0.7),
+                borderRadius: BorderRadius.circular(8)),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: ImageNetworkBuilder(
+                imgUrl: product.thumbUrl,
+                isSquare: true,
+                width: 120,
+                height: 120,
+              ),
             ),
           ),
           Expanded(
