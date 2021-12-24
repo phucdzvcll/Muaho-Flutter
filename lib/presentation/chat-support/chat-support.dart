@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/common.dart';
+import 'package:muaho/main.dart';
 
 import 'bloc/chat_bloc.dart';
 
@@ -20,7 +22,10 @@ class ChatMessage extends StatelessWidget {
       sizeFactor:
           CurvedAnimation(parent: animationController, curve: Curves.easeOut),
       axisAlignment: 0.0,
-      child: ChatMessageNoAnimation(text: text, isMine: isMine,),
+      child: ChatMessageNoAnimation(
+        text: text,
+        isMine: isMine,
+      ),
     );
   }
 }
@@ -104,7 +109,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatBloc()..add(InitEvent()),
+      create: (context) =>
+          ChatBloc(userStore: getIt.get<UserStore>())..add(InitEvent()),
       child: BlocListener<ChatBloc, ChatState>(
         listenWhen: (pre, current) {
           return current is InsertChatMsgState;

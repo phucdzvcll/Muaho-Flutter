@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,13 +27,11 @@ import 'presentation/chat-support/chat-support.dart';
 //flutter pub run easy_localization:generate --source-dir ./assets/translations
 //flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
 //flutter pub run build_runner build --delete-conflicting-outputs
-final storage = new FlutterSecureStorage();
 final getIt = GetIt.instance;
 int startTime = 0;
 
 Future<void> main() async {
   startTime = DateTime.now().millisecondsSinceEpoch;
-  log("Start $startTime");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
@@ -65,10 +61,17 @@ Future<void> main() async {
 
 void _initDi() {
   //Singleton
+  //store
+  getIt.registerLazySingleton<FlutterSecureStorage>(
+      () => FlutterSecureStorage());
+  //jwt
+  getIt.registerSingleton<UserStore>(UserStore(storage: getIt.get()));
+  //Cart store
   getIt.registerSingleton<CartStore>(
       CartStore(shopId: -1, shopName: "", shopAddress: "", productStores: []));
   //token expired handler
-  getIt.registerSingleton<TokenExpiredHandler>(TokenExpiredHandler());
+  getIt.registerSingleton<TokenExpiredHandler>(
+      TokenExpiredHandler(userStore: getIt.get()));
   //homePage
   getIt.registerSingleton<HomeService>(HomeService(createDioInstance()));
   getIt.registerSingleton<HomePageRepository>(HomeRepositoryImpl());
@@ -81,8 +84,6 @@ void _initDi() {
   //shop
   getIt.registerSingleton<ShopService>(ShopService(createDioInstance()));
   getIt.registerSingleton<ShopRepository>(ShopRepositoryImpl());
-  //jwt
-  getIt.registerSingleton<TokenStore>(TokenStore(""));
   //history
   getIt.registerSingleton<HistoryService>(HistoryService(createDioInstance()));
   getIt.registerSingleton<HistoryPageRepository>(HistoryRepositoryImpl());
@@ -95,9 +96,10 @@ void _initDi() {
   getIt.registerFactory(() => GetListProductCategoriesHomeUseCase());
   getIt.registerFactory(() => GetHotSearchUseCase());
   getIt.registerFactory(() => GetListShopBySearchUseCase());
-  getIt.registerFactory(() => GetJwtTokenUseCase());
+  getIt.registerFactory(() => SignInUseCase());
   getIt.registerFactory(() => GetShopProductUseCase());
-  getIt.registerFactory(() => GetOrderHistoryDeliveryUseCase());
+  getIt.registerFactory(
+      () => GetOrderHistoryDeliveryUseCase(historyRepository: getIt.get()));
   getIt.registerFactory(() => GetOrderHistoryCompleteUseCase());
   getIt.registerFactory(() => GetOrderDetailUseCase());
   getIt.registerFactory(() => CreateOrderUseCase());
@@ -109,8 +111,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    log("result ${DateTime.now().millisecondsSinceEpoch - startTime} " +
-        " Start $startTime");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: context.locale,

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/chat/list_msg.dart';
@@ -36,8 +35,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   List<MessageModel> _chatMss = [];
   Timer? _timerPingSocket;
   int _chatUserId = 0;
+  final UserStore userStore;
 
-  ChatBloc() : super(ChatInitState()) {
+  ChatBloc({required this.userStore}) : super(ChatInitState()) {
     on<InitEvent>((event, emit) {
       _handleInitEvent(emit);
     });
@@ -79,7 +79,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void _handleInitEvent(Emitter<ChatState> emit) {
-    String token = GetIt.instance.get<TokenStore>().getToken();
+    String? token = userStore.getToken();
     _socket = IO.io(
         'http://103.221.220.249:3000',
         IO.OptionBuilder()
@@ -91,7 +91,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _socket?.onConnect((_) {
       log('connect');
       //add(_ChatNeedCreateTicketEvent());
-      _socket?.emit("open_chat_session", {"name": "Guest"});
+      _socket?.emit("open_chat_session", {"name": userStore.getUserName()});
 
       _timerPingSocket?.cancel();
       _timerPingSocket = Timer.periodic(Duration(seconds: 5000), (timer) {

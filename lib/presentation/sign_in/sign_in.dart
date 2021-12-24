@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/my_theme.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 
 import 'bloc/sign_bloc_bloc.dart';
@@ -16,7 +17,8 @@ class SignIn extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: BlocProvider<SignBloc>(
-            create: (ctx) => SignBloc()..add(GetJwtTokenEvent()),
+            create: (ctx) =>
+                SignBloc(signInUseCase: getIt.get())..add(GetJwtTokenEvent()),
             child: BlocListener<SignBloc, SignBlocState>(
               listener: (ctx, state) {
                 if (state is SignSuccess) {

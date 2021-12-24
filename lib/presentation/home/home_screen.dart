@@ -31,7 +31,12 @@ class _HomeScreenState extends State<HomeScreen>
       child: SafeArea(
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                ChatScreen.routeName,
+              );
+            },
             child: Swing(
               duration: Duration(milliseconds: 1200),
               delay: Duration(milliseconds: 200),

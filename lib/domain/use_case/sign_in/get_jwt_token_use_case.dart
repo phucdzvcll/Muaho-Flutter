@@ -2,18 +2,12 @@ import 'package:get_it/get_it.dart';
 
 import '../../domain.dart';
 
-class GetJwtTokenUseCase extends BaseUseCase<SignInParam, SignInEntity> {
+class SignInUseCase extends BaseUseCase<EmptyInput, SignInEntity> {
   final SignInRepository repository = GetIt.instance.get();
 
   @override
   Future<Either<Failure, SignInEntity>> executeInternal(
-      SignInParam input) async {
-    return await repository.getJwtToken(firebaseToken: input.firebaseToken);
+      EmptyInput input) async {
+    return await repository.loginAnonymous();
   }
-}
-
-class SignInParam {
-  final String firebaseToken;
-
-  SignInParam({required this.firebaseToken});
 }

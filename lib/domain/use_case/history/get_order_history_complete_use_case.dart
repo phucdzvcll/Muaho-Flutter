@@ -1,15 +1,16 @@
 import 'package:muaho/domain/common/use_case.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/repository/history_page_repository.dart';
-import 'package:muaho/main.dart';
 
 class GetOrderHistoryDeliveryUseCase
     extends BaseUseCase<EmptyInput, List<OrderHistoryDelivering>> {
-  HistoryPageRepository _repository = getIt.get();
+  final HistoryPageRepository historyRepository;
+
+  GetOrderHistoryDeliveryUseCase({required this.historyRepository});
 
   @override
   Future<Either<Failure, List<OrderHistoryDelivering>>> executeInternal(
       EmptyInput input) async {
-    return await _repository.getOrderHistoryDelivering();
+    return await historyRepository.getOrderHistoryDelivering();
   }
 }

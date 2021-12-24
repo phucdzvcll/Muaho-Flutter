@@ -6,7 +6,6 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/common/extensions/string.dart';
 import 'package:muaho/common/model/jwt_token_store.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
-import 'package:muaho/presentation/sign_in/bloc/sign_bloc_bloc.dart';
 import 'package:synchronized/synchronized.dart' as sLock;
 
 import '../../main.dart';
@@ -15,6 +14,8 @@ final BaseOptions baseOptions =
     BaseOptions(connectTimeout: 30000, receiveTimeout: 30000, baseUrl: baseUrl);
 
 Dio createDioInstance() {
+  //todo edit become a class
+
   final Dio dio = Dio(baseOptions);
   dio.interceptors.add(
     InterceptorsWrapper(
@@ -33,7 +34,7 @@ Dio createDioInstance() {
         }
       },
       onRequest: (options, handler) async {
-        TokenStore token = GetIt.instance.get();
+        UserStore token = GetIt.instance.get();
         Map<String, dynamic> headers = _buildHeaders(token.getToken());
         options.headers.addAll(headers);
         return handler.next(options);
@@ -47,15 +48,18 @@ Dio createDioInstance() {
   return dio;
 }
 
-Map<String, String> _buildHeaders(String token) {
+Map<String, String> _buildHeaders(String? token) {
   Map<String, String> headers = {"Authorization": "Bearer $token"};
 
   return headers;
 }
 
 class TokenExpiredHandler {
+  final UserStore userStore;
   String _currentJwt = "";
   var lock = new sLock.Lock();
+
+  TokenExpiredHandler({required this.userStore});
 
   Future<Response<dynamic>?> handleTokenExpired(DioError error) async {
     try {
@@ -63,10 +67,10 @@ class TokenExpiredHandler {
         if (error.requestOptions.headers["Authorization"] ==
                 "Bearer $_currentJwt" ||
             _currentJwt.isEmpty) {
-          String? rToken = await storage.read(key: rJTW);
+          String? rToken = await userStore.getRefreshToken();
           var jwt = await apiSignInService.refreshToken(
               RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
-          getIt.get<TokenStore>().setToken(jwt.jwtToken.defaultEmpty());
+          getIt.get<UserStore>().setToken(jwt.jwtToken.defaultEmpty());
           _currentJwt = jwt.jwtToken.defaultEmpty();
         }
       });

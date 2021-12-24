@@ -1,39 +1,46 @@
 class SignInEntity {
-  final String jwtToken;
   final String userName;
-  final String refreshToken;
 
-  SignInEntity({
-    required this.jwtToken,
+//<editor-fold desc="Data Methods">
+
+  const SignInEntity({
     required this.userName,
-    required this.refreshToken
   });
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SignInEntity &&
+          runtimeType == other.runtimeType &&
+          userName == other.userName);
+
+  @override
+  int get hashCode => userName.hashCode;
+
+  @override
+  String toString() {
+    return 'SignInEntity{' + ' userName: $userName,' + '}';
+  }
+
   SignInEntity copyWith({
-    String? jwtToken,
     String? userName,
-    String? refreshToken
   }) {
     return SignInEntity(
-      jwtToken: jwtToken ?? this.jwtToken,
       userName: userName ?? this.userName,
-      refreshToken: refreshToken ?? this.refreshToken,
     );
   }
 
-  @override
-  String toString() => 'SignInEntity(jwtToken: $jwtToken, userName: $userName, refreshToken: $refreshToken)';
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is SignInEntity &&
-        other.jwtToken == jwtToken &&
-        other.userName == userName &&
-        other.refreshToken == refreshToken;
+  Map<String, dynamic> toMap() {
+    return {
+      'userName': this.userName,
+    };
   }
 
-  @override
-  int get hashCode => jwtToken.hashCode ^ userName.hashCode ^ refreshToken.hashCode;
+  factory SignInEntity.fromMap(Map<String, dynamic> map) {
+    return SignInEntity(
+      userName: map['userName'] as String,
+    );
+  }
+
+//</editor-fold>
 }
