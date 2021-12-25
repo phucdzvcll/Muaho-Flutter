@@ -17,8 +17,7 @@ class SignIn extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: BlocProvider<SignBloc>(
-            create: (ctx) =>
-                SignBloc(signInUseCase: getIt.get())..add(GetJwtTokenEvent()),
+            create: (ctx) => getIt()..add(GetJwtTokenEvent()),
             child: BlocListener<SignBloc, SignBlocState>(
               listener: (ctx, state) {
                 if (state is SignSuccess) {

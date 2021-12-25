@@ -9,22 +9,16 @@ class MessageModel {
 }
 
 @immutable
-class ChatState{}
+class ChatState {}
 
 @immutable
-class ChatInitState extends ChatState {
-  
-}
+class ChatInitState extends ChatState {}
 
 @immutable
-class ChatNeedCreateTicketState extends ChatState {
-  
-}
+class ChatNeedCreateTicketState extends ChatState {}
 
 @immutable
-class ChatLostConnectionState extends ChatState {
-  
-}
+class ChatLostConnectionState extends ChatState {}
 
 @immutable
 class ChatMsgListState extends ChatState {

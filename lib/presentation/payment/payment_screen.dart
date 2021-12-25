@@ -15,10 +15,8 @@ class PaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          PaymentBloc(cartStore: getIt.get(), createOrderUseCase: getIt.get())
-            ..add(RequestLocationPermission()),
+    return BlocProvider<PaymentBloc>(
+      create: (context) => getIt()..add(RequestLocationPermission()),
       child: BlocBuilder<PaymentBloc, PaymentState>(
         builder: (ctx, state) {
           return Container(
@@ -67,6 +65,7 @@ class PaymentScreen extends StatelessWidget {
                             CupertinoDialogAction(
                               child: Text("Yes"),
                               onPressed: () {
+                                //todo move cartStore into Bloc
                                 CartStore cartStore = getIt.get();
                                 cartStore.clearStore();
                                 Navigator.popUntil(context,

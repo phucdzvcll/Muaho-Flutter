@@ -1,18 +1,15 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/data/data.dart';
-import 'package:muaho/data/remote/order/order_service.dart';
-import 'package:muaho/data/repository/order_repository.dart';
-import 'package:muaho/domain/domain.dart';
-import 'package:muaho/domain/use_case/order/create_oreder_use_case.dart';
+import 'package:muaho/common/di.dart';
+import 'package:muaho/data/di.dart';
+import 'package:muaho/domain/di.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
+import 'package:muaho/presentation/di.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
@@ -33,9 +30,11 @@ int startTime = 0;
 Future<void> main() async {
   startTime = DateTime.now().millisecondsSinceEpoch;
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await EasyLocalization.ensureInitialized();
   _initDi();
+
+  await Firebase.initializeApp();
+  await getIt<AppLocalization>().initializeApp();
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Color(0x00FFFFFF),
@@ -60,69 +59,10 @@ Future<void> main() async {
 }
 
 void _initDi() {
-  //Singleton
-  //store
-  getIt.registerLazySingleton<FlutterSecureStorage>(
-      () => FlutterSecureStorage());
-  //jwt
-  getIt.registerLazySingleton<UserStore>(() => UserStore(storage: getIt.get()));
-  //Cart store
-  getIt.registerLazySingleton<CartStore>(() =>
-      CartStore(shopId: -1, shopName: "", shopAddress: "", productStores: []));
-  //token expired handler
-  getIt.registerLazySingleton<TokenExpiredHandler>(
-      () => TokenExpiredHandler(userStore: getIt.get()));
-  //homePage
-  getIt.registerLazySingleton<HomeService>(
-      () => HomeService(createDioInstance()));
-  getIt.registerLazySingleton<HomePageRepository>(
-      () => HomeRepositoryImpl(homeService: getIt.get()));
-  //searchPage
-  getIt.registerLazySingleton<SearchService>(
-      () => SearchService(createDioInstance()));
-  getIt.registerLazySingleton<SearchRepository>(
-      () => SearchRepositoryImpl(searchService: getIt.get()));
-  //signIn
-  getIt.registerLazySingleton<SignInService>(
-      () => SignInService(Dio(baseOptions)));
-  getIt.registerLazySingleton<SignInRepository>(
-      () => SignInRepositoryImpl(service: getIt.get()));
-  //shop
-  getIt.registerLazySingleton<ShopService>(
-      () => ShopService(createDioInstance()));
-  getIt.registerLazySingleton<ShopRepository>(
-      () => ShopRepositoryImpl(service: getIt.get()));
-  //history
-  getIt.registerLazySingleton<HistoryService>(
-      () => HistoryService(createDioInstance()));
-  getIt.registerLazySingleton<HistoryPageRepository>(
-      () => HistoryRepositoryImpl(service: getIt.get()));
-  //oder
-  getIt.registerLazySingleton<OrderService>(
-      () => OrderService(createDioInstance()));
-  getIt.registerLazySingleton<CreateOrderRepository>(
-      () => OrderRepositoryImpl(service: getIt.get()));
-
-  //Factory
-  getIt.registerFactory(
-      () => GetListBannerUseCase(homePageRepository: getIt.get()));
-  getIt.registerFactory(() =>
-      GetListProductCategoriesHomeUseCase(homePageRepository: getIt.get()));
-  getIt.registerFactory(
-      () => GetHotSearchUseCase(searchRepository: getIt.get()));
-  getIt.registerFactory(
-      () => GetListShopBySearchUseCase(searchRepository: getIt.get()));
-  getIt.registerFactory(() => SignInUseCase(signInRepository: getIt.get()));
-  getIt.registerFactory(
-      () => GetShopProductUseCase(shopRepository: getIt.get()));
-  getIt.registerFactory(
-      () => GetOrderHistoryDeliveryUseCase(historyRepository: getIt.get()));
-  getIt.registerFactory(
-      () => GetOrderHistoryCompleteUseCase(historyPageRepository: getIt.get()));
-  getIt.registerFactory(
-      () => GetOrderDetailUseCase(historyPageRepository: getIt.get()));
-  getIt.registerFactory(
-      () => CreateOrderUseCase(createOrderRepository: getIt.get()));
+  commonDiConfig(getIt);
+  domainDiConfig(getIt);
+  dataDiConfig(getIt);
+  presentationDiConfig(getIt);
 }
 
 class MyApp extends StatelessWidget {

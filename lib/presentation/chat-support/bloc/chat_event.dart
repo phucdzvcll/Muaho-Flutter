@@ -9,7 +9,6 @@ class OpenTicketEvent extends ChatEvent {
   final String displayName;
 
   OpenTicketEvent({required this.displayName});
-
 }
 
 class CloseTicketEvent extends ChatEvent {}

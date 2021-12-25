@@ -44,11 +44,10 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
               ),
             ),
             child: BlocProvider<SearchShopBloc>(
-              create: (_) =>
-                  SearchShopBloc(getListShopBySearchUseCase: getIt.get())
-                    ..add(
-                      SearchEvent(keyword: widget.args.keyword),
-                    ),
+              create: (_) => getIt()
+                ..add(
+                  SearchEvent(keyword: widget.args.keyword),
+                ),
               child: BlocBuilder<SearchShopBloc, SearchShopState>(
                 builder: (ctx, state) {
                   return _handleRequestSearch(state, ctx);

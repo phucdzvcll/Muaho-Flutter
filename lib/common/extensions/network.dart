@@ -1,55 +1,77 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/common/extensions/string.dart';
 import 'package:muaho/common/model/jwt_token_store.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:synchronized/synchronized.dart' as sLock;
 
-import '../../main.dart';
-
 final BaseOptions baseOptions =
     BaseOptions(connectTimeout: 30000, receiveTimeout: 30000, baseUrl: baseUrl);
 
-Dio createDioInstance() {
-  //todo edit become a class
+enum DioInstanceType {
+  DioTokenHandler,
+  Dio,
+}
 
-  final Dio dio = Dio(baseOptions);
-  dio.interceptors.add(
-    InterceptorsWrapper(
-      onError: (error, handle) async {
-        if (error.response?.statusCode == 401) {
-          TokenExpiredHandler tokenExpiredHandler =
-              getIt.get<TokenExpiredHandler>();
-          var response = await tokenExpiredHandler.handleTokenExpired(error);
-          if (response != null) {
-            return handle.resolve(response);
+class DioFactory {
+  final TokenExpiredHandler tokenExpiredHandler;
+  final UserStore userStore;
+
+  DioFactory({required this.tokenExpiredHandler, required this.userStore});
+
+  Dio create(DioInstanceType instanceType) {
+    switch (instanceType) {
+      case DioInstanceType.DioTokenHandler:
+        return _createDioTokenHandlerInstance();
+
+      case DioInstanceType.Dio:
+        return _createDioInstance();
+    }
+  }
+
+  Dio _createDioInstance() {
+    return Dio(baseOptions);
+  }
+
+  Dio _createDioTokenHandlerInstance() {
+    //todo edit become a class
+
+    final Dio dio = Dio(baseOptions);
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (error, handle) async {
+          if (error.response?.statusCode == 401) {
+            var response = await tokenExpiredHandler.handleTokenExpired(error);
+            if (response != null) {
+              return handle.resolve(response);
+            } else {
+              return handle.next(error);
+            }
           } else {
             return handle.next(error);
           }
-        } else {
-          return handle.next(error);
-        }
-      },
-      onRequest: (options, handler) async {
-        UserStore token = GetIt.instance.get();
-        Map<String, dynamic> headers = _buildHeaders(token.getToken());
-        options.headers.addAll(headers);
-        return handler.next(options);
-      },
-      onResponse: (response, handle) {
-        handle.next(response);
-      },
-    ),
-  );
+        },
+        onRequest: (options, handler) async {
+          Map<String, dynamic> headers = _buildHeaders(userStore.getToken());
+          options.headers.addAll(headers);
+          return handler.next(options);
+        },
+        onResponse: (response, handle) {
+          handle.next(response);
+        },
+      ),
+    );
 
-  return dio;
+    return dio;
+  }
 }
 
+final tokenHeaderName = "Authorization";
+final tokenPrefix = "Bearer ";
 Map<String, String> _buildHeaders(String? token) {
-  Map<String, String> headers = {"Authorization": "Bearer $token"};
+  Map<String, String> headers = {tokenHeaderName: "$tokenPrefix$token"};
 
   return headers;
 }
@@ -64,19 +86,19 @@ class TokenExpiredHandler {
   Future<Response<dynamic>?> handleTokenExpired(DioError error) async {
     try {
       await lock.synchronized(() async {
-        if (error.requestOptions.headers["Authorization"] ==
-                "Bearer $_currentJwt" ||
+        if (error.requestOptions.headers[tokenHeaderName] ==
+                "$tokenPrefix$_currentJwt" ||
             _currentJwt.isEmpty) {
           String? rToken = await userStore.getRefreshToken();
           var jwt = await apiSignInService.refreshToken(
               RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
-          getIt.get<UserStore>().setToken(jwt.jwtToken.defaultEmpty());
+          userStore.setToken(jwt.jwtToken.defaultEmpty());
           _currentJwt = jwt.jwtToken.defaultEmpty();
         }
       });
       log(_currentJwt);
       return await _retry(error, _currentJwt);
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return null;
     }
   }

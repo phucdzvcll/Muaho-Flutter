@@ -9,14 +9,15 @@
 
 class MsgList {
   MsgList({
-      this.msgId, 
-      this.senderId, 
-      this.receiverId, 
-      this.msg, 
-      this.roomId, 
-      this.sendTime, 
-      this.createdAt, 
-      this.updatedAt,});
+    this.msgId,
+    this.senderId,
+    this.receiverId,
+    this.msg,
+    this.roomId,
+    this.sendTime,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   MsgList.fromJson(dynamic json) {
     msgId = json['msgId'];
@@ -49,5 +50,4 @@ class MsgList {
     map['updatedAt'] = updatedAt;
     return map;
   }
-
 }
