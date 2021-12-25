@@ -22,7 +22,7 @@ class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab> {
   Widget build(BuildContext context) {
     return BlocProvider<OrderHistoryCompleteBloc>(
       create: (context) =>
-          OrderHistoryCompleteBloc(getOrderHistoryCompleteUseCase: getIt.get())
+          getIt()
             ..add(GetOrderHistoryCompleteEvent()),
       child: BlocBuilder<OrderHistoryCompleteBloc, OrderHistoryCompleteState>(
         builder: (context, state) {

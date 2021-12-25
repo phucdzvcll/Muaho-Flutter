@@ -43,6 +43,9 @@ android {
         multiDexEnabled true
     }
 
+    //TODO signingConfigs debug, release, hide secrets
+
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

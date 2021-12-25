@@ -1,14 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
+import 'package:muaho/data/response/sign_in/refresh_token_response.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/sign_in/jwt_entity.dart';
-import 'package:muaho/main.dart';
 
 class SignInRepositoryImpl implements SignInRepository {
   final SignInService service;
+  final UserStore userStore;
 
-  SignInRepositoryImpl({required this.service});
+  SignInRepositoryImpl({
+    required this.service,
+    required this.userStore,
+  });
 
   @override
   Future<Either<Failure, JwtEntity>> getJwtToken(
@@ -30,37 +34,38 @@ class SignInRepositoryImpl implements SignInRepository {
   @override
   Future<Either<Failure, SignInEntity>> loginAnonymous() async {
     var auth = FirebaseAuth.instance;
-    UserStore userStore = getIt.get();
     String? rToken = await userStore.getRefreshToken();
     if (auth.currentUser != null && rToken != null && rToken.isNotEmpty) {
-      var jwt = await apiSignInService.refreshToken(
+      RefreshTokenResponse refreshTokenResponse = await apiSignInService.refreshToken(
           RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
-      //Di singleton JWT
-      String? userName = await userStore.getUserName();
-      getIt.get<UserStore>()
-        ..setToken(jwt.jwtToken.defaultEmpty())
-        ..setUseName(userName.defaultEmpty());
-      return SuccessValue(SignInEntity(userName: userName.defaultEmpty()));
+      String userName = (await userStore.getUserName()).defaultEmpty();
+      userStore
+        ..setToken(refreshTokenResponse.jwtToken.defaultEmpty())
+        ..setUseName(userName);
+      return SuccessValue(SignInEntity(userName: userName));
     } else {
       String? firebaseToken = await _loginFirebaseAnonymousUser(auth);
+      if (firebaseToken != null) {
+        Either<Failure, JwtEntity> result =
+            await getJwtToken(firebaseToken: firebaseToken.defaultEmpty());
 
-      Either<Failure, JwtEntity> result =
-          await getJwtToken(firebaseToken: firebaseToken.defaultEmpty());
+        if (result.isSuccess) {
+          //Di singleton JWT
+          var jwt = result.success.jwtToken;
+          var rJwt = result.success.refreshToken;
+          var userName = result.success.userName;
+          userStore
+            ..setToken(jwt)
+            ..setUseName(userName);
+          await userStore.save(userName: userName, refreshToken: rJwt);
 
-      if (result.isSuccess) {
-        //Di singleton JWT
-        var jwt = result.success.jwtToken;
-        var rJwt = result.success.refreshToken;
-        var userName = result.success.userName;
-        getIt.get<UserStore>()
-          ..setToken(jwt)
-          ..setUseName(userName);
-        await userStore.save(userName: userName, refreshToken: rJwt);
-
-        return SuccessValue(SignInEntity(userName: userName));
-      } else {
-        return FailValue(Failure());
+          return SuccessValue(SignInEntity(userName: userName));
+        } else {
+          return FailValue(Failure());
+        }
       }
+
+      return FailValue(Failure());
     }
   }
 

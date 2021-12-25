@@ -21,8 +21,7 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrderHistoryDeliveringBloc>(
-      create: (context) => OrderHistoryDeliveringBloc(
-          getOrderHistoryDeliveryUseCase: getIt.get())
+      create: (context) => getIt()
         ..add(GetOrderHistoryDeliveringEvent()),
       child:
           BlocBuilder<OrderHistoryDeliveringBloc, OrderHistoryDeliveringState>(

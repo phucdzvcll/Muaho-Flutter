@@ -1,12 +1,14 @@
 //remote
 export 'remote/history/history_service.dart';
 export 'remote/home/home_service.dart';
+export 'remote/order/order_service.dart';
 export 'remote/search/search_service.dart';
 export 'remote/shop/shop_service.dart';
 export 'remote/sign_in/sign_in_service.dart';
 export 'repository/history_repository.dart';
 //repo
 export 'repository/home_repository.dart';
+export 'repository/order_repository.dart';
 export 'repository/search_repository.dart';
 export 'repository/shop_repository.dart';
 export 'repository/sign_in_repository.dart';

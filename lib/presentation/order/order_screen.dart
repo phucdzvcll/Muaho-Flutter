@@ -38,9 +38,9 @@ class _OrderScreenState extends State<OrderScreen>
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<OrderBloc>(
       create: (ctx) =>
-          OrderBloc(cartStore: getIt.get(), getShopProductUseCase: getIt.get())
+          getIt()
             ..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
       child: Container(
         color: Theme.of(context).backgroundColor,
@@ -226,6 +226,7 @@ class _OrderScreenState extends State<OrderScreen>
             shrinkWrap: true,
             itemCount: orderDetailModel.currentListProducts.length,
             itemBuilder: (ctx, index) {
+              //todo move logic into Bloc
               return _productCard(
                   orderDetailModel.currentListProducts[index],
                   ctx,

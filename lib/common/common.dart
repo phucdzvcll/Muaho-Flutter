@@ -7,3 +7,4 @@ export 'extensions/string.dart';
 export 'model/cart_store.dart';
 export 'model/jwt_token_store.dart';
 export 'my_theme.dart';
+export 'localization/app_localization.dart';

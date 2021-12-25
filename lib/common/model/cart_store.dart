@@ -2,10 +2,10 @@ import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
 
 class CartStore {
-  int shopId;
-  String shopName;
-  String shopAddress;
-  List<ProductStore> productStores;
+  int shopId = -1;
+  String shopName = "";
+  String shopAddress = "";
+  List<ProductStore> productStores = [];
 
   void editCart(ProductStore product) {
     if (productStores.length == 0) {
@@ -90,12 +90,7 @@ class CartStore {
 
 //<editor-fold desc="Data Methods">
 
-  CartStore({
-    required this.shopId,
-    required this.shopName,
-    required this.shopAddress,
-    required this.productStores,
-  });
+  CartStore();
 
   @override
   bool operator ==(Object other) =>
@@ -124,19 +119,6 @@ class CartStore {
         '}';
   }
 
-  CartStore copyWith({
-    int? shopId,
-    String? shopName,
-    String? shopAddress,
-    List<ProductStore>? productStores,
-  }) {
-    return CartStore(
-      shopId: shopId ?? this.shopId,
-      shopName: shopName ?? this.shopName,
-      shopAddress: shopAddress ?? this.shopAddress,
-      productStores: productStores ?? this.productStores,
-    );
-  }
 //</editor-fold>
 }
 

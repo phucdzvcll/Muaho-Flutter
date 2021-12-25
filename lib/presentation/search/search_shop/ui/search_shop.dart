@@ -45,7 +45,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
             ),
             child: BlocProvider<SearchShopBloc>(
               create: (_) =>
-                  SearchShopBloc(getListShopBySearchUseCase: getIt.get())
+                  getIt()
                     ..add(
                       SearchEvent(keyword: widget.args.keyword),
                     ),

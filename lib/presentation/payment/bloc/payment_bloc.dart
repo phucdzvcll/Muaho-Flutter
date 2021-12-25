@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/use_case/order/create_oreder_use_case.dart';
+import 'package:muaho/domain/use_case/order/create_order_use_case.dart';
 import 'package:muaho/presentation/payment/model/payment_info.dart';
 
 part 'payment_event.dart';
