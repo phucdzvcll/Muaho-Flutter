@@ -34,8 +34,7 @@ class _CartScreenState extends State<CartScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CartBloc>(
-      create: (context) =>
-          getIt()..add(RequestCartEvent()),
+      create: (context) => getIt()..add(RequestCartEvent()),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

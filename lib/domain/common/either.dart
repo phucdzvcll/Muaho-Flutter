@@ -16,15 +16,15 @@ abstract class Either<Fail, Success> {
 
   /// Get [FailValue] value, may throw an exception when the value is [SuccessValue]
   Fail get fail => this.fold<Fail>(
-          (value) => value,
-          (right) => throw Exception(
+      (value) => value,
+      (right) => throw Exception(
           'Illegal use. You should check isLeft() before calling'));
 
   /// Get [SuccessValue] value, may throw an exception when the value is [FailValue]
   Success get success => this.fold<Success>(
-          (left) => throw Exception(
+      (left) => throw Exception(
           'Illegal use. You should check isRight() before calling'),
-          (value) => value);
+      (value) => value);
 
   /// Transform values of [FailValue] and [SuccessValue]
   Either<TL, TR> either<TL, TR>(
@@ -50,7 +50,8 @@ abstract class Either<Fail, Success> {
   T fold<T>(T Function(Fail left) fnL, T Function(Success right) fnR);
 
   /// Swap [FailValue] and [SuccessValue]
-  Either<Success, Fail> swap() => fold((left) => SuccessValue(left), (right) => FailValue(right));
+  Either<Success, Fail> swap() =>
+      fold((left) => SuccessValue(left), (right) => FailValue(right));
 
   /// Constructs a new [Either] from a function that might throw
   static Either<L, R> tryCatch<L, R, Err>(
@@ -68,9 +69,8 @@ abstract class Either<Fail, Success> {
 
   /// If the condition is satify then return [rightValue] in [SuccessValue] else [leftValue] in [FailValue]
   static Either<L, R> condLazy<L, R>(
-      bool test, Lazy<L> leftValue, Lazy<R> rightValue) =>
+          bool test, Lazy<L> leftValue, Lazy<R> rightValue) =>
       test ? SuccessValue(rightValue()) : FailValue(leftValue());
-
 }
 
 /// Used for "failure"

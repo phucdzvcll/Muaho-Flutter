@@ -91,7 +91,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     _socket?.onConnect((_) async {
       log('connect');
       //add(_ChatNeedCreateTicketEvent());
-      _socket?.emit("open_chat_session", {"name": await userStore.getUserName()});
+      _socket
+          ?.emit("open_chat_session", {"name": await userStore.getUserName()});
 
       _timerPingSocket?.cancel();
       _timerPingSocket = Timer.periodic(Duration(seconds: 5000), (timer) {

@@ -108,8 +108,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChatBloc>(
-      create: (context) =>
-          getIt()..add(InitEvent()),
+      create: (context) => getIt()..add(InitEvent()),
       child: BlocListener<ChatBloc, ChatState>(
         listenWhen: (pre, current) {
           return current is InsertChatMsgState;

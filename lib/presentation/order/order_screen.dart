@@ -40,8 +40,7 @@ class _OrderScreenState extends State<OrderScreen>
   Widget build(BuildContext context) {
     return BlocProvider<OrderBloc>(
       create: (ctx) =>
-          getIt()
-            ..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
+          getIt()..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

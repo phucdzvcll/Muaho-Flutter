@@ -71,7 +71,7 @@ class DioFactory {
 final tokenHeaderName = "Authorization";
 final tokenPrefix = "Bearer ";
 Map<String, String> _buildHeaders(String? token) {
-  Map<String, String> headers = { tokenHeaderName: "$tokenPrefix$token"};
+  Map<String, String> headers = {tokenHeaderName: "$tokenPrefix$token"};
 
   return headers;
 }

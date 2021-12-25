@@ -21,8 +21,8 @@ void presentationDiConfig(GetIt injector) {
   injector
       .registerFactory(() => HotSearchBloc(getHotSearchUseCase: injector()));
 
-  injector.registerFactory(() =>
-      PaymentBloc(cartStore: injector(), createOrderUseCase: injector()));
+  injector.registerFactory(
+      () => PaymentBloc(cartStore: injector(), createOrderUseCase: injector()));
 
   injector.registerFactory(() =>
       OrderBloc(cartStore: injector(), getShopProductUseCase: injector()));
@@ -32,22 +32,16 @@ void presentationDiConfig(GetIt injector) {
         useCaseProductCategories: injector(),
       ));
 
-  injector.registerFactory(() =>
-      OrderDetailBloc(getOrderDetailUseCase: injector()));
+  injector.registerFactory(
+      () => OrderDetailBloc(getOrderDetailUseCase: injector()));
 
   injector.registerFactory(() =>
-      OrderHistoryDeliveringBloc(
-          getOrderHistoryDeliveryUseCase: injector()));
+      OrderHistoryDeliveringBloc(getOrderHistoryDeliveryUseCase: injector()));
 
   injector.registerFactory(() =>
       OrderHistoryCompleteBloc(getOrderHistoryCompleteUseCase: injector()));
 
-  injector.registerFactory(() =>
-      ChatBloc(userStore: injector()));
+  injector.registerFactory(() => ChatBloc(userStore: injector()));
 
-  injector.registerFactory(() =>
-      CartBloc(cartStore: injector()));
-
-
-
+  injector.registerFactory(() => CartBloc(cartStore: injector()));
 }

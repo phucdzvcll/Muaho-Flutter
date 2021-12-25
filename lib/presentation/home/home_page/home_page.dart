@@ -38,8 +38,7 @@ class _HomePageState extends State<HomePage>
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: BlocProvider<HomePageBloc>(
-                create: (ctx) => getIt()
-                  ..add(HomePageRequestEvent()),
+                create: (ctx) => getIt()..add(HomePageRequestEvent()),
                 child: BlocBuilder<HomePageBloc, HomePageState>(
                   builder: (ctx, state) {
                     return _handleBuilder(state, ctx, arg);

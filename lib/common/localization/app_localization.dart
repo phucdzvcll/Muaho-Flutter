@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
 class AppLocalization {
-
   Future initializeApp() async {
     await EasyLocalization.ensureInitialized();
   }
@@ -24,7 +23,8 @@ class AppLocalization {
     return context.setLocale(locale);
   }
 
-  String translate(String key, {
+  String translate(
+    String key, {
     List<String>? args,
     Map<String, String>? namedArgs,
     String? gender,
@@ -44,10 +44,10 @@ extension Localization on String {
     String? gender,
   }) {
     return GetIt.instance.get<AppLocalization>().translate(
-      this,
-      args: args,
-      gender: gender,
-      namedArgs: namedArgs,
-    );
+          this,
+          args: args,
+          gender: gender,
+          namedArgs: namedArgs,
+        );
   }
 }

@@ -6,33 +6,35 @@ import 'data.dart';
 
 void dataDiConfig(GetIt injector) {
   //homePage
-  injector.registerLazySingleton<HomeService>(
-          () => HomeService(injector(instanceName: DioInstanceType.DioTokenHandler.name)));
+  injector.registerLazySingleton<HomeService>(() => HomeService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name)));
   injector.registerLazySingleton<HomePageRepository>(
-          () => HomeRepositoryImpl(homeService: injector()));
+      () => HomeRepositoryImpl(homeService: injector()));
   //searchPage
-  injector.registerLazySingleton<SearchService>(
-          () => SearchService(injector(instanceName: DioInstanceType.DioTokenHandler.name)));
+  injector.registerLazySingleton<SearchService>(() => SearchService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name)));
   injector.registerLazySingleton<SearchRepository>(
-          () => SearchRepositoryImpl(searchService: injector()));
+      () => SearchRepositoryImpl(searchService: injector()));
   //signIn
   injector.registerLazySingleton<SignInService>(
-          () => SignInService(injector(instanceName: DioInstanceType.Dio.name)));
-  injector.registerLazySingleton<SignInRepository>(
-          () => SignInRepositoryImpl(service: injector(), userStore: injector(),));
+      () => SignInService(injector(instanceName: DioInstanceType.Dio.name)));
+  injector.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl(
+        service: injector(),
+        userStore: injector(),
+      ));
   //shop
-  injector.registerLazySingleton<ShopService>(
-          () => ShopService(injector(instanceName: DioInstanceType.DioTokenHandler.name)));
+  injector.registerLazySingleton<ShopService>(() => ShopService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name)));
   injector.registerLazySingleton<ShopRepository>(
-          () => ShopRepositoryImpl(service: injector()));
+      () => ShopRepositoryImpl(service: injector()));
   //history
-  injector.registerLazySingleton<HistoryService>(
-          () => HistoryService(injector(instanceName: DioInstanceType.DioTokenHandler.name)));
+  injector.registerLazySingleton<HistoryService>(() => HistoryService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name)));
   injector.registerLazySingleton<HistoryPageRepository>(
-          () => HistoryRepositoryImpl(service: injector()));
+      () => HistoryRepositoryImpl(service: injector()));
   //oder
-  injector.registerLazySingleton<OrderService>(
-          () => OrderService(injector(instanceName: DioInstanceType.DioTokenHandler.name)));
+  injector.registerLazySingleton<OrderService>(() => OrderService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name)));
   injector.registerLazySingleton<CreateOrderRepository>(
-          () => OrderRepositoryImpl(service: injector()));
+      () => OrderRepositoryImpl(service: injector()));
 }

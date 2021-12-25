@@ -36,8 +36,9 @@ class SignInRepositoryImpl implements SignInRepository {
     var auth = FirebaseAuth.instance;
     String? rToken = await userStore.getRefreshToken();
     if (auth.currentUser != null && rToken != null && rToken.isNotEmpty) {
-      RefreshTokenResponse refreshTokenResponse = await apiSignInService.refreshToken(
-          RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
+      RefreshTokenResponse refreshTokenResponse =
+          await apiSignInService.refreshToken(
+              RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
       String userName = (await userStore.getUserName()).defaultEmpty();
       userStore
         ..setToken(refreshTokenResponse.jwtToken.defaultEmpty())

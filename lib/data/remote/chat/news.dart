@@ -5,10 +5,11 @@
 
 class NewsChat {
   NewsChat({
-      this.senderId, 
-      this.msg, 
-      this.roomId, 
-      this.sendTime,});
+    this.senderId,
+    this.msg,
+    this.roomId,
+    this.sendTime,
+  });
 
   NewsChat.fromJson(dynamic json) {
     senderId = json['senderId'];
@@ -29,5 +30,4 @@ class NewsChat {
     map['sendTime'] = sendTime;
     return map;
   }
-
 }

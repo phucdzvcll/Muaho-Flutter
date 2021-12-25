@@ -39,8 +39,8 @@ class _OrderDetailState extends State<OrderDetail>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrderDetailBloc>(
-      create: (ctx) => getIt()
-        ..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
+      create: (ctx) =>
+          getIt()..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(
