@@ -24,6 +24,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       yield* _handleRequestPermission();
     } else if (event is CreateOrderEvent) {
       yield* _handleCreateOrder();
+    } else if (event is ClearCartStore) {
+      cartStore.clearStore();
     }
   }
 

@@ -36,8 +36,6 @@ class DioFactory {
   }
 
   Dio _createDioTokenHandlerInstance() {
-    //todo edit become a class
-
     final Dio dio = Dio(baseOptions);
     dio.interceptors.add(
       InterceptorsWrapper(

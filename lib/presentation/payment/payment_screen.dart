@@ -65,9 +65,8 @@ class PaymentScreen extends StatelessWidget {
                             CupertinoDialogAction(
                               child: Text("Yes"),
                               onPressed: () {
-                                //todo move cartStore into Bloc
-                                CartStore cartStore = getIt.get();
-                                cartStore.clearStore();
+                                BlocProvider.of<PaymentBloc>(context)
+                                    .add(ClearCartStore());
                                 Navigator.popUntil(context,
                                     ModalRoute.withName(HomeScreen.routeName));
                               },
