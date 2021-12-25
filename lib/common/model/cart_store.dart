@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
 
@@ -7,26 +8,30 @@ class CartStore {
   String shopAddress = "";
   List<ProductStore> productStores = [];
 
-  void editCart(ProductStore product) {
-    if (productStores.length == 0) {
-      productStores.add(product);
+  void addToCart({required ProductStore productStore}) {
+    ProductStore? product = findProductStore(productStore.productId);
+    if (product != null) {
+      int index = getIndexOfProduct(productStore.productId);
+      productStores[index] =
+          productStore.copyWith(quantity: productStore.quantity + 1);
     } else {
-      var productStore = getProductQuantity(product.productId);
-      if (productStore.quantity > 0) {
-        var index = getIndexOfProduct(product.productId);
-        if (product.quantity != 0) {
-          productStores[index] = product;
-        } else {
-          productStores.removeAt(index);
-          if (productStores.isEmpty) {
-            this.shopId = -1;
-            this.shopAddress = "";
-            this.shopName = "";
-          }
-        }
+      this.productStores.add(productStore.copyWith(quantity: 1));
+    }
+  }
+
+  void removeToCart({required int productID}) {
+    ProductStore? productStore = findProductStore(productID);
+    if (productStore != null) {
+      int index = getIndexOfProduct(productID);
+      if (productStore.quantity == 1) {
+        this.productStores.removeAt(index);
       } else {
-        productStores.add(product);
+        productStores[index] =
+            productStore.copyWith(quantity: productStore.quantity - 1);
       }
+    }
+    if (this.productStores.isEmpty) {
+      clearStore();
     }
   }
 
@@ -58,7 +63,7 @@ class CartStore {
   }
 
   int getIndexOfProduct(int productID) {
-    int index = 0;
+    int index = -1;
     this.productStores.asMap().forEach((i, element) {
       if (element.productId == productID) {
         index = i;
@@ -67,25 +72,10 @@ class CartStore {
     return index;
   }
 
-  ProductStore getProductQuantity(int productID) {
-    try {
-      if (productStores.isEmpty) {
-        throw Exception("productStores is empty");
-      }
-      return this
-          .productStores
-          .firstWhere((element) => element.productId == productID);
-    } catch (e) {
-      print(e);
-      return ProductStore(
-          productId: -1,
-          productName: "",
-          productPrice: 0,
-          groupId: 0,
-          unit: "",
-          thumbUrl: "",
-          quantity: 0);
-    }
+  ProductStore? findProductStore(int productID) {
+    return this
+        .productStores
+        .firstWhereOrNull((element) => element.productId == productID);
   }
 
 //<editor-fold desc="Data Methods">

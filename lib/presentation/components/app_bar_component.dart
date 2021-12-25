@@ -61,28 +61,28 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color: Theme.of(context).backgroundColor, width: 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.search_rounded,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      searchAction();
-                    },
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 8),
+              //   child: Container(
+              //     width: 32,
+              //     height: 32,
+              //     decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         border: Border.all(
+              //             color: Theme.of(context).backgroundColor, width: 1),
+              //         borderRadius: BorderRadius.circular(8)),
+              //     child: IconButton(
+              //       padding: EdgeInsets.zero,
+              //       icon: Icon(
+              //         Icons.search_rounded,
+              //         color: Colors.black,
+              //       ),
+              //       onPressed: () {
+              //         searchAction();
+              //       },
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

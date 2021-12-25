@@ -21,3 +21,9 @@ class CartSuccessResult {
 class CartEmpty extends CartState {}
 
 class CartLoading extends CartState {}
+
+class WarningRemoveProduct extends CartState {
+  final int productID;
+
+  WarningRemoveProduct({required this.productID});
+}

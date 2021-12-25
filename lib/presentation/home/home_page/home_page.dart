@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
@@ -37,13 +36,10 @@ class _HomePageState extends State<HomePage>
         child: Scaffold(
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
-              child: BlocProvider<HomePageBloc>(
-                create: (ctx) => getIt()..add(HomePageRequestEvent()),
-                child: BlocBuilder<HomePageBloc, HomePageState>(
-                  builder: (ctx, state) {
-                    return _handleBuilder(state, ctx, arg);
-                  },
-                ),
+              child: BlocBuilder<HomePageBloc, HomePageState>(
+                builder: (ctx, state) {
+                  return _handleBuilder(state, ctx, arg);
+                },
               ),
             )),
       ),
@@ -53,7 +49,8 @@ class _HomePageState extends State<HomePage>
   Widget _handleBuilder(
       HomePageState state, BuildContext ctx, SignInArguments arguments) {
     if (state is HomePageSuccessState) {
-      return _handleHomePageBuilder(state.homePageModel, ctx, arguments);
+      return _handleHomePageBuilder(state.homePageModel, ctx, arguments,
+          state.cartIsNotEmpty.defaultFalse());
     } else {
       return Center(
         child: CircularProgressIndicator(),
@@ -61,7 +58,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Padding _userInfo(SignInArguments arg) {
+  Padding _userInfo(SignInArguments arg, bool redDotVisible) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -118,9 +115,27 @@ class _HomePageState extends State<HomePage>
                       CartScreen.routeName,
                     );
                   },
-                  child: Icon(
-                    Icons.shopping_cart_outlined,
-                    size: 24,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        size: 24,
+                      ),
+                      Positioned(
+                        right: 1,
+                        top: 1,
+                        child: Visibility(
+                          visible: redDotVisible,
+                          child: Container(
+                            width: 7,
+                            height: 7,
+                            decoration: BoxDecoration(
+                                color: Colors.red, shape: BoxShape.circle),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -207,11 +222,11 @@ class _HomePageState extends State<HomePage>
   }
 
   _handleHomePageBuilder(HomePageModel homePageModel, BuildContext ctx,
-      SignInArguments arguments) {
+      SignInArguments arguments, bool redDotVisible) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        _userInfo(arguments),
+        _userInfo(arguments, redDotVisible),
         Visibility(
           visible: homePageModel.slideBannerEntity.length > 0 ? true : false,
           child: Align(

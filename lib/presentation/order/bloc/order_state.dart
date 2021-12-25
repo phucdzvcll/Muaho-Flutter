@@ -14,3 +14,15 @@ class OrderSuccess extends OrderState {
 
   OrderSuccess({required this.shopDetailModel});
 }
+
+class WarningChangeShop extends OrderState {
+  final ProductStore productStore;
+
+  WarningChangeShop({required this.productStore});
+}
+
+class WarningRemoveProduct extends OrderState {
+  final int productID;
+
+  WarningRemoveProduct({required this.productID});
+}

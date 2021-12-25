@@ -1,16 +1,15 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
 import 'package:muaho/presentation/components/product_card.dart';
+import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';
@@ -39,33 +38,44 @@ class _OrderScreenState extends State<OrderScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrderBloc>(
-      create: (ctx) =>
-          getIt()..add(GetShopDetailEvent(shopID: widget.shopArgument.shopId)),
-      child: Container(
-        color: Theme.of(context).backgroundColor,
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
-            appBar: AppBarComponent(
-              title: "Chọn Sản Phẩm",
-              backAction: () {
-                Navigator.pop(context);
-              },
-              searchAction: () {},
-            ),
-            body: Container(
-              margin: EdgeInsets.only(top: 32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(48),
-                  topRight: Radius.circular(48),
-                ),
-              ),
-              child: BlocBuilder<OrderBloc, OrderState>(
-                builder: (ctx, state) {
-                  return Center(child: _handleStateResult(state, ctx));
+      create: (ctx) => getIt()
+        ..add(
+          GetShopDetailEvent(shopID: widget.shopArgument.shopId),
+        ),
+      child: BlocListener<OrderBloc, OrderState>(
+        listener: (ctx, state) {
+          if (state is WarningRemoveProduct) {
+            showDialogWarningRemoveProduct(ctx, state.productID);
+          } else if (state is WarningChangeShop) {
+            showDialogWarningChangeShop(ctx, state.productStore);
+          }
+        },
+        child: Container(
+          color: Theme.of(context).backgroundColor,
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
+              appBar: AppBarComponent(
+                title: "Chọn Sản Phẩm",
+                backAction: () {
+                  Navigator.pop(context);
                 },
+                searchAction: () {},
+              ),
+              body: Container(
+                margin: EdgeInsets.only(top: 32),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(48),
+                    topRight: Radius.circular(48),
+                  ),
+                ),
+                child: BlocBuilder<OrderBloc, OrderState>(
+                  builder: (ctx, state) {
+                    return Center(child: _handleStateResult(state, ctx));
+                  },
+                ),
               ),
             ),
           ),
@@ -225,12 +235,8 @@ class _OrderScreenState extends State<OrderScreen>
             shrinkWrap: true,
             itemCount: orderDetailModel.currentListProducts.length,
             itemBuilder: (ctx, index) {
-              //todo move logic into Bloc
-              return _productCard(
-                  orderDetailModel.currentListProducts[index],
-                  ctx,
-                  orderDetailModel.shopID != getIt.get<CartStore>().shopId,
-                  getIt.get<CartStore>().shopId);
+              return _productCard(orderDetailModel.currentListProducts[index],
+                  ctx, orderDetailModel.shopID);
             },
           ),
         ),
@@ -238,51 +244,107 @@ class _OrderScreenState extends State<OrderScreen>
     );
   }
 
-  Widget _productCard(ProductStore product, BuildContext context,
-      bool isChangeShop, int shopId) {
+  Widget _productCard(ProductStore product, BuildContext context, int shopID) {
     return ProductCard(
-        product: product,
-        onSelectedProduct: (productCart, isIncrease) {
-          if (isChangeShop && shopId != -1) {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                backgroundColor: MyTheme.backgroundColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                title: Text(
-                  "Bạn có muốn đổi cửa hàng?",
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                content: Text(
-                  "Những món bạn chọn ở cửa hàng trước sẽ bị xóa.",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                actions: [
-                  CupertinoDialogAction(
-                    child: Text("Yes"),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                      BlocProvider.of<OrderBloc>(context)
-                          .add(ChangeShopEvent(product: productCart));
-                    },
-                  ),
-                  CupertinoDialogAction(
-                    child: Text("No"),
-                  )
-                ],
-              ),
-            );
-          } else if (shopId == -1) {
-            BlocProvider.of<OrderBloc>(context)
-                .add(ChangeShopEvent(product: productCart));
-          } else {
-            BlocProvider.of<OrderBloc>(context).add(
-                AddToCartEvent(product: productCart, isIncrease: isIncrease));
-          }
-        });
+      product: product,
+      onSelectedAddToCartBtn: () {
+        BlocProvider.of<OrderBloc>(context)
+            .add(AddToCartEvent(productStore: product, shopID: shopID));
+        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
+      },
+      onSelectedIncreaseBtn: () {
+        BlocProvider.of<OrderBloc>(context)
+            .add(AddToCartEvent(productStore: product, shopID: shopID));
+        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
+      },
+      onSelectedReducedBtn: () {
+        BlocProvider.of<OrderBloc>(context).add(ReducedProductEvent(
+            productID: product.productId, productQuantity: product.quantity));
+        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
+      },
+      onTab: () {
+        BlocProvider.of<OrderBloc>(context)
+            .add(AddToCartEvent(productStore: product, shopID: shopID));
+        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
+      },
+    );
   }
+
+  Future<dynamic> showDialogWarningChangeShop(
+      BuildContext context, ProductStore productStore) {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: MyTheme.backgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        title: Text(
+          "Bạn có muốn đổi cửa hàng?",
+          style: Theme.of(context).textTheme.headline1,
+        ),
+        content: Text(
+          "Những món bạn chọn ở cửa hàng trước sẽ bị xóa.",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("Yes"),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              BlocProvider.of<OrderBloc>(context)
+                  .add(ChangeShopEvent(productStore: productStore));
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("No"),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              BlocProvider.of<OrderBloc>(context).add(ReloadEvent());
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+Future<dynamic> showDialogWarningRemoveProduct(
+    BuildContext context, int productID) {
+  return showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: MyTheme.backgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0))),
+      title: Text(
+        "Xóa sản phẩm khỏi giỏ hàng?",
+        style: Theme.of(context).textTheme.headline1,
+      ),
+      content: Text(
+        "Sản phẩm này sẽ bị xóa khỏi giỏ hàng của bạn!",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
+      actions: [
+        CupertinoDialogAction(
+          child: Text("Yes"),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            BlocProvider.of<OrderBloc>(context)
+                .add(RemoveProductEvent(productID: productID));
+          },
+        ),
+        CupertinoDialogAction(
+          child: Text("No"),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            BlocProvider.of<OrderBloc>(context).add(ReloadEvent());
+          },
+        )
+      ],
+    ),
+  );
 }
 
 Widget _shopDetail(String shopName, String shopAddress, BuildContext context) {

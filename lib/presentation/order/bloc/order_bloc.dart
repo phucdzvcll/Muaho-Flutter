@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/model/cart_store.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/domain/use_case/shop/get_shop_product_use_case.dart';
 import 'package:muaho/presentation/order/model/order_detail_model.dart';
 
 part 'order_event.dart';
@@ -34,30 +33,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       yield* _handleFilterEvent(event);
     } else if (event is AddToCartEvent) {
       yield* _handleAddToCartEvent(event);
+    } else if (event is ReducedProductEvent) {
+      yield* _handleReducedProductEventEvent(event);
+    } else if (event is RemoveProductEvent) {
+      yield* _handleRemoveProductEvent(event);
+    } else if (event is ReloadEvent) {
+      yield* _handleReloadEvent(event);
     } else if (event is ChangeShopEvent) {
       yield* _handleChangeShopEvent(event);
     }
-  }
-
-  Stream<OrderState> _handleChangeShopEvent(ChangeShopEvent event) async* {
-    cartStore.shopId = _shopID;
-    cartStore.shopAddress = _address;
-    cartStore.shopName = _shopName;
-    cartStore.productStores.clear();
-    cartStore.editCart(event.product);
-    filterProductsByProductStore();
-    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
-  }
-
-  Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {
-    if (cartStore.shopId == -1) {
-      cartStore.shopId = _shopID;
-      cartStore.shopAddress = _address;
-      cartStore.shopName = _shopName;
-    }
-    cartStore.editCart(event.product);
-    filterProductsByProductStore();
-    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
   }
 
   Stream<OrderState> _handleRequestEvent(GetShopDetailEvent event) async* {
@@ -89,12 +73,15 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   void filterProductsByProductStore() {
     _currentProducts.asMap().forEach((index, product) {
-      ProductStore productStore =
-          cartStore.getProductQuantity(product.productId);
-
-      if (product.productId == productStore.productId) {
-        _currentProducts[index] = productStore;
-      } else if (product.quantity > 0) {
+      ProductStore? productStore =
+          cartStore.findProductStore(product.productId);
+      if (productStore != null) {
+        if (product.productId == productStore.productId) {
+          _currentProducts[index] = productStore;
+        } else if (product.quantity > 0) {
+          _currentProducts[index] = product.copyWith(quantity: 0);
+        }
+      } else {
         _currentProducts[index] = product.copyWith(quantity: 0);
       }
     });
@@ -131,5 +118,52 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       quantity: 0,
       unit: productEntity.unit,
     );
+  }
+
+  Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {
+    if (cartStore.shopId == -1) {
+      cartStore.shopId = _shopID;
+      cartStore.shopAddress = _address;
+      cartStore.shopName = _shopName;
+    }
+    if (event.shopID == cartStore.shopId) {
+      cartStore.addToCart(productStore: event.productStore);
+      filterProductsByProductStore();
+      yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+    } else {
+      yield WarningChangeShop(productStore: event.productStore);
+    }
+  }
+
+  Stream<OrderState> _handleReducedProductEventEvent(
+      ReducedProductEvent event) async* {
+    if (event.productQuantity > 1) {
+      cartStore.removeToCart(productID: event.productID);
+      filterProductsByProductStore();
+      yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+    } else {
+      yield WarningRemoveProduct(productID: event.productID);
+    }
+  }
+
+  Stream<OrderState> _handleRemoveProductEvent(
+      RemoveProductEvent event) async* {
+    cartStore.removeToCart(productID: event.productID);
+    filterProductsByProductStore();
+    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+  }
+
+  Stream<OrderState> _handleReloadEvent(ReloadEvent event) async* {
+    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+  }
+
+  Stream<OrderState> _handleChangeShopEvent(ChangeShopEvent event) async* {
+    cartStore.clearStore();
+    cartStore.addToCart(productStore: event.productStore);
+    cartStore.shopId = _shopID;
+    cartStore.shopAddress = _address;
+    cartStore.shopName = _shopName;
+    filterProductsByProductStore();
+    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
   }
 }

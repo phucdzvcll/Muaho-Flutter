@@ -30,6 +30,7 @@ void presentationDiConfig(GetIt injector) {
   injector.registerFactory(() => HomePageBloc(
         bannerUseCase: injector(),
         useCaseProductCategories: injector(),
+        cartStore: injector(),
       ));
 
   injector.registerFactory(

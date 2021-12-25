@@ -4,3 +4,5 @@ part of 'home_page_bloc.dart';
 abstract class HomePageEvent {}
 
 class HomePageRequestEvent extends HomePageEvent {}
+
+class ChangeCart extends HomePageEvent {}

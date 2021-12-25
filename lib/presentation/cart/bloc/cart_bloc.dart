@@ -16,8 +16,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Stream<CartState> mapEventToState(CartEvent event) async* {
     if (event is RequestCartEvent) {
       yield* _handleRequestEvent(event);
-    } else if (event is EditCartEvent) {
-      yield* _handleEditCartEvent(event);
+    } else if (event is IncreaseProductEvent) {
+      yield* _handleIncreaseProductEvent(event);
+    } else if (event is ReducedProductEvent) {
+      yield* _handleReducedProductEvent(event);
+    } else if (event is RemoveProductEvent) {
+      yield* _handleRemoveProductEvent(event);
+    } else if (event is ReloadEvent) {
+      yield CartSuccess(
+          cartSuccessResult: CartSuccessResult(
+              cartStore: cartStore,
+              cartOverViewModel: cartStore.getCartOverView()));
     }
   }
 
@@ -33,11 +42,33 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  Stream<CartState> _handleEditCartEvent(EditCartEvent event) async* {
-    cartStore.editCart(event.productStore);
+  Stream<CartState> _handleIncreaseProductEvent(
+      IncreaseProductEvent event) async* {
+    cartStore.addToCart(productStore: event.productStore);
     yield CartSuccess(
         cartSuccessResult: CartSuccessResult(
             cartStore: cartStore,
             cartOverViewModel: cartStore.getCartOverView()));
+  }
+
+  Stream<CartState> _handleRemoveProductEvent(RemoveProductEvent event) async* {
+    cartStore.removeToCart(productID: event.productId);
+    yield CartSuccess(
+        cartSuccessResult: CartSuccessResult(
+            cartStore: cartStore,
+            cartOverViewModel: cartStore.getCartOverView()));
+  }
+
+  Stream<CartState> _handleReducedProductEvent(
+      ReducedProductEvent event) async* {
+    if (event.quantity == 1) {
+      yield WarningRemoveProduct(productID: event.productID);
+    } else {
+      cartStore.removeToCart(productID: event.productID);
+      yield CartSuccess(
+          cartSuccessResult: CartSuccessResult(
+              cartStore: cartStore,
+              cartOverViewModel: cartStore.getCartOverView()));
+    }
   }
 }

@@ -9,8 +9,6 @@ class GetShopDetailEvent extends OrderEvent {
   GetShopDetailEvent({required this.shopID});
 }
 
-class ReloadEvent extends OrderEvent {}
-
 class FilterProductEvent extends OrderEvent {
   final int groupID;
 
@@ -18,14 +16,29 @@ class FilterProductEvent extends OrderEvent {
 }
 
 class AddToCartEvent extends OrderEvent {
-  final ProductStore product;
-  final bool isIncrease;
+  final ProductStore productStore;
+  final int shopID;
 
-  AddToCartEvent({required this.product, required this.isIncrease});
+  AddToCartEvent({required this.productStore, required this.shopID});
 }
 
-class ChangeShopEvent extends OrderEvent {
-  final ProductStore product;
+class ReducedProductEvent extends OrderEvent {
+  final int productID;
+  final int productQuantity;
 
-  ChangeShopEvent({required this.product});
+  ReducedProductEvent({required this.productID, required this.productQuantity});
+}
+
+class RemoveProductEvent extends OrderEvent {
+  final int productID;
+
+  RemoveProductEvent({required this.productID});
+}
+
+class ReloadEvent extends OrderEvent {}
+
+class ChangeShopEvent extends OrderEvent {
+  final ProductStore productStore;
+
+  ChangeShopEvent({required this.productStore});
 }

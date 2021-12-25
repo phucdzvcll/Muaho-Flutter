@@ -35,30 +35,37 @@ class _CartScreenState extends State<CartScreen>
   Widget build(BuildContext context) {
     return BlocProvider<CartBloc>(
       create: (context) => getIt()..add(RequestCartEvent()),
-      child: Container(
-        color: Theme.of(context).backgroundColor,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: AppBarComponent(
-                searchAction: () {},
-                title: "Giỏ hàng",
-                backAction: () {
-                  Navigator.pop(context);
-                }),
-            body: Container(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-              margin: EdgeInsets.only(top: 32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(48),
-                  topRight: Radius.circular(48),
+      child: BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          if (state is WarningRemoveProduct) {
+            showWarningRemoveProductDialog(context, state.productID);
+          }
+        },
+        child: Container(
+          color: Theme.of(context).backgroundColor,
+          child: SafeArea(
+            child: Scaffold(
+              appBar: AppBarComponent(
+                  searchAction: () {},
+                  title: "Giỏ hàng",
+                  backAction: () {
+                    Navigator.pop(context);
+                  }),
+              body: Container(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+                margin: EdgeInsets.only(top: 32),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(48),
+                    topRight: Radius.circular(48),
+                  ),
                 ),
-              ),
-              child: BlocBuilder<CartBloc, CartState>(
-                builder: (ctx, state) {
-                  return _handleStateResult(state, ctx);
-                },
+                child: BlocBuilder<CartBloc, CartState>(
+                  builder: (ctx, state) {
+                    return _handleStateResult(state, ctx);
+                  },
+                ),
               ),
             ),
           ),
@@ -163,43 +170,7 @@ class _CartScreenState extends State<CartScreen>
         children: [
           SlidableAction(
             onPressed: (context) {
-              showDialog(
-                context: blocContext,
-                builder: (ctx) => AlertDialog(
-                  backgroundColor: MyTheme.backgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(16.0),
-                    ),
-                  ),
-                  title: Text(
-                    "Xóa sản phẩm",
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  content: Text(
-                    "Món hàng này sẽ bị xóa khỏi giỏ hàng của bạn",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: Text("Yes"),
-                      onPressed: () {
-                        var newProduct = product.copyWith(quantity: 0);
-                        Navigator.of(blocContext, rootNavigator: true).pop();
-                        BlocProvider.of<CartBloc>(blocContext)
-                            .add(EditCartEvent(productStore: newProduct));
-                      },
-                    ),
-                    CupertinoDialogAction(
-                      child: Text("No"),
-                      onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      },
-                    )
-                  ],
-                ),
-              );
+              showWarningRemoveProductDialog(blocContext, product.productId);
             },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
@@ -262,22 +233,7 @@ class _CartScreenState extends State<CartScreen>
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: product.quantity > 0
-                          ? _upDownWidget(blocContext, product)
-                          : _upDownButton(
-                              context: blocContext,
-                              onSelectedProduct: () {
-                                var newProduct = product.copyWith(
-                                    quantity: product.quantity + 1);
-                                BlocProvider.of<CartBloc>(blocContext).add(
-                                    EditCartEvent(productStore: newProduct));
-                              },
-                              icon: Icon(
-                                Icons.add,
-                                color: Theme.of(blocContext).primaryColorLight,
-                                size: 16,
-                              ),
-                              color: Colors.white),
+                      child: _upDownWidget(blocContext, product),
                     )
                   ],
                 ),
@@ -375,47 +331,9 @@ class _CartScreenState extends State<CartScreen>
           _upDownButton(
               context: context,
               onSelectedProduct: () {
-                var newProduct =
-                    productStore.copyWith(quantity: productStore.quantity - 1);
-                if (newProduct.quantity == 0) {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      backgroundColor: MyTheme.backgroundColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(16.0))),
-                      title: Text(
-                        "Xóa sản phẩm",
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      content: Text(
-                        "Món hàng này sẽ bị xóa khỏi giỏ hàng của bạn",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      actions: [
-                        CupertinoDialogAction(
-                          child: Text("Yes"),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                            BlocProvider.of<CartBloc>(context)
-                                .add(EditCartEvent(productStore: newProduct));
-                          },
-                        ),
-                        CupertinoDialogAction(
-                          child: Text("No"),
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pop();
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                } else {
-                  BlocProvider.of<CartBloc>(context)
-                      .add(EditCartEvent(productStore: newProduct));
-                }
+                BlocProvider.of<CartBloc>(context).add(ReducedProductEvent(
+                    productID: productStore.productId,
+                    quantity: productStore.quantity));
               },
               icon: Icon(
                 Icons.remove,
@@ -456,9 +374,47 @@ class _CartScreenState extends State<CartScreen>
               var newProduct =
                   productStore.copyWith(quantity: productStore.quantity + 1);
               BlocProvider.of<CartBloc>(context)
-                  .add(EditCartEvent(productStore: newProduct));
+                  .add(IncreaseProductEvent(productStore: productStore));
             },
           ),
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> showWarningRemoveProductDialog(
+      BuildContext context, int productID) {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: MyTheme.backgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        title: Text(
+          "Xóa sản phẩm",
+          style: Theme.of(context).textTheme.headline1,
+        ),
+        content: Text(
+          "Món hàng này sẽ bị xóa khỏi giỏ hàng của bạn",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("Yes"),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              BlocProvider.of<CartBloc>(context)
+                  .add(RemoveProductEvent(productId: productID));
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("No"),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              BlocProvider.of<CartBloc>(context).add(ReloadEvent());
+            },
+          )
         ],
       ),
     );
