@@ -2,14 +2,39 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 
-class CartInfo {
+class CartSummary {
   final double totalAmount;
   final int itemQuantity;
   final int unitQuantity;
-  CartInfo(
+
+  CartSummary(
       {required this.totalAmount,
       required this.itemQuantity,
       required this.unitQuantity});
+}
+
+class CartShopInfo {
+  final int shopID;
+  final String shopName;
+  final String shopAddress;
+
+  CartShopInfo({
+    required this.shopID,
+    required this.shopName,
+    required this.shopAddress,
+  });
+}
+
+class CartInfo {
+  final CartShopInfo cartShopInfo;
+  final CartSummary cartSummary;
+  final List<ProductStore> productStores;
+
+  CartInfo({
+    required this.cartSummary,
+    required this.productStores,
+    required this.cartShopInfo,
+  });
 }
 
 class CartStore {
@@ -22,7 +47,7 @@ class CartStore {
       new StreamController();
 
   void _sendUpdateCartEvent() {
-    this._updateCartController.add(getCartOverView());
+    this._updateCartController.add(getCartInfo());
   }
 
   void close() {
@@ -33,19 +58,43 @@ class CartStore {
     return this._updateCartBroadcastStream;
   }
 
-  void addToCart({required ProductStore productStore}) {
-    ProductStore? product = findProductStore(productStore.productId);
+  void increaseProduct({required int productId}) {
+    ProductStore? product = findProductStore(productId);
     if (product != null) {
-      int index = getIndexOfProduct(productStore.productId);
-      productStores[index] =
-          productStore.copyWith(quantity: productStore.quantity + 1);
-    } else {
-      this.productStores.add(productStore.copyWith(quantity: 1));
+      int index = getIndexOfProduct(productId);
+      productStores[index] = product.copyWith(quantity: product.quantity + 1);
+      _sendUpdateCartEvent();
     }
-    _sendUpdateCartEvent();
   }
 
-  void removeToCart({required int productID}) {
+  AddToCartResult addToCart(
+      {required ProductStore productStore,
+      required int shopId,
+      required String shopAddress,
+      required String shopName}) {
+    if (this.shopId == -1) {
+      this.shopId = shopId;
+      this.shopAddress = shopAddress;
+      this.shopName = shopName;
+    }
+    if (shopId == this.shopId) {
+      ProductStore? product = findProductStore(productStore.productId);
+      if (product != null) {
+        int index = getIndexOfProduct(productStore.productId);
+        productStores[index] =
+            product.copyWith(quantity: productStore.quantity + 1);
+      } else {
+        this.productStores.add(productStore.copyWith(quantity: 1));
+      }
+      _sendUpdateCartEvent();
+
+      return AddToCartResult.Success;
+    } else {
+      return AddToCartResult.WarningChangeShop;
+    }
+  }
+
+  void removeProduct({required int productID}) {
     ProductStore? productStore = findProductStore(productID);
     if (productStore != null) {
       int index = getIndexOfProduct(productID);
@@ -57,12 +106,41 @@ class CartStore {
       }
     }
     if (this.productStores.isEmpty) {
-      clearStore();
+      _clearStore();
     }
     _sendUpdateCartEvent();
   }
 
-  CartInfo getCartOverView() {
+  ReducedResult reducedProduct({required int productID}) {
+    ProductStore? productStore = findProductStore(productID);
+    if (productStore != null) {
+      int index = getIndexOfProduct(productID);
+      if (productStore.quantity == 1) {
+        return ReducedResult.WarningRemove;
+      } else {
+        productStores[index] =
+            productStore.copyWith(quantity: productStore.quantity - 1);
+        _sendUpdateCartEvent();
+        return ReducedResult.Success;
+      }
+    } else {
+      return ReducedResult.NotFound;
+    }
+  }
+
+  CartInfo getCartInfo() {
+    return CartInfo(
+      cartSummary: getCartOverView(),
+      productStores: this.productStores,
+      cartShopInfo: CartShopInfo(
+        shopID: shopId,
+        shopName: shopName,
+        shopAddress: shopAddress,
+      ),
+    );
+  }
+
+  CartSummary getCartOverView() {
     int itemQuantity = 0;
     int unitQuantity = 0;
     double totalPrice = 0.0;
@@ -76,14 +154,14 @@ class CartStore {
         }
       });
     }
-    return CartInfo(
+    return CartSummary(
       totalAmount: totalPrice,
       itemQuantity: itemQuantity,
       unitQuantity: unitQuantity,
     );
   }
 
-  void clearStore() {
+  void _clearStore() {
     this.shopId = -1;
     this.productStores.clear();
     this.shopName = "";
@@ -139,6 +217,17 @@ class CartStore {
         ' shopAddress: $shopAddress,' +
         ' productStores: $productStores,' +
         '}';
+  }
+
+  void changeShop(
+      {required int shopId,
+      required String shopAddress,
+      required String shopName}) {
+    _clearStore();
+    this.shopId = shopId;
+    this.shopAddress = shopAddress;
+    this.shopName = shopName;
+    _sendUpdateCartEvent();
   }
 
 //</editor-fold>
@@ -222,4 +311,15 @@ class ProductStore {
   }
 
 //</editor-fold>
+}
+
+enum AddToCartResult {
+  Success,
+  WarningChangeShop,
+}
+
+enum ReducedResult {
+  Success,
+  WarningRemove,
+  NotFound,
 }

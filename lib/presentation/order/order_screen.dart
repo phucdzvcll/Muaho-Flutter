@@ -117,10 +117,7 @@ class _OrderScreenState extends State<OrderScreen>
             Navigator.pushNamed(
               ctx,
               CartScreen.routeName,
-            ).whenComplete(() {
-              BlocProvider.of<OrderBloc>(ctx)
-                  .add(GetShopDetailEvent(shopID: widget.shopArgument.shopId));
-            });
+            );
           },
           cartInfo: state.shopDetailModel.cartInfo,
           icon: FadeInDown(

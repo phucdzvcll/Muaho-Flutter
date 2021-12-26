@@ -170,8 +170,8 @@ class _HomePageState extends State<HomePage>
     return BlocBuilder<CartUpdateBloc, CartUpdateState>(
       builder: (context, state) {
         return Visibility(
-          visible:
-              (state is CartUpdatedState && state.cartInfo.unitQuantity > 0),
+          visible: (state is CartUpdatedState &&
+              state.cartInfo.productStores.isNotEmpty),
           child: Container(
             width: 7,
             height: 7,

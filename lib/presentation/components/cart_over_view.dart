@@ -3,7 +3,7 @@ import 'package:muaho/common/common.dart';
 
 class CartOverView extends StatelessWidget {
   final VoidCallback onClick;
-  final CartInfo cartInfo;
+  final CartSummary cartInfo;
   final Widget icon;
   const CartOverView(
       {Key? key,

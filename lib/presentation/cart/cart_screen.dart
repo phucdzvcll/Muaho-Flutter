@@ -36,10 +36,7 @@ class _CartScreenState extends State<CartScreen>
   Widget build(BuildContext context) {
     return BlocProvider<CartBloc>(
       create: (context) =>
-          getIt(param1: BlocProvider.of<CartUpdateBloc>(context))
-            ..add(
-              RequestCartEvent(),
-            ),
+          getIt(param1: BlocProvider.of<CartUpdateBloc>(context)),
       child: Builder(builder: (context) {
         return _blocListener(context);
       }),
@@ -78,36 +75,26 @@ class _CartScreenState extends State<CartScreen>
                 topRight: Radius.circular(48),
               ),
             ),
-            child: BlocBuilder<CartBloc, CartState>(
-              builder: (ctx, state) {
-                return _handleStateResult(state, ctx);
-              },
-            ),
+            child: _handleStateResult(),
           ),
         ),
       ),
     );
   }
 
-  Widget _handleStateResult(CartState state, BuildContext ctx) {
-    if (state is CartLoading || state is CartInitial) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (state is CartEmpty) {
-      return Center(
-        child: Text("Không có gì trong giỏ hàng"),
-      );
-    } else if (state is CartSuccess) {
-      return Center(
-        child: _handleSuccessBuilder(state, ctx),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
+  Widget _handleStateResult() {
+    return BlocBuilder<CartUpdateBloc, CartUpdateState>(
+      builder: (ctx, state) {
+        if (state is CartUpdatedState) {
+          return _handleSuccessBuilder(state, ctx);
+        } else {
+          return SizedBox.shrink();
+        }
+      },
+    );
   }
 
-  SliverAppBar _sliverAppBarBuilder(CartSuccess state) {
+  SliverAppBar _sliverAppBarBuilder() {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       expandedHeight: 70,
@@ -118,59 +105,65 @@ class _CartScreenState extends State<CartScreen>
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: [StretchMode.fadeTitle],
-        background: _appbarHeaderBuilder(state),
+        background: _appbarHeaderBuilder(),
       ),
     );
   }
 
-  Widget _appbarHeaderBuilder(CartSuccess state) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.only(bottom: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              state.cartSuccessResult.cartStore.shopName,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.headline1!.copyWith(
-                  color: Theme.of(context).primaryColorLight,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              state.cartSuccessResult.cartStore.shopAddress,
-              textAlign: TextAlign.start,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style:
-                  Theme.of(context).textTheme.subtitle2!.copyWith(fontSize: 12),
-            ),
-          )
-        ],
-      ),
+  Widget _appbarHeaderBuilder() {
+    return BlocBuilder<CartUpdateBloc, CartUpdateState>(
+      builder: (context, state) {
+        return state is CartUpdatedState
+            ? Container(
+                color: Colors.white,
+                padding: EdgeInsets.only(bottom: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        state.cartInfo.cartShopInfo.shopName,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.headline1!.copyWith(
+                            color: Theme.of(context).primaryColorLight,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        state.cartInfo.cartShopInfo.shopAddress,
+                        textAlign: TextAlign.start,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(fontSize: 12),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            : SizedBox.shrink();
+      },
     );
   }
 
   SingleChildRenderObjectWidget _sliverListProductBuilder(
-      CartSuccess state, BuildContext context) {
+      CartUpdatedState state, BuildContext context) {
     return SliverPadding(
       padding: EdgeInsets.only(bottom: 120),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             return _itemProductDetailBuilder(
-                state.cartSuccessResult.cartStore.productStores[index],
-                context);
+                state.cartInfo.productStores[index], context);
           },
           addAutomaticKeepAlives: true,
-          childCount: state.cartSuccessResult.cartStore.productStores
-              .length, // 1000 list items
+          childCount: state.cartInfo.productStores.length, // 1000 list items
         ),
       ),
     );
@@ -259,8 +252,8 @@ class _CartScreenState extends State<CartScreen>
     );
   }
 
-  Widget _handleSuccessBuilder(CartSuccess state, BuildContext ctx) {
-    bool isVisible = state.cartSuccessResult.cartStore.productStores.length > 0;
+  Widget _handleSuccessBuilder(CartUpdatedState state, BuildContext ctx) {
+    bool isVisible = state.cartInfo.productStores.isNotEmpty;
     return Stack(
       children: [
         NotificationListener(
@@ -277,7 +270,7 @@ class _CartScreenState extends State<CartScreen>
           child: CustomScrollView(
             physics: BouncingScrollPhysics(),
             slivers: [
-              _sliverAppBarBuilder(state),
+              _sliverAppBarBuilder(),
               isVisible
                   ? _sliverListProductBuilder(state, ctx)
                   : SliverToBoxAdapter(
@@ -306,12 +299,12 @@ class _CartScreenState extends State<CartScreen>
     );
   }
 
-  Widget _cartOverViewBuilder(CartSuccess state) {
+  Widget _cartOverViewBuilder(CartUpdatedState state) {
     return CartOverView(
       onClick: () {
         Navigator.pushNamed(context, PaymentScreen.routeName);
       },
-      cartInfo: state.cartSuccessResult.cartInfo,
+      cartInfo: state.cartInfo.cartSummary,
       icon: FadeInLeft(
         delay: Duration(milliseconds: 200),
         duration: Duration(milliseconds: 1000),
@@ -428,7 +421,6 @@ class _CartScreenState extends State<CartScreen>
             child: Text("No"),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
-              BlocProvider.of<CartBloc>(context).add(ReloadEvent());
             },
           )
         ],

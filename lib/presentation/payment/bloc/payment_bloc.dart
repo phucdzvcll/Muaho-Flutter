@@ -18,14 +18,14 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   final CartStore cartStore;
   final CreateOrderUseCase createOrderUseCase;
 
+  //todo
+
   @override
   Stream<PaymentState> mapEventToState(PaymentEvent event) async* {
     if (event is RequestLocationPermission) {
       yield* _handleRequestPermission();
     } else if (event is CreateOrderEvent) {
       yield* _handleCreateOrder();
-    } else if (event is ClearCartStore) {
-      cartStore.clearStore();
     }
   }
 

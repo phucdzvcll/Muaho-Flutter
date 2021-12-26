@@ -11,20 +11,20 @@ import 'package:muaho/presentation/order/model/order_detail_model.dart';
 part 'order_event.dart';
 part 'order_state.dart';
 
+class _OrderSuccessEvent extends OrderEvent {}
+
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final GetShopProductUseCase getShopProductUseCase;
-  final CartStore cartStore;
   final CartUpdateBloc cartUpdateBloc;
-  StreamSubscription<CartInfo>? _updateCartStreamSubscription;
+  StreamSubscription<CartUpdateState>? _cartUpdateSubscription;
 
   OrderBloc({
     required this.getShopProductUseCase,
-    required this.cartStore,
     required this.cartUpdateBloc,
   }) : super(OrderInitial()) {
-    this._updateCartStreamSubscription =
-        cartStore.updateCartBroadcastStream?.listen((event) {
-      cartUpdateBloc.add(UpdateCartEvent(cartInfo: event));
+    _cartUpdateSubscription =
+        cartUpdateBloc.stream.asBroadcastStream().listen((event) {
+      _handleCartUpdate();
     });
   }
 
@@ -37,6 +37,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   String _address = "";
   int _shopID = -1;
   int _currentGroupId = -1;
+
+  @override
+  Future<void> close() {
+    _cartUpdateSubscription?.cancel();
+    return super.close();
+  }
 
   @override
   Stream<OrderState> mapEventToState(OrderEvent event) async* {
@@ -52,6 +58,9 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       yield* _handleRemoveProductEvent(event);
     } else if (event is ChangeShopEvent) {
       yield* _handleChangeShopEvent(event);
+    } else if (event is _OrderSuccessEvent) {
+      filterProductsByProductStore();
+      yield (OrderSuccess(shopDetailModel: mapOrderDetailModel()));
     }
   }
 
@@ -85,7 +94,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   void filterProductsByProductStore() {
     _currentProducts.asMap().forEach((index, product) {
       ProductStore? productStore =
-          cartStore.findProductStore(product.productId);
+          cartUpdateBloc.cartStore.findProductStore(product.productId);
       if (productStore != null) {
         if (product.productId == productStore.productId) {
           _currentProducts[index] = productStore;
@@ -116,7 +125,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         shopAddress: _address,
         groups: _groups,
         currentListProducts: _currentProducts,
-        cartInfo: cartStore.getCartOverView());
+        cartInfo: cartUpdateBloc.cartStore.getCartOverView());
   }
 
   ProductStore mapProduct(ProductEntity productEntity) {
@@ -132,51 +141,54 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   }
 
   Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {
-    if (cartStore.shopId == -1) {
-      cartStore.shopId = _shopID;
-      cartStore.shopAddress = _address;
-      cartStore.shopName = _shopName;
-    }
-    if (event.shopID == cartStore.shopId) {
-      cartStore.addToCart(productStore: event.productStore);
-      filterProductsByProductStore();
-      yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
-    } else {
-      yield WarningChangeShop(productStore: event.productStore);
+    AddToCartResult addToCart = cartUpdateBloc.cartStore.addToCart(
+        productStore: event.productStore,
+        shopId: _shopID,
+        shopAddress: _address,
+        shopName: _shopName);
+    switch (addToCart) {
+      case AddToCartResult.Success:
+        //nothing to do here
+        break;
+      case AddToCartResult.WarningChangeShop:
+        yield WarningChangeShop(productStore: event.productStore);
+        break;
     }
   }
 
   Stream<OrderState> _handleReducedProductEventEvent(
       ReducedProductEvent event) async* {
-    if (event.productQuantity > 1) {
-      cartStore.removeToCart(productID: event.productID);
-      filterProductsByProductStore();
-      yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
-    } else {
-      yield WarningRemoveProduct(productID: event.productID);
+    ReducedResult reducedProduct =
+        cartUpdateBloc.cartStore.reducedProduct(productID: event.productID);
+    switch (reducedProduct) {
+      case ReducedResult.Success:
+        //nothing to do here
+        break;
+      case ReducedResult.WarningRemove:
+        yield WarningRemoveProduct(productID: event.productID);
+        break;
+      case ReducedResult.NotFound:
+        // todo Handle this case not found.
+        break;
     }
   }
 
   Stream<OrderState> _handleRemoveProductEvent(
       RemoveProductEvent event) async* {
-    cartStore.removeToCart(productID: event.productID);
-    filterProductsByProductStore();
-    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+    cartUpdateBloc.cartStore.removeProduct(productID: event.productID);
   }
 
   Stream<OrderState> _handleChangeShopEvent(ChangeShopEvent event) async* {
-    cartStore.clearStore();
-    cartStore.addToCart(productStore: event.productStore);
-    cartStore.shopId = _shopID;
-    cartStore.shopAddress = _address;
-    cartStore.shopName = _shopName;
-    filterProductsByProductStore();
-    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+    cartUpdateBloc.cartStore.changeShop(
+        shopId: _shopID, shopAddress: _address, shopName: _shopName);
+    cartUpdateBloc.cartStore.addToCart(
+        productStore: event.productStore,
+        shopName: _shopName,
+        shopAddress: _address,
+        shopId: _shopID);
   }
 
-  @override
-  Future<void> close() {
-    _updateCartStreamSubscription?.cancel();
-    return super.close();
+  void _handleCartUpdate() {
+    this.add(_OrderSuccessEvent());
   }
 }

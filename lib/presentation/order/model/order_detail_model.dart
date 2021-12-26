@@ -8,7 +8,7 @@ class OrderDetailModel {
   final int shopID;
   final List<ProductGroupEntity> groups;
   final List<ProductStore> currentListProducts;
-  final CartInfo cartInfo;
+  final CartSummary cartInfo;
 
 //<editor-fold desc="Data Methods">
 
@@ -62,7 +62,7 @@ class OrderDetailModel {
     String? shopAddress,
     List<ProductGroupEntity>? groups,
     List<ProductStore>? currentListProducts,
-    CartInfo? cartInfo,
+    CartSummary? cartInfo,
     int? shopID,
   }) {
     return OrderDetailModel(

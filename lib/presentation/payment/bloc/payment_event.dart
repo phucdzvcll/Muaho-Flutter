@@ -14,5 +14,3 @@ class EditAddress extends PaymentEvent {
 }
 
 class CreateOrderEvent extends PaymentEvent {}
-
-class ClearCartStore extends PaymentEvent {}

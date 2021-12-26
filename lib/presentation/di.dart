@@ -27,16 +27,16 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactoryParam<OrderBloc, CartUpdateBloc, void>(
       (cartUpdateBloc, _) => OrderBloc(
-          cartStore: injector(),
-          getShopProductUseCase: injector(),
-          cartUpdateBloc: cartUpdateBloc));
+          getShopProductUseCase: injector(), cartUpdateBloc: cartUpdateBloc));
 
   injector.registerFactory(() => HomePageBloc(
         bannerUseCase: injector(),
         useCaseProductCategories: injector(),
       ));
 
-  injector.registerFactory<CartUpdateBloc>(() => CartUpdateBloc());
+  injector.registerFactory<CartUpdateBloc>(() => CartUpdateBloc(
+        cartStore: injector(),
+      ));
 
   injector.registerFactory(
       () => OrderDetailBloc(getOrderDetailUseCase: injector()));
@@ -51,7 +51,6 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactoryParam<CartBloc, CartUpdateBloc, void>(
       (cartUpdateBloc, _) => CartBloc(
-            cartStore: injector(),
             cartUpdateBloc: cartUpdateBloc,
           ));
 }

@@ -37,7 +37,7 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
     }
   }
 
-  CartInfo getCartOverView(OrderDetailEntity entity) {
+  CartSummary getCartOverView(OrderDetailEntity entity) {
     int itemQuantity = 0;
     int unitQuantity = 0;
     double totalPrice = 0.0;
@@ -52,7 +52,7 @@ class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
       });
     }
 
-    return CartInfo(
+    return CartSummary(
       totalAmount: totalPrice,
       itemQuantity: itemQuantity,
       unitQuantity: unitQuantity,
