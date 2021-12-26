@@ -1,12 +1,37 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
-import 'package:muaho/common/extensions/number.dart';
-import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
+
+class CartInfo {
+  final double totalAmount;
+  final int itemQuantity;
+  final int unitQuantity;
+  CartInfo(
+      {required this.totalAmount,
+      required this.itemQuantity,
+      required this.unitQuantity});
+}
 
 class CartStore {
   int shopId = -1;
   String shopName = "";
   String shopAddress = "";
   List<ProductStore> productStores = [];
+  Stream<CartInfo>? _updateCartBroadcastStream;
+  final StreamController<CartInfo> _updateCartController =
+      new StreamController();
+
+  void _sendUpdateCartEvent() {
+    this._updateCartController.add(getCartOverView());
+  }
+
+  void close() {
+    this._updateCartController.close();
+  }
+
+  Stream<CartInfo>? get updateCartBroadcastStream {
+    return this._updateCartBroadcastStream;
+  }
 
   void addToCart({required ProductStore productStore}) {
     ProductStore? product = findProductStore(productStore.productId);
@@ -17,6 +42,7 @@ class CartStore {
     } else {
       this.productStores.add(productStore.copyWith(quantity: 1));
     }
+    _sendUpdateCartEvent();
   }
 
   void removeToCart({required int productID}) {
@@ -33,26 +59,28 @@ class CartStore {
     if (this.productStores.isEmpty) {
       clearStore();
     }
+    _sendUpdateCartEvent();
   }
 
-  CartOverViewModel getCartOverView() {
-    int amount = 0;
-    int totalItem = 0;
+  CartInfo getCartOverView() {
+    int itemQuantity = 0;
+    int unitQuantity = 0;
     double totalPrice = 0.0;
 
     if (this.productStores.isNotEmpty) {
       this.productStores.forEach((element) {
         if (element.quantity > 0) {
-          amount += element.quantity;
-          totalItem += 1;
+          itemQuantity += element.quantity;
+          unitQuantity += 1;
           totalPrice += element.quantity * element.productPrice;
         }
       });
     }
-
-    return CartOverViewModel(
-        amount: "$amount đơn vị - $totalItem sản phầm",
-        totalPrice: totalPrice.formatDouble() + " VNĐ");
+    return CartInfo(
+      totalAmount: totalPrice,
+      itemQuantity: itemQuantity,
+      unitQuantity: unitQuantity,
+    );
   }
 
   void clearStore() {
@@ -60,6 +88,7 @@ class CartStore {
     this.productStores.clear();
     this.shopName = "";
     this.shopAddress = "";
+    _sendUpdateCartEvent();
   }
 
   int getIndexOfProduct(int productID) {
@@ -80,7 +109,10 @@ class CartStore {
 
 //<editor-fold desc="Data Methods">
 
-  CartStore();
+  CartStore() {
+    _updateCartBroadcastStream =
+        _updateCartController.stream.asBroadcastStream();
+  }
 
   @override
   bool operator ==(Object other) =>

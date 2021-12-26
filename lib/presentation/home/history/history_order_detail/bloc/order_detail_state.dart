@@ -17,8 +17,7 @@ class OrderDetailSuccess extends OrderDetailState {
 
 class OrderDetailSuccessModel {
   final OrderDetailEntity entity;
-  final CartOverViewModel cartOverViewModel;
+  final CartInfo cartInfo;
 
-  OrderDetailSuccessModel(
-      {required this.entity, required this.cartOverViewModel});
+  OrderDetailSuccessModel({required this.entity, required this.cartInfo});
 }

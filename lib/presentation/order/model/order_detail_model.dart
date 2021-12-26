@@ -1,8 +1,6 @@
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 
-import '../../components/model/cart_over_view_model.dart';
-
 class OrderDetailModel {
   final int currentGroupId;
   final String shopName;
@@ -10,7 +8,7 @@ class OrderDetailModel {
   final int shopID;
   final List<ProductGroupEntity> groups;
   final List<ProductStore> currentListProducts;
-  final CartOverViewModel cartOverView;
+  final CartInfo cartInfo;
 
 //<editor-fold desc="Data Methods">
 
@@ -21,7 +19,7 @@ class OrderDetailModel {
     required this.shopAddress,
     required this.groups,
     required this.currentListProducts,
-    required this.cartOverView,
+    required this.cartInfo,
   });
 
   @override
@@ -34,7 +32,7 @@ class OrderDetailModel {
           shopAddress == other.shopAddress &&
           groups == other.groups &&
           currentListProducts == other.currentListProducts &&
-          cartOverView == other.cartOverView);
+          cartInfo == other.cartInfo);
 
   @override
   int get hashCode =>
@@ -43,7 +41,7 @@ class OrderDetailModel {
       shopAddress.hashCode ^
       groups.hashCode ^
       currentListProducts.hashCode ^
-      cartOverView.hashCode;
+      cartInfo.hashCode;
 
   @override
   String toString() {
@@ -53,7 +51,7 @@ class OrderDetailModel {
         ' shopAddress: $shopAddress,' +
         ' groups: $groups,' +
         ' currentListProducts: $currentListProducts,' +
-        ' cartOverView: $cartOverView,' +
+        ' cartOverView: $cartInfo,' +
         ' shopID: $shopID,' +
         '}';
   }
@@ -64,7 +62,7 @@ class OrderDetailModel {
     String? shopAddress,
     List<ProductGroupEntity>? groups,
     List<ProductStore>? currentListProducts,
-    CartOverViewModel? cartOverView,
+    CartInfo? cartInfo,
     int? shopID,
   }) {
     return OrderDetailModel(
@@ -74,7 +72,7 @@ class OrderDetailModel {
       shopAddress: shopAddress ?? this.shopAddress,
       groups: groups ?? this.groups,
       currentListProducts: currentListProducts ?? this.currentListProducts,
-      cartOverView: cartOverView ?? this.cartOverView,
+      cartInfo: cartInfo ?? this.cartInfo,
     );
   }
 

@@ -11,8 +11,6 @@ class HomePageOnClick extends HomePageState {}
 
 class HomePageSuccessState extends HomePageState {
   final HomePageModel homePageModel;
-  final bool? cartIsNotEmpty;
 
-  HomePageSuccessState(
-      {required this.homePageModel, required this.cartIsNotEmpty});
+  HomePageSuccessState({required this.homePageModel});
 }

@@ -4,7 +4,12 @@ final NumberFormat moneyNumberFormat = NumberFormat("#,##0.##", "en_US");
 
 extension IntNullUtils on int? {
   int defaultZero() => defaultIfNull(0);
+
   int defaultIfNull(int defaultNumber) => this ?? defaultNumber;
+
+  String format() {
+    return moneyNumberFormat.format(this);
+  }
 }
 
 extension DoubleNullUtils on double? {
@@ -12,11 +17,7 @@ extension DoubleNullUtils on double? {
 
   double defaultIfNull(double defaultNumber) => this ?? defaultNumber;
 
-  String formatDouble() {
-    if (this.defaultZero().truncateToDouble() == this) {
-      return moneyNumberFormat.format(this);
-    } else {
-      return moneyNumberFormat.format(this);
-    }
+  String format() {
+    return moneyNumberFormat.format(this);
   }
 }

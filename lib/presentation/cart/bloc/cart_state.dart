@@ -13,9 +13,9 @@ class CartSuccess extends CartState {
 
 class CartSuccessResult {
   final CartStore cartStore;
-  final CartOverViewModel cartOverViewModel;
+  final CartInfo cartInfo;
 
-  CartSuccessResult({required this.cartStore, required this.cartOverViewModel});
+  CartSuccessResult({required this.cartStore, required this.cartInfo});
 }
 
 class CartEmpty extends CartState {}

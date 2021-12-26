@@ -34,7 +34,7 @@ class OrderHistoryDeliveringBloc
                   orderID: e.orderId,
                   shopName: e.shopName,
                   subText: "${e.itemCount} Đơn vị - ${e.status}",
-                  totalPrice: e.total.formatDouble() + " VNĐ"))
+                  totalPrice: e.total.format() + " VNĐ"))
               .toList());
     } else {
       yield OrderHistoryDeliveringError();

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
+import 'package:muaho/common/common.dart';
 
 class CartOverView extends StatelessWidget {
   final VoidCallback onClick;
-  final CartOverViewModel cartOverViewModel;
+  final CartInfo cartInfo;
   final Widget icon;
   const CartOverView(
       {Key? key,
       required this.onClick,
-      required this.cartOverViewModel,
+      required this.cartInfo,
       required this.icon})
       : super(key: key);
 
@@ -33,14 +33,14 @@ class CartOverView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        cartOverViewModel.amount,
+                        "${cartInfo.itemQuantity.format()} đơn vị - ${cartInfo.unitQuantity.format()} sản phầm",
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1!
                             .copyWith(color: Colors.white),
                       ),
                       Text(
-                        cartOverViewModel.totalPrice,
+                        "${cartInfo.totalAmount.format()} VND",
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       )

@@ -172,7 +172,7 @@ class PaymentScreen extends StatelessWidget {
                               Expanded(
                                 flex: 1,
                                 child: Text(
-                                  e.productPrice.formatDouble() +
+                                  e.productPrice.format() +
                                       " x " +
                                       e.quantity.toString(),
                                   textAlign: TextAlign.end,
@@ -208,7 +208,7 @@ class PaymentScreen extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        state.paymentInfoModel.total.formatDouble(),
+                        state.paymentInfoModel.total.format(),
                         textAlign: TextAlign.end,
                       ),
                     )

@@ -10,10 +10,10 @@ import 'package:muaho/data/di.dart';
 import 'package:muaho/domain/di.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/di.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
-import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/payment/payment_screen.dart';
@@ -73,8 +73,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomePageBloc>(
-      create: (ctx) => getIt()..add(HomePageRequestEvent()),
+    return BlocProvider(
+      create: (context) => CartUpdateBloc(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

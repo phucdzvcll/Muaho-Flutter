@@ -3,13 +3,24 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/presentation/components/model/cart_over_view_model.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc({required this.cartStore}) : super(CartInitial());
+  CartBloc({
+    required this.cartStore,
+    required this.cartUpdateBloc,
+  }) : super(CartInitial()) {
+    this._updateCartStreamSubscription =
+        cartStore.updateCartBroadcastStream?.listen((event) {
+      cartUpdateBloc.add(UpdateCartEvent(cartInfo: event));
+    });
+  }
+
+  final CartUpdateBloc cartUpdateBloc;
+  StreamSubscription<CartInfo>? _updateCartStreamSubscription;
   CartStore cartStore;
 
   @override
@@ -25,9 +36,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     } else if (event is ReloadEvent) {
       yield CartSuccess(
           cartSuccessResult: CartSuccessResult(
-              cartStore: cartStore,
-              cartOverViewModel: cartStore.getCartOverView()));
+              cartStore: cartStore, cartInfo: cartStore.getCartOverView()));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _updateCartStreamSubscription?.cancel();
+    return super.close();
   }
 
   Stream<CartState> _handleRequestEvent(RequestCartEvent event) async* {
@@ -37,8 +53,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     } else {
       yield CartSuccess(
           cartSuccessResult: CartSuccessResult(
-              cartStore: cartStore,
-              cartOverViewModel: cartStore.getCartOverView()));
+              cartStore: cartStore, cartInfo: cartStore.getCartOverView()));
     }
   }
 
@@ -47,16 +62,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     cartStore.addToCart(productStore: event.productStore);
     yield CartSuccess(
         cartSuccessResult: CartSuccessResult(
-            cartStore: cartStore,
-            cartOverViewModel: cartStore.getCartOverView()));
+            cartStore: cartStore, cartInfo: cartStore.getCartOverView()));
   }
 
   Stream<CartState> _handleRemoveProductEvent(RemoveProductEvent event) async* {
     cartStore.removeToCart(productID: event.productId);
     yield CartSuccess(
         cartSuccessResult: CartSuccessResult(
-            cartStore: cartStore,
-            cartOverViewModel: cartStore.getCartOverView()));
+            cartStore: cartStore, cartInfo: cartStore.getCartOverView()));
   }
 
   Stream<CartState> _handleReducedProductEvent(
@@ -67,8 +80,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       cartStore.removeToCart(productID: event.productID);
       yield CartSuccess(
           cartSuccessResult: CartSuccessResult(
-              cartStore: cartStore,
-              cartOverViewModel: cartStore.getCartOverView()));
+              cartStore: cartStore, cartInfo: cartStore.getCartOverView()));
     }
   }
 }

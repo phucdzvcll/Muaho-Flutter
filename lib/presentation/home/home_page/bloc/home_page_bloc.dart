@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:muaho/common/model/cart_store.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/home_page/model/home_page_model.dart';
 
@@ -10,14 +9,12 @@ part 'home_page_event.dart';
 part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  HomePageBloc(
-      {required this.useCaseProductCategories,
-      required this.bannerUseCase,
-      required this.cartStore})
-      : super(HomePageInitial());
+  HomePageBloc({
+    required this.useCaseProductCategories,
+    required this.bannerUseCase,
+  }) : super(HomePageInitial());
   final GetListProductCategoriesHomeUseCase useCaseProductCategories;
   final GetListBannerUseCase bannerUseCase;
-  final CartStore cartStore;
   List<ProductCategoryHomeEntity> _productCategories = [];
   List<SlideBannerEntity> _slideBannerEntity = [];
 
@@ -27,10 +24,10 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       yield* _handleHomePageRequestEvent();
     } else if (event is ChangeCart) {
       yield HomePageSuccessState(
-          homePageModel: HomePageModel(
-              productCategories: _productCategories,
-              slideBannerEntity: _slideBannerEntity),
-          cartIsNotEmpty: (cartStore.productStores.length > 0));
+        homePageModel: HomePageModel(
+            productCategories: _productCategories,
+            slideBannerEntity: _slideBannerEntity),
+      );
     }
   }
 
@@ -54,9 +51,9 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       _slideBannerEntity.addAll(bannersResult.success.listBanner);
     }
     yield HomePageSuccessState(
-        homePageModel: HomePageModel(
-            productCategories: _productCategories,
-            slideBannerEntity: _slideBannerEntity),
-        cartIsNotEmpty: (cartStore.productStores.length > 0));
+      homePageModel: HomePageModel(
+          productCategories: _productCategories,
+          slideBannerEntity: _slideBannerEntity),
+    );
   }
 }

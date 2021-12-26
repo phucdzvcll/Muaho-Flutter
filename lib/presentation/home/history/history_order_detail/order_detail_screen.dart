@@ -120,8 +120,7 @@ class _OrderDetailState extends State<OrderDetail>
                       _cartOverviewController = controller,
                   child: CartOverView(
                     onClick: () {},
-                    cartOverViewModel:
-                        state.orderDetailSuccessModel.cartOverViewModel,
+                    cartInfo: state.orderDetailSuccessModel.cartInfo,
                     icon: FadeInLeft(
                       delay: Duration(milliseconds: 200),
                       duration: Duration(milliseconds: 1000),
@@ -198,8 +197,7 @@ class _OrderDetailState extends State<OrderDetail>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      (product.price * product.quantity).formatDouble() +
-                          " Vnd",
+                      (product.price * product.quantity).format() + " Vnd",
                       style: Theme.of(context)
                           .textTheme
                           .headline1!

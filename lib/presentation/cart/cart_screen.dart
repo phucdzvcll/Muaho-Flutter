@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/main.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/adjustment_auantity_Button.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
@@ -34,39 +35,53 @@ class _CartScreenState extends State<CartScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CartBloc>(
-      create: (context) => getIt()..add(RequestCartEvent()),
-      child: BlocListener<CartBloc, CartState>(
-        listener: (context, state) {
-          if (state is WarningRemoveProduct) {
-            showWarningRemoveProductDialog(context, state.productID);
-          }
-        },
-        child: Container(
-          color: Theme.of(context).backgroundColor,
-          child: SafeArea(
-            child: Scaffold(
-              appBar: AppBarComponent(
-                  searchAction: () {},
-                  title: "Giỏ hàng",
-                  backAction: () {
-                    Navigator.pop(context);
-                  }),
-              body: Container(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-                margin: EdgeInsets.only(top: 32),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(48),
-                    topRight: Radius.circular(48),
-                  ),
-                ),
-                child: BlocBuilder<CartBloc, CartState>(
-                  builder: (ctx, state) {
-                    return _handleStateResult(state, ctx);
-                  },
-                ),
+      create: (context) =>
+          getIt(param1: BlocProvider.of<CartUpdateBloc>(context))
+            ..add(
+              RequestCartEvent(),
+            ),
+      child: Builder(builder: (context) {
+        return _blocListener(context);
+      }),
+    );
+  }
+
+  Widget _blocListener(BuildContext context) {
+    return BlocListener<CartBloc, CartState>(
+      listener: (context, state) {
+        if (state is WarningRemoveProduct) {
+          showWarningRemoveProductDialog(context, state.productID);
+        }
+      },
+      child: _bodyBuilder(context),
+    );
+  }
+
+  Widget _bodyBuilder(BuildContext context) {
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBarComponent(
+              searchAction: () {},
+              title: "Giỏ hàng",
+              backAction: () {
+                Navigator.pop(context);
+              }),
+          body: Container(
+            padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+            margin: EdgeInsets.only(top: 32),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(48),
+                topRight: Radius.circular(48),
               ),
+            ),
+            child: BlocBuilder<CartBloc, CartState>(
+              builder: (ctx, state) {
+                return _handleStateResult(state, ctx);
+              },
             ),
           ),
         ),
@@ -218,8 +233,7 @@ class _CartScreenState extends State<CartScreen>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        (product.productPrice * product.quantity)
-                                .formatDouble() +
+                        (product.productPrice * product.quantity).format() +
                             " Vnd",
                         style: Theme.of(blocContext)
                             .textTheme
@@ -284,22 +298,26 @@ class _CartScreenState extends State<CartScreen>
               manualTrigger: true,
               duration: Duration(milliseconds: 400),
               controller: (controller) => _cartOverviewController = controller,
-              child: CartOverView(
-                onClick: () {
-                  Navigator.pushNamed(context, PaymentScreen.routeName);
-                },
-                cartOverViewModel: state.cartSuccessResult.cartOverViewModel,
-                icon: FadeInLeft(
-                  delay: Duration(milliseconds: 200),
-                  duration: Duration(milliseconds: 1000),
-                  child: Icon(Icons.payments_outlined,
-                      size: 48, color: Theme.of(context).primaryColorLight),
-                ),
-              ),
+              child: _cartOverViewBuilder(state),
             ),
           ),
         )
       ],
+    );
+  }
+
+  Widget _cartOverViewBuilder(CartSuccess state) {
+    return CartOverView(
+      onClick: () {
+        Navigator.pushNamed(context, PaymentScreen.routeName);
+      },
+      cartInfo: state.cartSuccessResult.cartInfo,
+      icon: FadeInLeft(
+        delay: Duration(milliseconds: 200),
+        duration: Duration(milliseconds: 1000),
+        child: Icon(Icons.payments_outlined,
+            size: 48, color: Theme.of(context).primaryColorLight),
+      ),
     );
   }
 
@@ -371,8 +389,6 @@ class _CartScreenState extends State<CartScreen>
                 : Colors.white,
             context: context,
             onSelectedProduct: () {
-              var newProduct =
-                  productStore.copyWith(quantity: productStore.quantity + 1);
               BlocProvider.of<CartBloc>(context)
                   .add(IncreaseProductEvent(productStore: productStore));
             },

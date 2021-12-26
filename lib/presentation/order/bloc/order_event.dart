@@ -35,8 +35,6 @@ class RemoveProductEvent extends OrderEvent {
   RemoveProductEvent({required this.productID});
 }
 
-class ReloadEvent extends OrderEvent {}
-
 class ChangeShopEvent extends OrderEvent {
   final ProductStore productStore;
 

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 
 import 'cart/bloc/cart_bloc.dart';
 import 'chat-support/bloc/chat_bloc.dart';
@@ -24,14 +25,18 @@ void presentationDiConfig(GetIt injector) {
   injector.registerFactory(
       () => PaymentBloc(cartStore: injector(), createOrderUseCase: injector()));
 
-  injector.registerFactory(() =>
-      OrderBloc(cartStore: injector(), getShopProductUseCase: injector()));
+  injector.registerFactoryParam<OrderBloc, CartUpdateBloc, void>(
+      (cartUpdateBloc, _) => OrderBloc(
+          cartStore: injector(),
+          getShopProductUseCase: injector(),
+          cartUpdateBloc: cartUpdateBloc));
 
   injector.registerFactory(() => HomePageBloc(
         bannerUseCase: injector(),
         useCaseProductCategories: injector(),
-        cartStore: injector(),
       ));
+
+  injector.registerFactory<CartUpdateBloc>(() => CartUpdateBloc());
 
   injector.registerFactory(
       () => OrderDetailBloc(getOrderDetailUseCase: injector()));
@@ -44,5 +49,9 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactory(() => ChatBloc(userStore: injector()));
 
-  injector.registerFactory(() => CartBloc(cartStore: injector()));
+  injector.registerFactoryParam<CartBloc, CartUpdateBloc, void>(
+      (cartUpdateBloc, _) => CartBloc(
+            cartStore: injector(),
+            cartUpdateBloc: cartUpdateBloc,
+          ));
 }

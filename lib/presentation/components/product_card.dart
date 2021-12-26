@@ -75,7 +75,7 @@ class ProductCard extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Text(
-                    product.productPrice.formatDouble(),
+                    product.productPrice.format(),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),

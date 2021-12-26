@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
+import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -30,18 +33,21 @@ class _HomePageState extends State<HomePage>
     final SignInArguments arg =
         ModalRoute.of(context)!.settings.arguments as SignInArguments;
 
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              child: BlocBuilder<HomePageBloc, HomePageState>(
-                builder: (ctx, state) {
-                  return _handleBuilder(state, ctx, arg);
-                },
-              ),
-            )),
+    return BlocProvider<HomePageBloc>(
+      create: (ctx) => getIt()..add(HomePageRequestEvent()),
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                child: BlocBuilder<HomePageBloc, HomePageState>(
+                  builder: (ctx, state) {
+                    return _handleBuilder(state, ctx, arg);
+                  },
+                ),
+              )),
+        ),
       ),
     );
   }
@@ -49,8 +55,11 @@ class _HomePageState extends State<HomePage>
   Widget _handleBuilder(
       HomePageState state, BuildContext ctx, SignInArguments arguments) {
     if (state is HomePageSuccessState) {
-      return _handleHomePageBuilder(state.homePageModel, ctx, arguments,
-          state.cartIsNotEmpty.defaultFalse());
+      return _handleHomePageBuilder(
+        state.homePageModel,
+        ctx,
+        arguments,
+      );
     } else {
       return Center(
         child: CircularProgressIndicator(),
@@ -58,7 +67,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Padding _userInfo(SignInArguments arg, bool redDotVisible) {
+  Padding _userInfo(SignInArguments arg) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -125,15 +134,7 @@ class _HomePageState extends State<HomePage>
                       Positioned(
                         right: 1,
                         top: 1,
-                        child: Visibility(
-                          visible: redDotVisible,
-                          child: Container(
-                            width: 7,
-                            height: 7,
-                            decoration: BoxDecoration(
-                                color: Colors.red, shape: BoxShape.circle),
-                          ),
-                        ),
+                        child: _redDotBuilder(),
                       )
                     ],
                   ),
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage>
               height: 40,
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, '/search');
+                  Navigator.pushNamed(context, SearchScreen.routeName);
                 },
                 child: Icon(
                   Icons.search_outlined,
@@ -162,6 +163,23 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _redDotBuilder() {
+    return BlocBuilder<CartUpdateBloc, CartUpdateState>(
+      builder: (context, state) {
+        return Visibility(
+          visible:
+              (state is CartUpdatedState && state.cartInfo.unitQuantity > 0),
+          child: Container(
+            width: 7,
+            height: 7,
+            decoration:
+                BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+          ),
+        );
+      },
     );
   }
 
@@ -222,11 +240,11 @@ class _HomePageState extends State<HomePage>
   }
 
   _handleHomePageBuilder(HomePageModel homePageModel, BuildContext ctx,
-      SignInArguments arguments, bool redDotVisible) {
+      SignInArguments arguments) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        _userInfo(arguments, redDotVisible),
+        _userInfo(arguments),
         Visibility(
           visible: homePageModel.slideBannerEntity.length > 0 ? true : false,
           child: Align(

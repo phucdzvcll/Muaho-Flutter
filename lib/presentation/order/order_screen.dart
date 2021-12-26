@@ -6,10 +6,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
 import 'package:muaho/presentation/components/product_card.dart';
-import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';
@@ -38,7 +38,7 @@ class _OrderScreenState extends State<OrderScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrderBloc>(
-      create: (ctx) => getIt()
+      create: (ctx) => getIt(param1: BlocProvider.of<CartUpdateBloc>(context))
         ..add(
           GetShopDetailEvent(shopID: widget.shopArgument.shopId),
         ),
@@ -75,6 +75,8 @@ class _OrderScreenState extends State<OrderScreen>
                   builder: (ctx, state) {
                     return Center(child: _handleStateResult(state, ctx));
                   },
+                  buildWhen: (previous, current) =>
+                      !(current is OrderListenOnlyState),
                 ),
               ),
             ),
@@ -120,7 +122,7 @@ class _OrderScreenState extends State<OrderScreen>
                   .add(GetShopDetailEvent(shopID: widget.shopArgument.shopId));
             });
           },
-          cartOverViewModel: state.shopDetailModel.cartOverView,
+          cartInfo: state.shopDetailModel.cartInfo,
           icon: FadeInDown(
             delay: Duration(milliseconds: 300),
             duration: Duration(milliseconds: 1000),
@@ -250,22 +252,18 @@ class _OrderScreenState extends State<OrderScreen>
       onSelectedAddToCartBtn: () {
         BlocProvider.of<OrderBloc>(context)
             .add(AddToCartEvent(productStore: product, shopID: shopID));
-        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
       },
       onSelectedIncreaseBtn: () {
         BlocProvider.of<OrderBloc>(context)
             .add(AddToCartEvent(productStore: product, shopID: shopID));
-        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
       },
       onSelectedReducedBtn: () {
         BlocProvider.of<OrderBloc>(context).add(ReducedProductEvent(
             productID: product.productId, productQuantity: product.quantity));
-        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
       },
       onTab: () {
         BlocProvider.of<OrderBloc>(context)
             .add(AddToCartEvent(productStore: product, shopID: shopID));
-        BlocProvider.of<HomePageBloc>(context).add(ChangeCart());
       },
     );
   }
@@ -300,7 +298,6 @@ class _OrderScreenState extends State<OrderScreen>
             child: Text("No"),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
-              BlocProvider.of<OrderBloc>(context).add(ReloadEvent());
             },
           )
         ],
@@ -339,7 +336,6 @@ Future<dynamic> showDialogWarningRemoveProduct(
           child: Text("No"),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
-            BlocProvider.of<OrderBloc>(context).add(ReloadEvent());
           },
         )
       ],
