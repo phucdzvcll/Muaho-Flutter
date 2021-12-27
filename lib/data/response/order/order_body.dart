@@ -1,12 +1,13 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'order_body.g.dart';
 
 @JsonSerializable()
-class OrderBody {
-  int? voucherId;
+class OrderBody extends Equatable {
+  final int? voucherId;
   final double totalBeforeDiscount;
-  double? voucherDiscount;
+  final double? voucherDiscount;
   final double total;
   final int userId;
   final int deliveryAddressID;
@@ -27,19 +28,44 @@ class OrderBody {
       _$OrderBodyFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderBodyToJson(this);
+
+  @override
+  List<Object?> get props => [
+        totalBeforeDiscount,
+        total,
+        userId,
+        deliveryAddressID,
+        shopId,
+        voucherDiscount,
+        voucherId,
+        products
+      ];
 }
 
 @JsonSerializable()
-class OrderProduct {
+class OrderProduct extends Equatable {
   final int productId;
   final double price;
   final int quantity;
   final double total;
 
-  OrderProduct(this.productId, this.price, this.quantity, this.total);
+  OrderProduct(
+    this.productId,
+    this.price,
+    this.quantity,
+    this.total,
+  );
 
   factory OrderProduct.fromJson(Map<String, dynamic> json) =>
       _$OrderProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderProductToJson(this);
+
+  @override
+  List<Object?> get props => [
+        productId,
+        price,
+        quantity,
+        total,
+      ];
 }

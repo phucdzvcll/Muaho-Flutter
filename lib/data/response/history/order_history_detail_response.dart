@@ -1,11 +1,12 @@
 import 'dart:core';
 
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'order_history_detail_response.g.dart';
 
 @JsonSerializable()
-class OrderHistoryDetailResponse {
+class OrderHistoryDetailResponse extends Equatable {
   final int? orderId;
   final String? voucherCode;
   final double? totalBeforeDiscount;
@@ -23,11 +24,7 @@ class OrderHistoryDetailResponse {
   factory OrderHistoryDetailResponse.fromJson(Map<String, dynamic> json) =>
       _$OrderHistoryDetailResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$OrderHistoryDetailResponseToJson(this);
-
-//<editor-fold desc="Data Methods">
-
-  const OrderHistoryDetailResponse({
+  OrderHistoryDetailResponse({
     this.orderId,
     this.voucherCode,
     this.totalBeforeDiscount,
@@ -41,10 +38,28 @@ class OrderHistoryDetailResponse {
     this.status,
     this.products,
   });
+
+  Map<String, dynamic> toJson() => _$OrderHistoryDetailResponseToJson(this);
+
+  @override
+  List<Object?> get props => [
+        orderId,
+        voucherCode,
+        totalBeforeDiscount,
+        voucherDiscount,
+        total,
+        deliveryAddress,
+        deliveryPhoneNumber,
+        shopId,
+        shopName,
+        shopAddress,
+        status,
+        products,
+      ];
 }
 
 @JsonSerializable()
-class ProductDetailResponse {
+class ProductDetailResponse extends Equatable {
   final int? productId;
   final double? price;
   final int? quantity;
@@ -57,8 +72,6 @@ class ProductDetailResponse {
 
   Map<String, dynamic> toJson() => _$ProductDetailResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const ProductDetailResponse({
     this.productId,
     this.price,
@@ -69,25 +82,12 @@ class ProductDetailResponse {
   });
 
   @override
-  int get hashCode =>
-      productId.hashCode ^
-      price.hashCode ^
-      quantity.hashCode ^
-      total.hashCode ^
-      productName.hashCode ^
-      productThumbUrl.hashCode;
-
-  @override
-  String toString() {
-    return 'ProductDetailResponse{' +
-        ' productId: $productId,' +
-        ' price: $price,' +
-        ' quantity: $quantity,' +
-        ' total: $total,' +
-        ' productName: $productName,' +
-        ' productThumbUrl: $productThumbUrl,' +
-        '}';
-  }
-
-//</editor-fold>
+  List<Object?> get props => [
+        productId,
+        price,
+        quantity,
+        total,
+        productName,
+        productThumbUrl,
+      ];
 }

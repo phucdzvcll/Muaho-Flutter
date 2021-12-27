@@ -1,12 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:muaho/domain/domain.dart';
 
-class PaymentEntity {
+class PaymentEntity extends Equatable {
   final int shopID;
   final String shopAddress;
   final String shopName;
   final List<ProductEntity> productEntities;
-
-//<editor-fold desc="Data Methods">
 
   const PaymentEntity({
     required this.shopID,
@@ -16,45 +15,10 @@ class PaymentEntity {
   });
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is PaymentEntity &&
-          runtimeType == other.runtimeType &&
-          shopID == other.shopID &&
-          shopAddress == other.shopAddress &&
-          shopName == other.shopName &&
-          productEntities == other.productEntities);
-
-  @override
-  int get hashCode =>
-      shopID.hashCode ^
-      shopAddress.hashCode ^
-      shopName.hashCode ^
-      productEntities.hashCode;
-
-  @override
-  String toString() {
-    return 'PaymentEntity{' +
-        ' shopID: $shopID,' +
-        ' shopAddress: $shopAddress,' +
-        ' shopName: $shopName,' +
-        ' productEntities: $productEntities,' +
-        '}';
-  }
-
-  PaymentEntity copyWith({
-    int? shopID,
-    String? shopAddress,
-    String? shopName,
-    List<ProductEntity>? productEntities,
-  }) {
-    return PaymentEntity(
-      shopID: shopID ?? this.shopID,
-      shopAddress: shopAddress ?? this.shopAddress,
-      shopName: shopName ?? this.shopName,
-      productEntities: productEntities ?? this.productEntities,
-    );
-  }
-
-//</editor-fold>
+  List<Object?> get props => [
+        shopID,
+        shopAddress,
+        shopName,
+        productEntities,
+      ];
 }

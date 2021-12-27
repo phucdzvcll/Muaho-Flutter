@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'order_status.g.dart';
 
 @JsonSerializable()
-class OrderStatus {
+class OrderStatus extends Equatable {
   final String status;
 
   OrderStatus({required this.status});
@@ -12,4 +13,7 @@ class OrderStatus {
       _$OrderStatusFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderStatusToJson(this);
+
+  @override
+  List<Object?> get props => [status];
 }

@@ -190,38 +190,9 @@ class CartStore {
         .firstWhereOrNull((element) => element.productId == productID);
   }
 
-//<editor-fold desc="Data Methods">
-
   CartStore() {
     _updateCartBroadcastStream =
         _updateCartController.stream.asBroadcastStream();
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is CartStore &&
-          runtimeType == other.runtimeType &&
-          shopId == other.shopId &&
-          shopName == other.shopName &&
-          shopAddress == other.shopAddress &&
-          productStores == other.productStores);
-
-  @override
-  int get hashCode =>
-      shopId.hashCode ^
-      shopName.hashCode ^
-      shopAddress.hashCode ^
-      productStores.hashCode;
-
-  @override
-  String toString() {
-    return 'CartStore{' +
-        ' shopId: $shopId,' +
-        ' shopName: $shopName,' +
-        ' shopAddress: $shopAddress,' +
-        ' productStores: $productStores,' +
-        '}';
   }
 
   void changeShop(
@@ -234,8 +205,6 @@ class CartStore {
     this.shopName = shopName;
     _sendUpdateCartEvent();
   }
-
-//</editor-fold>
 }
 
 enum AddToCartResult {

@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'order_history_complete_response.g.dart';
 
 @JsonSerializable()
-class OrderHistoryCompleteResponse {
+class OrderHistoryCompleteResponse extends Equatable {
   final int? orderId;
   final String? orderCode;
   final String? shopName;
@@ -17,8 +18,6 @@ class OrderHistoryCompleteResponse {
 
   Map<String, dynamic> toJson() => _$OrderHistoryCompleteResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const OrderHistoryCompleteResponse({
     required this.orderId,
     required this.orderCode,
@@ -30,17 +29,6 @@ class OrderHistoryCompleteResponse {
   });
 
   @override
-  String toString() {
-    return 'OrderHistoryCompleteResponse{' +
-        ' orderId: $orderId,' +
-        ' orderCode: $orderCode,' +
-        ' shopName: $shopName,' +
-        ' itemCount: $itemCount,' +
-        ' total: $total,' +
-        ' status: $status,' +
-        ' thumbUrl: $thumbUrl,' +
-        '}';
-  }
-
-//</editor-fold>
+  List<Object?> get props =>
+      [orderId, orderCode, shopName, itemCount, total, status, thumbUrl];
 }

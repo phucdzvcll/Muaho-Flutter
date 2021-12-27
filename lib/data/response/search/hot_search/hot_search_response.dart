@@ -1,37 +1,26 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'hot_search_response.g.dart';
 
 @JsonSerializable()
-class HotSearchResponse {
-  List<HotKeywordResponse>? keywords;
-  List<HotShopResponse>? shops;
+class HotSearchResponse extends Equatable {
+  final List<HotKeywordResponse>? keywords;
+  final List<HotShopResponse>? shops;
 
   factory HotSearchResponse.fromJson(Map<String, dynamic> json) =>
       _$HotSearchResponseFromJson(json);
 
+  HotSearchResponse({this.keywords, this.shops});
+
   Map<String, dynamic> toJson() => _$HotSearchResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
-  HotSearchResponse({
-    this.keywords,
-    this.shops,
-  });
-
   @override
-  String toString() {
-    return 'HotSearchResponse{' +
-        ' keywords: $keywords,' +
-        ' shops: $shops,' +
-        '}';
-  }
-
-//</editor-fold>
+  List<Object?> get props => [keywords, shops];
 }
 
 @JsonSerializable()
-class HotKeywordResponse {
+class HotKeywordResponse extends Equatable {
   final String? name;
 
   factory HotKeywordResponse.fromJson(Map<String, dynamic> json) =>
@@ -39,21 +28,16 @@ class HotKeywordResponse {
 
   Map<String, dynamic> toJson() => _$HotKeywordResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const HotKeywordResponse({
     this.name,
   });
 
   @override
-  String toString() {
-    return 'HotKeywordResponse{' + ' name: $name,' + '}';
-  }
-//</editor-fold>
+  List<Object?> get props => [name];
 }
 
 @JsonSerializable()
-class HotShopResponse {
+class HotShopResponse extends Equatable {
   final int? id;
   final String? name;
   final String? address;
@@ -64,8 +48,6 @@ class HotShopResponse {
 
   Map<String, dynamic> toJson() => _$HotShopResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const HotShopResponse({
     this.id,
     this.name,
@@ -74,14 +56,10 @@ class HotShopResponse {
   });
 
   @override
-  String toString() {
-    return 'HotShopRespones{' +
-        ' id: $id,' +
-        ' name: $name,' +
-        ' address: $address,' +
-        ' thumbUrl: $thumbUrl,' +
-        '}';
-  }
-
-//</editor-fold>
+  List<Object?> get props => [
+        id,
+        name,
+        address,
+        thumbUrl,
+      ];
 }

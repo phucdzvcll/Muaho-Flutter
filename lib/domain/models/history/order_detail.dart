@@ -1,4 +1,6 @@
-class OrderDetailEntity {
+import 'package:equatable/equatable.dart';
+
+class OrderDetailEntity extends Equatable {
   final int orderId;
   final String voucherCode;
   final double totalBeforeDiscount;
@@ -11,8 +13,6 @@ class OrderDetailEntity {
   final String shopAddress;
   final String status;
   final List<Product> products;
-
-//<editor-fold desc="Data Methods">
 
   const OrderDetailEntity({
     required this.orderId,
@@ -30,98 +30,29 @@ class OrderDetailEntity {
   });
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is OrderDetailEntity &&
-          runtimeType == other.runtimeType &&
-          orderId == other.orderId &&
-          voucherCode == other.voucherCode &&
-          totalBeforeDiscount == other.totalBeforeDiscount &&
-          voucherDiscount == other.voucherDiscount &&
-          total == other.total &&
-          deliveryAddress == other.deliveryAddress &&
-          deliveryPhoneNumber == other.deliveryPhoneNumber &&
-          shopId == other.shopId &&
-          shopName == other.shopName &&
-          shopAddress == other.shopAddress &&
-          status == other.status &&
-          products == other.products);
-
-  @override
-  int get hashCode =>
-      orderId.hashCode ^
-      voucherCode.hashCode ^
-      totalBeforeDiscount.hashCode ^
-      voucherDiscount.hashCode ^
-      total.hashCode ^
-      deliveryAddress.hashCode ^
-      deliveryPhoneNumber.hashCode ^
-      shopId.hashCode ^
-      shopName.hashCode ^
-      shopAddress.hashCode ^
-      status.hashCode ^
-      products.hashCode;
-
-  @override
-  String toString() {
-    return 'OrderDetailEntity{' +
-        ' orderId: $orderId,' +
-        ' voucherCode: $voucherCode,' +
-        ' totalBeforeDiscount: $totalBeforeDiscount,' +
-        ' voucherDiscount: $voucherDiscount,' +
-        ' total: $total,' +
-        ' deliveryAddress: $deliveryAddress,' +
-        ' deliveryPhoneNumber: $deliveryPhoneNumber,' +
-        ' shopId: $shopId,' +
-        ' shopName: $shopName,' +
-        ' shopAddress: $shopAddress,' +
-        ' status: $status,' +
-        ' products: $products,' +
-        '}';
-  }
-
-  OrderDetailEntity copyWith({
-    int? orderId,
-    String? voucherCode,
-    double? totalBeforeDiscount,
-    double? voucherDiscount,
-    double? total,
-    String? deliveryAddress,
-    String? deliveryPhoneNumber,
-    int? shopId,
-    String? shopName,
-    String? shopAddress,
-    String? status,
-    List<Product>? products,
-  }) {
-    return OrderDetailEntity(
-      orderId: orderId ?? this.orderId,
-      voucherCode: voucherCode ?? this.voucherCode,
-      totalBeforeDiscount: totalBeforeDiscount ?? this.totalBeforeDiscount,
-      voucherDiscount: voucherDiscount ?? this.voucherDiscount,
-      total: total ?? this.total,
-      deliveryAddress: deliveryAddress ?? this.deliveryAddress,
-      deliveryPhoneNumber: deliveryPhoneNumber ?? this.deliveryPhoneNumber,
-      shopId: shopId ?? this.shopId,
-      shopName: shopName ?? this.shopName,
-      shopAddress: shopAddress ?? this.shopAddress,
-      status: status ?? this.status,
-      products: products ?? this.products,
-    );
-  }
-
-//</editor-fold>
+  List<Object?> get props => [
+        orderId,
+        voucherCode,
+        totalBeforeDiscount,
+        voucherDiscount,
+        total,
+        deliveryAddress,
+        deliveryPhoneNumber,
+        shopId,
+        shopName,
+        shopAddress,
+        status,
+        products,
+      ];
 }
 
-class Product {
+class Product extends Equatable {
   final int productId;
   final double price;
   final int quantity;
   final double total;
   final String productName;
   final String thumbUrl;
-
-//<editor-fold desc="Data Methods">
 
   const Product({
     required this.productId,
@@ -133,55 +64,12 @@ class Product {
   });
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Product &&
-          runtimeType == other.runtimeType &&
-          productId == other.productId &&
-          price == other.price &&
-          quantity == other.quantity &&
-          total == other.total &&
-          productName == other.productName &&
-          thumbUrl == other.thumbUrl);
-
-  @override
-  int get hashCode =>
-      productId.hashCode ^
-      price.hashCode ^
-      quantity.hashCode ^
-      total.hashCode ^
-      productName.hashCode ^
-      thumbUrl.hashCode;
-
-  @override
-  String toString() {
-    return 'Product{' +
-        ' productId: $productId,' +
-        ' price: $price,' +
-        ' quantity: $quantity,' +
-        ' total: $total,' +
-        ' productName: $productName,' +
-        ' thumbUrl: $thumbUrl,' +
-        '}';
-  }
-
-  Product copyWith({
-    int? productId,
-    double? price,
-    int? quantity,
-    double? total,
-    String? productName,
-    String? thumbUrl,
-  }) {
-    return Product(
-      productId: productId ?? this.productId,
-      price: price ?? this.price,
-      quantity: quantity ?? this.quantity,
-      total: total ?? this.total,
-      productName: productName ?? this.productName,
-      thumbUrl: thumbUrl ?? this.thumbUrl,
-    );
-  }
-
-//</editor-fold>
+  List<Object?> get props => [
+        productId,
+        price,
+        quantity,
+        total,
+        productName,
+        thumbUrl,
+      ];
 }

@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'shop_product_response.g.dart';
 
 @JsonSerializable()
-class ShopProductResponse {
+class ShopProductResponse extends Equatable {
   final int shopId;
   final String shopName;
   final String? shopAddress;
@@ -15,8 +16,6 @@ class ShopProductResponse {
 
   Map<String, dynamic> toJson() => _$ShopProductResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const ShopProductResponse({
     required this.shopId,
     required this.shopName,
@@ -26,21 +25,17 @@ class ShopProductResponse {
   });
 
   @override
-  String toString() {
-    return 'ShopProductResponse{' +
-        ' shopId: $shopId,' +
-        ' shopName: $shopName,' +
-        ' shopAddress: $shopAddress,' +
-        ' groups: $groups,' +
-        ' vouchers: $vouchers,' +
-        '}';
-  }
-
-//</editor-fold>
+  List<Object?> get props => [
+        shopId,
+        shopName,
+        shopAddress,
+        groups,
+        vouchers,
+      ];
 }
 
 @JsonSerializable()
-class ProductGroupResponse {
+class ProductGroupResponse extends Equatable {
   final int groupId;
   final String groupName;
   final List<ProductResponse?>? products;
@@ -50,8 +45,6 @@ class ProductGroupResponse {
 
   Map<String, dynamic> toJson() => _$ProductGroupResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const ProductGroupResponse({
     required this.groupId,
     required this.groupName,
@@ -59,18 +52,15 @@ class ProductGroupResponse {
   });
 
   @override
-  String toString() {
-    return 'ShopGroupProduct{' +
-        ' groupId: $groupId,' +
-        ' groupName: $groupName,' +
-        ' products: $products,' +
-        '}';
-  }
-//</editor-fold>
+  List<Object?> get props => [
+        groupId,
+        groupName,
+        products,
+      ];
 }
 
 @JsonSerializable()
-class ProductResponse {
+class ProductResponse extends Equatable {
   final int productId;
   final String productName;
   @JsonKey(name: "produtPrice")
@@ -83,8 +73,6 @@ class ProductResponse {
 
   Map<String, dynamic> toJson() => _$ProductResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   const ProductResponse({
     required this.productId,
     required this.productName,
@@ -94,20 +82,17 @@ class ProductResponse {
   });
 
   @override
-  String toString() {
-    return 'Product{' +
-        ' productId: $productId,' +
-        ' productName: $productName,' +
-        ' produtPrice: $productPrice,' +
-        ' unit: $unit,' +
-        ' thumbUrl: $thumbUrl,' +
-        '}';
-  }
-//</editor-fold>
+  List<Object?> get props => [
+        productId,
+        productName,
+        productPrice,
+        unit,
+        thumbUrl,
+      ];
 }
 
 @JsonSerializable()
-class ShopVoucherResponse {
+class ShopVoucherResponse extends Equatable {
   final int id;
   final String code;
   final String? description;
@@ -117,13 +102,16 @@ class ShopVoucherResponse {
 
   Map<String, dynamic> toJson() => _$ShopVoucherResponseToJson(this);
 
-//<editor-fold desc="Data Methods">
-
   ShopVoucherResponse({
     required this.id,
     required this.code,
     this.description = "",
   });
 
-//</editor-fold>
+  @override
+  List<Object?> get props => [
+        id,
+        code,
+        description,
+      ];
 }
