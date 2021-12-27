@@ -16,7 +16,7 @@ class FilterProductEvent extends OrderEvent {
 }
 
 class AddToCartEvent extends OrderEvent {
-  final ProductStore productStore;
+  final ProductEntity productStore;
   final int shopID;
 
   AddToCartEvent({required this.productStore, required this.shopID});
@@ -36,7 +36,7 @@ class RemoveProductEvent extends OrderEvent {
 }
 
 class ChangeShopEvent extends OrderEvent {
-  final ProductStore productStore;
+  final ProductEntity productStore;
 
   ChangeShopEvent({required this.productStore});
 }

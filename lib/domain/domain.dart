@@ -9,7 +9,7 @@ export 'models/history/order_history_delivering.dart';
 export 'models/home/product_category_home.dart';
 export 'models/home/slide_banner_entity.dart';
 export 'models/home/slide_banner_entity.dart';
-export 'models/order/order_status_result.dart';
+export 'models/payment//order_status_result.dart';
 export 'models/search/hot_search/hot_keyword.dart';
 export 'models/search/hot_search/hot_shop.dart';
 export 'models/search/search_shop/seach_shop.dart';

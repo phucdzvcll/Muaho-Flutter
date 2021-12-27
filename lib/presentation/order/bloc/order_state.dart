@@ -16,7 +16,7 @@ class OrderSuccess extends OrderState {
 }
 
 class WarningChangeShop extends OrderListenOnlyState {
-  final ProductStore productStore;
+  final ProductEntity productStore;
 
   WarningChangeShop({required this.productStore});
 }

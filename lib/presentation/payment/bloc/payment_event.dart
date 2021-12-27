@@ -3,14 +3,8 @@ part of 'payment_bloc.dart';
 @immutable
 abstract class PaymentEvent {}
 
-class RequestLocationPermission extends PaymentEvent {}
+class CreateOrderEvent extends PaymentEvent {
+  final PaymentEntity paymentEntity;
 
-class RequestLocation extends PaymentEvent {}
-
-class EditAddress extends PaymentEvent {
-  final String newAddress;
-
-  EditAddress({required this.newAddress});
+  CreateOrderEvent({required this.paymentEntity});
 }
-
-class CreateOrderEvent extends PaymentEvent {}

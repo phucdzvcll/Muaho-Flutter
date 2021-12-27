@@ -7,12 +7,6 @@ class PaymentInitial extends PaymentState {}
 
 class LoadingState extends PaymentState {}
 
-class GetLocationFailed extends PaymentState {}
-
-class AcceptedLocationPermission extends PaymentState {}
-
-class DeniedLocationPermission extends PaymentState {}
-
 class GetPaymentInfoSuccess extends PaymentState {
   final PaymentInfoModel paymentInfoModel;
 

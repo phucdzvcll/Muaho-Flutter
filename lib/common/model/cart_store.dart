@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:muaho/domain/models/shop/shop_product_entity.dart';
 
 class CartSummary {
   final double totalAmount;
@@ -28,7 +29,7 @@ class CartShopInfo {
 class CartInfo {
   final CartShopInfo cartShopInfo;
   final CartSummary cartSummary;
-  final List<ProductStore> productStores;
+  final List<ProductEntity> productStores;
 
   CartInfo({
     required this.cartSummary,
@@ -41,7 +42,7 @@ class CartStore {
   int shopId = -1;
   String shopName = "";
   String shopAddress = "";
-  List<ProductStore> productStores = [];
+  List<ProductEntity> productStores = [];
   Stream<CartInfo>? _updateCartBroadcastStream;
   final StreamController<CartInfo> _updateCartController =
       new StreamController();
@@ -59,7 +60,7 @@ class CartStore {
   }
 
   void increaseProduct({required int productId}) {
-    ProductStore? product = findProductStore(productId);
+    ProductEntity? product = findProductStore(productId);
     if (product != null) {
       int index = getIndexOfProduct(productId);
       productStores[index] = product.copyWith(quantity: product.quantity + 1);
@@ -68,7 +69,7 @@ class CartStore {
   }
 
   AddToCartResult addToCart(
-      {required ProductStore productStore,
+      {required ProductEntity productStore,
       required int shopId,
       required String shopAddress,
       required String shopName}) {
@@ -78,7 +79,7 @@ class CartStore {
       this.shopName = shopName;
     }
     if (shopId == this.shopId) {
-      ProductStore? product = findProductStore(productStore.productId);
+      ProductEntity? product = findProductStore(productStore.productId);
       if (product != null) {
         int index = getIndexOfProduct(productStore.productId);
         productStores[index] =
@@ -95,7 +96,7 @@ class CartStore {
   }
 
   void removeProduct({required int productID}) {
-    ProductStore? productStore = findProductStore(productID);
+    ProductEntity? productStore = findProductStore(productID);
     if (productStore != null) {
       int index = getIndexOfProduct(productID);
       if (productStore.quantity == 1) {
@@ -112,7 +113,7 @@ class CartStore {
   }
 
   ReducedResult reducedProduct({required int productID}) {
-    ProductStore? productStore = findProductStore(productID);
+    ProductEntity? productStore = findProductStore(productID);
     if (productStore != null) {
       int index = getIndexOfProduct(productID);
       if (productStore.quantity == 1) {
@@ -169,6 +170,10 @@ class CartStore {
     _sendUpdateCartEvent();
   }
 
+  void createOrderSuccess() {
+    _clearStore();
+  }
+
   int getIndexOfProduct(int productID) {
     int index = -1;
     this.productStores.asMap().forEach((i, element) {
@@ -179,7 +184,7 @@ class CartStore {
     return index;
   }
 
-  ProductStore? findProductStore(int productID) {
+  ProductEntity? findProductStore(int productID) {
     return this
         .productStores
         .firstWhereOrNull((element) => element.productId == productID);
@@ -228,86 +233,6 @@ class CartStore {
     this.shopAddress = shopAddress;
     this.shopName = shopName;
     _sendUpdateCartEvent();
-  }
-
-//</editor-fold>
-}
-
-class ProductStore {
-  final int productId;
-  final String productName;
-  final double productPrice;
-  final int groupId;
-  final String unit;
-  final String thumbUrl;
-  final int quantity;
-
-//<editor-fold desc="Data Methods">
-
-  const ProductStore({
-    required this.productId,
-    required this.productName,
-    required this.productPrice,
-    required this.groupId,
-    required this.unit,
-    required this.thumbUrl,
-    required this.quantity,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ProductStore &&
-          runtimeType == other.runtimeType &&
-          productId == other.productId &&
-          productName == other.productName &&
-          productPrice == other.productPrice &&
-          groupId == other.groupId &&
-          unit == other.unit &&
-          thumbUrl == other.thumbUrl &&
-          quantity == other.quantity);
-
-  @override
-  int get hashCode =>
-      productId.hashCode ^
-      productName.hashCode ^
-      productPrice.hashCode ^
-      groupId.hashCode ^
-      unit.hashCode ^
-      thumbUrl.hashCode ^
-      quantity.hashCode;
-
-  @override
-  String toString() {
-    return 'ProductStore{' +
-        ' productId: $productId,' +
-        ' productName: $productName,' +
-        ' productPrice: $productPrice,' +
-        ' groupId: $groupId,' +
-        ' unit: $unit,' +
-        ' thumbUrl: $thumbUrl,' +
-        ' quantity: $quantity,' +
-        '}';
-  }
-
-  ProductStore copyWith({
-    int? productId,
-    String? productName,
-    double? productPrice,
-    int? groupId,
-    String? unit,
-    String? thumbUrl,
-    int? quantity,
-  }) {
-    return ProductStore(
-      productId: productId ?? this.productId,
-      productName: productName ?? this.productName,
-      productPrice: productPrice ?? this.productPrice,
-      groupId: groupId ?? this.groupId,
-      unit: unit ?? this.unit,
-      thumbUrl: thumbUrl ?? this.thumbUrl,
-      quantity: quantity ?? this.quantity,
-    );
   }
 
 //</editor-fold>

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/adjustment_auantity_Button.dart';
@@ -170,7 +171,7 @@ class _CartScreenState extends State<CartScreen>
   }
 
   Widget _itemProductDetailBuilder(
-      ProductStore product, BuildContext blocContext) {
+      ProductEntity product, BuildContext blocContext) {
     return Slidable(
       endActionPane: ActionPane(
         extentRatio: 0.2,
@@ -331,7 +332,7 @@ class _CartScreenState extends State<CartScreen>
     );
   }
 
-  Widget _upDownWidget(BuildContext context, ProductStore productStore) {
+  Widget _upDownWidget(BuildContext context, ProductEntity productEntity) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Row(
@@ -343,15 +344,15 @@ class _CartScreenState extends State<CartScreen>
               context: context,
               onSelectedProduct: () {
                 BlocProvider.of<CartBloc>(context).add(ReducedProductEvent(
-                    productID: productStore.productId,
-                    quantity: productStore.quantity));
+                    productID: productEntity.productId,
+                    quantity: productEntity.quantity));
               },
               icon: Icon(
                 Icons.remove,
                 color: Theme.of(context).primaryColorLight,
                 size: 16,
               ),
-              color: productStore.quantity > 0
+              color: productEntity.quantity > 0
                   ? Theme.of(context).backgroundColor
                   : Colors.white),
           SizedBox(
@@ -360,7 +361,7 @@ class _CartScreenState extends State<CartScreen>
           Padding(
             padding: EdgeInsets.only(bottom: 6),
             child: Text(
-              productStore.quantity.toString(),
+              productEntity.quantity.toString(),
               textAlign: TextAlign.end,
               style: Theme.of(context)
                   .textTheme
@@ -377,13 +378,13 @@ class _CartScreenState extends State<CartScreen>
               color: Theme.of(context).primaryColorLight,
               size: 16,
             ),
-            color: productStore.quantity > 0
+            color: productEntity.quantity > 0
                 ? Theme.of(context).backgroundColor
                 : Colors.white,
             context: context,
             onSelectedProduct: () {
               BlocProvider.of<CartBloc>(context)
-                  .add(IncreaseProductEvent(productStore: productStore));
+                  .add(IncreaseProductEvent(productStore: productEntity));
             },
           ),
         ],

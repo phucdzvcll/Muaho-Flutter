@@ -4,7 +4,7 @@ part of 'cart_bloc.dart';
 abstract class CartEvent {}
 
 class IncreaseProductEvent extends CartEvent {
-  final ProductStore productStore;
+  final ProductEntity productStore;
 
   IncreaseProductEvent({required this.productStore});
 }

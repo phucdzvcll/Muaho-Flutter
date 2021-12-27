@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,10 +31,9 @@ final getIt = GetIt.instance;
 int startTime = 0;
 
 Future<void> main() async {
-  startTime = DateTime.now().millisecondsSinceEpoch;
   WidgetsFlutterBinding.ensureInitialized();
+  EquatableConfig.stringify = true;
   _initDi();
-
   await Firebase.initializeApp();
   await getIt<AppLocalization>().initializeApp();
 

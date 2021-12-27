@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
@@ -87,9 +88,7 @@ class _OrderScreenState extends State<OrderScreen>
   }
 
   Widget _handleStateResult(OrderState state, BuildContext ctx) {
-    if (state is OrderLoading) {
-      return CircularProgressIndicator();
-    } else if (state is OrderSuccess) {
+    if (state is OrderSuccess) {
       return Stack(
         children: [
           _shopDetailBuilder(state, ctx),
@@ -98,8 +97,10 @@ class _OrderScreenState extends State<OrderScreen>
       );
     } else if (state is OrderError) {
       return Text("Error");
+    } else if (state is OrderLoading || state is OrderInitial) {
+      return CircularProgressIndicator();
     } else {
-      return Container();
+      return SizedBox.shrink();
     }
   }
 
@@ -243,7 +244,7 @@ class _OrderScreenState extends State<OrderScreen>
     );
   }
 
-  Widget _productCard(ProductStore product, BuildContext context, int shopID) {
+  Widget _productCard(ProductEntity product, BuildContext context, int shopID) {
     return ProductCard(
       product: product,
       onSelectedAddToCartBtn: () {
@@ -266,7 +267,7 @@ class _OrderScreenState extends State<OrderScreen>
   }
 
   Future<dynamic> showDialogWarningChangeShop(
-      BuildContext context, ProductStore productStore) {
+      BuildContext context, ProductEntity productStore) {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(

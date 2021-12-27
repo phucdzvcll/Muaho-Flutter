@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 
 part 'cart_event.dart';

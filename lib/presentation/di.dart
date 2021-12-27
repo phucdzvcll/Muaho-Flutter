@@ -22,8 +22,9 @@ void presentationDiConfig(GetIt injector) {
   injector
       .registerFactory(() => HotSearchBloc(getHotSearchUseCase: injector()));
 
-  injector.registerFactory(
-      () => PaymentBloc(cartStore: injector(), createOrderUseCase: injector()));
+  injector.registerFactoryParam<PaymentBloc, CartUpdateBloc, void>(
+      (cartUpdateBloc, _) => PaymentBloc(
+          cartUpdateBloc: cartUpdateBloc, createOrderUseCase: injector()));
 
   injector.registerFactoryParam<OrderBloc, CartUpdateBloc, void>(
       (cartUpdateBloc, _) => OrderBloc(

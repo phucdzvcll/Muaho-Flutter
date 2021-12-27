@@ -28,8 +28,8 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     });
   }
 
-  List<ProductStore> _totalProducts = [];
-  List<ProductStore> _currentProducts = [];
+  List<ProductEntity> _totalProducts = [];
+  List<ProductEntity> _currentProducts = [];
 
   List<ProductGroupEntity> _groups = [];
 
@@ -70,7 +70,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     yield OrderLoading();
     if (result.isSuccess) {
       _totalProducts.clear();
-      _totalProducts.addAll(result.success.products.map((e) => mapProduct(e)));
+      _totalProducts.addAll(result.success.products);
       _shopName = result.success.shopName;
       _address = result.success.shopAddress;
       _groups.clear();
@@ -93,7 +93,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   void filterProductsByProductStore() {
     _currentProducts.asMap().forEach((index, product) {
-      ProductStore? productStore =
+      ProductEntity? productStore =
           cartUpdateBloc.cartStore.findProductStore(product.productId);
       if (productStore != null) {
         if (product.productId == productStore.productId) {
@@ -126,18 +126,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         groups: _groups,
         currentListProducts: _currentProducts,
         cartInfo: cartUpdateBloc.cartStore.getCartOverView());
-  }
-
-  ProductStore mapProduct(ProductEntity productEntity) {
-    return ProductStore(
-      productId: productEntity.productId,
-      productName: productEntity.productName,
-      productPrice: productEntity.productPrice,
-      groupId: productEntity.groupId,
-      thumbUrl: productEntity.thumbUrl,
-      quantity: 0,
-      unit: productEntity.unit,
-    );
   }
 
   Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {

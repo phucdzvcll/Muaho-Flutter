@@ -1,11 +1,15 @@
-import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 
 class PaymentInfoModel {
+  final List<ProductEntity> productEntities;
   final UserInfo userInfo;
-  final CartStore cartStore;
-  final double total;
-  PaymentInfoModel(
-      {required this.userInfo, required this.cartStore, required this.total});
+  final double totalAmount;
+
+  PaymentInfoModel({
+    required this.userInfo,
+    required this.totalAmount,
+    required this.productEntities,
+  });
 }
 
 class UserInfo {

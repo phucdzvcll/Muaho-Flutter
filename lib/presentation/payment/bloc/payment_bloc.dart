@@ -1,87 +1,37 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
-import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/domain/use_case/order/create_order_use_case.dart';
+import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/payment/model/payment_info.dart';
 
 part 'payment_event.dart';
 part 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
-  PaymentBloc({required this.cartStore, required this.createOrderUseCase})
-      : super(PaymentInitial());
-  String _userAddress = "";
-  final CartStore cartStore;
+  PaymentBloc({
+    required this.createOrderUseCase,
+    required this.cartUpdateBloc,
+  }) : super(PaymentInitial());
+  final CartUpdateBloc cartUpdateBloc;
   final CreateOrderUseCase createOrderUseCase;
-
-  //todo
 
   @override
   Stream<PaymentState> mapEventToState(PaymentEvent event) async* {
-    if (event is RequestLocationPermission) {
-      yield* _handleRequestPermission();
-    } else if (event is CreateOrderEvent) {
-      yield* _handleCreateOrder();
+    if (event is CreateOrderEvent) {
+      yield* _handleCreateOrder(event);
     }
   }
 
-  Stream<PaymentState> _handleRequestPermission() async* {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    var permission;
-    if (serviceEnabled) {
-      await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        yield GetLocationFailed();
-      } else if (permission == LocationPermission.deniedForever) {
-        yield GetLocationFailed();
+  Stream<PaymentState> _handleCreateOrder(CreateOrderEvent event) async* {
+    if (event.paymentEntity.productEntities.isNotEmpty) {
+      var result = await createOrderUseCase.execute(event.paymentEntity);
+      if (result.isSuccess) {
+        cartUpdateBloc.cartStore.createOrderSuccess();
+        yield CreateOrderSuccess();
       } else {
-        try {
-          final _location = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          List<Placemark> address = await placemarkFromCoordinates(
-              _location.latitude, _location.longitude);
-          _userAddress = address[0].street.defaultEmpty() +
-              ", " +
-              address[0].subAdministrativeArea.defaultEmpty() +
-              ", " +
-              address[0].administrativeArea.defaultEmpty();
-          log(address.toString());
-          log(_location.latitude.toString() +
-              " " +
-              _location.longitude.toString());
-          yield GetPaymentInfoSuccess(
-              paymentInfoModel: PaymentInfoModel(
-                  userInfo: UserInfo(phoneNumber: "", address: _userAddress),
-                  cartStore: cartStore,
-                  total: calculatorTotal()));
-        } on Exception catch (e) {
-          yield GetLocationFailed();
-        }
+        yield CreateOrderFailed();
       }
-    } else {
-      yield GetLocationFailed();
-    }
-  }
-
-  double calculatorTotal() {
-    double total = 0;
-    cartStore.productStores.forEach((element) {
-      total += element.productPrice * element.quantity;
-    });
-    return total;
-  }
-
-  Stream<PaymentState> _handleCreateOrder() async* {
-    var result = await createOrderUseCase.execute(cartStore);
-    if (result.isSuccess) {
-      yield CreateOrderSuccess();
-    } else {
-      yield CreateOrderFailed();
     }
   }
 }

@@ -122,6 +122,7 @@ class ProductEntity {
   final int groupId;
   final String unit;
   final String thumbUrl;
+  final int quantity;
 
 //<editor-fold desc="Data Methods">
 
@@ -132,6 +133,7 @@ class ProductEntity {
     required this.groupId,
     required this.unit,
     required this.thumbUrl,
+    required this.quantity,
   });
 
   @override
@@ -164,6 +166,7 @@ class ProductEntity {
         ' groupId: $groupId,' +
         ' unit: $unit,' +
         ' thumbUrl: $thumbUrl,' +
+        ' quantity: $quantity,' +
         '}';
   }
 
@@ -174,6 +177,7 @@ class ProductEntity {
     int? groupId,
     String? unit,
     String? thumbUrl,
+    int? quantity,
   }) {
     return ProductEntity(
       productId: productId ?? this.productId,
@@ -182,6 +186,7 @@ class ProductEntity {
       groupId: groupId ?? this.groupId,
       unit: unit ?? this.unit,
       thumbUrl: thumbUrl ?? this.thumbUrl,
+      quantity: quantity ?? this.quantity,
     );
   }
 

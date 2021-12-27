@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 
 import 'image_network_builder.dart';
 
 class ProductCard extends StatelessWidget {
-  final ProductStore product;
+  final ProductEntity product;
   final VoidCallback onSelectedIncreaseBtn;
   final VoidCallback onSelectedReducedBtn;
   final VoidCallback onSelectedAddToCartBtn;

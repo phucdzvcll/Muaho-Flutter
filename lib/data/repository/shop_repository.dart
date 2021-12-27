@@ -1,6 +1,5 @@
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
-import 'package:muaho/data/remote/shop/shop_service.dart';
 import 'package:muaho/domain/domain.dart';
 
 class ShopRepositoryImpl implements ShopRepository {
@@ -52,6 +51,7 @@ class ShopRepositoryImpl implements ShopRepository {
   ProductEntity mapProductEntity(
       ProductResponse? product, List<ProductEntity> products, int groupId) {
     var productEntity = ProductEntity(
+        quantity: 0,
         groupId: groupId,
         productId: (product?.productId).defaultZero(),
         productName: (product?.productName).defaultEmpty(),
