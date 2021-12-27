@@ -43,10 +43,8 @@ class ProductCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: ImageNetworkBuilder(
-                      isSquare: true,
                       imgUrl: product.thumbUrl,
-                      width: 50,
-                      height: 50,
+                      size: Size.square(50),
                     ),
                   ),
                   SizedBox(

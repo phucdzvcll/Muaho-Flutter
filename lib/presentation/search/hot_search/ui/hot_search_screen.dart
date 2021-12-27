@@ -150,9 +150,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: ImageNetworkBuilder(
-                  isSquare: true,
-                  width: 150,
-                  height: 150,
+                  size: Size.square(150),
                   imgUrl: hotShop.thumbUrl,
                 ),
               ),

@@ -28,7 +28,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       var result = await createOrderUseCase.execute(event.paymentEntity);
       if (result.isSuccess) {
         cartUpdateBloc.cartStore.createOrderSuccess();
-        yield CreateOrderSuccess();
+        //todo remove hard code order id = 1
+        yield CreateOrderSuccess(orderId: 1);
       } else {
         yield CreateOrderFailed();
       }

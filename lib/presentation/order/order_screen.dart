@@ -56,12 +56,8 @@ class _OrderScreenState extends State<OrderScreen>
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
-              appBar: AppBarComponent(
+              appBar: AppBarComponent.titleOnly(
                 title: "Chọn Sản Phẩm",
-                backAction: () {
-                  Navigator.pop(context);
-                },
-                searchAction: () {},
               ),
               body: Container(
                 margin: EdgeInsets.only(top: 32),
