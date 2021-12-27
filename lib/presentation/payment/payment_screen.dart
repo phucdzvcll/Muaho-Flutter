@@ -6,6 +6,8 @@ import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
+import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
+import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 
 import 'bloc/payment_bloc.dart';
@@ -27,12 +29,8 @@ class PaymentScreen extends StatelessWidget {
               child: SafeArea(
                 child: Scaffold(
                   backgroundColor: Theme.of(context).backgroundColor,
-                  appBar: AppBarComponent(
+                  appBar: AppBarComponent.titleOnly(
                     title: "Thanh Toán",
-                    backAction: () {
-                      Navigator.pop(context);
-                    },
-                    searchAction: () {},
                   ),
                   body: BlocBuilder<PaymentBloc, PaymentState>(
                     builder: (ctx, state) {
@@ -152,7 +150,7 @@ class PaymentScreen extends StatelessWidget {
         content: Text(
           state is CreateOrderSuccess
               ? "Tạo đơn hàng thành công"
-              : "Tạo Đơn Hàng Thất Bại",
+              : "Tạo Đơn Hàng thất bại",
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText1,
         ),
@@ -162,6 +160,15 @@ class PaymentScreen extends StatelessWidget {
             onPressed: () {
               Navigator.popUntil(
                   context, ModalRoute.withName(HomeScreen.routeName));
+              if (state is CreateOrderSuccess) {
+                Navigator.pushNamed(
+                  context,
+                  OrderDetail.routeName,
+                  arguments: OrderDetailArgument(
+                    orderID: state.orderId,
+                  ),
+                );
+              }
             },
           ),
         ],

@@ -27,13 +27,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBarComponent(
-            title: "Chọn Cửa Hàng",
-            backAction: () {
-              Navigator.pop(context);
-            },
-            searchAction: () {},
-          ),
+          appBar: AppBarComponent.titleOnly(title: "Chọn Cửa Hàng"),
           body: Container(
             margin: EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
@@ -177,10 +171,8 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(24),
                   child: ImageNetworkBuilder(
-                    isSquare: true,
                     imgUrl: shop.thumbUrl,
-                    width: 130,
-                    height: 130,
+                    size: Size.square(130),
                   ),
                 ),
               ),

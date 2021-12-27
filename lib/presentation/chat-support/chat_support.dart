@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/main.dart';
+import 'package:muaho/presentation/components/app_bar_component.dart';
 
 import 'bloc/chat_bloc.dart';
 
@@ -134,26 +135,30 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     );
   }
 
-  Scaffold _buildScaffold(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Chat with supporters'),
-        elevation: 4.0,
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            Flexible(
-              child: _buildBody(),
+  Widget _buildScaffold(BuildContext context) {
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBarComponent.titleOnly(
+            title: "Chat with supporters",
+          ),
+          body: Container(
+            child: Column(
+              children: [
+                Flexible(
+                  child: _buildBody(),
+                ),
+                const Divider(height: 1.0),
+                Container(
+                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                  child: _buildTextComposer(),
+                ),
+              ],
             ),
-            const Divider(height: 1.0),
-            Container(
-              decoration: BoxDecoration(color: Theme.of(context).cardColor),
-              child: _buildTextComposer(),
-            ),
-          ],
+            decoration: null,
+          ),
         ),
-        decoration: null,
       ),
     );
   }

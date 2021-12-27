@@ -47,12 +47,9 @@ class _OrderDetailState extends State<OrderDetail>
           child: BlocBuilder<OrderDetailBloc, OrderDetailState>(
             builder: (context, state) {
               return Scaffold(
-                appBar: AppBarComponent(
-                    title: "Giỏ Hàng",
-                    backAction: () {
-                      Navigator.pop(context);
-                    },
-                    searchAction: () {}),
+                appBar: AppBarComponent.titleOnly(
+                    title: "Chi tiết đơn hàng",
+                ),
                 body: Container(
                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
                   margin: EdgeInsets.only(top: 32),
@@ -172,9 +169,7 @@ class _OrderDetailState extends State<OrderDetail>
               borderRadius: BorderRadius.circular(8),
               child: ImageNetworkBuilder(
                 imgUrl: product.thumbUrl,
-                isSquare: true,
-                width: 120,
-                height: 120,
+                size: Size.square(120),
               ),
             ),
           ),

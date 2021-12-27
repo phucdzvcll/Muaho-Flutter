@@ -5,16 +5,14 @@ import 'package:flutter/material.dart';
 class ImageNetworkBuilder extends StatelessWidget {
   final String imgUrl;
   final bool isSquare;
-  double? width;
-  double? height;
+  final Size size;
 
-  ImageNetworkBuilder(
-      {Key? key,
-      required this.imgUrl,
-      this.width,
-      this.height,
-      required this.isSquare})
-      : super(key: key);
+  ImageNetworkBuilder({
+    Key? key,
+    required this.imgUrl,
+    required this.size,
+  })  : this.isSquare = size.width == size.height,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +24,8 @@ class ImageNetworkBuilder extends StatelessWidget {
       },
       fadeOutDuration: Duration(milliseconds: 400),
       fadeInDuration: Duration(milliseconds: 400),
-      width: width,
-      height: height,
+      width: size.width,
+      height: size.height,
       placeholder: (context, url) => isSquare
           ? Image.asset('assets/images/placeholder_square.png')
           : Image.asset('assets/images/placeholder.png'),

@@ -13,6 +13,10 @@ class GetPaymentInfoSuccess extends PaymentState {
   GetPaymentInfoSuccess({required this.paymentInfoModel});
 }
 
-class CreateOrderSuccess extends PaymentState {}
+class CreateOrderSuccess extends PaymentState {
+  final int orderId;
+
+  CreateOrderSuccess({required this.orderId});
+}
 
 class CreateOrderFailed extends PaymentState {}

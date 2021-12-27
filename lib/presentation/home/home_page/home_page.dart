@@ -75,10 +75,8 @@ class _HomePageState extends State<HomePage>
           ClipRRect(
             borderRadius: BorderRadius.circular(MyTheme.radiusSize),
             child: ImageNetworkBuilder(
-              isSquare: true,
               imgUrl: "https://picsum.photos/50",
-              width: 50,
-              height: 50,
+              size: Size.square(50),
             ),
           ),
           Expanded(
@@ -214,10 +212,8 @@ class _HomePageState extends State<HomePage>
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ImageNetworkBuilder(
-                              isSquare: true,
                               imgUrl: e.thumbUrl,
-                              width: imgSquareSize,
-                              height: imgSquareSize,
+                              size: Size.square(imgSquareSize),
                             ),
                           ),
                         ),
@@ -313,10 +309,8 @@ class _HomePageState extends State<HomePage>
                   ClipRRect(
                     borderRadius: BorderRadius.circular(32),
                     child: ImageNetworkBuilder(
-                      isSquare: false,
                       imgUrl: i.thumbUrl,
-                      width: 600,
-                      height: 280,
+                      size: Size(600, 280),
                     ),
                   ),
                   Positioned(

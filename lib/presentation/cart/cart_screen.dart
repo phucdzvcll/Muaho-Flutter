@@ -60,12 +60,9 @@ class _CartScreenState extends State<CartScreen>
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBarComponent(
-              searchAction: () {},
+          appBar: AppBarComponent.titleOnly(
               title: "Giỏ hàng",
-              backAction: () {
-                Navigator.pop(context);
-              }),
+          ),
           body: Container(
             padding: EdgeInsets.only(left: 16, right: 16, top: 16),
             margin: EdgeInsets.only(top: 32),
@@ -202,9 +199,7 @@ class _CartScreenState extends State<CartScreen>
                 borderRadius: BorderRadius.circular(8),
                 child: ImageNetworkBuilder(
                   imgUrl: product.thumbUrl,
-                  isSquare: true,
-                  width: 120,
-                  height: 120,
+                  size: Size.square(120),
                 ),
               ),
             ),

@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final Function backAction;
-  final Function searchAction;
+  final Widget widget;
+  final Function()? backAction;
 
-  const AppBarComponent(
-      {Key? key,
-      required this.title,
-      required this.backAction,
-      required this.searchAction})
-      : super(key: key);
+  const AppBarComponent({
+    Key? key,
+    required this.widget,
+    this.backAction,
+  }) : super(key: key);
+
+  AppBarComponent.titleOnly({
+    Key? key,
+    required String title,
+    this.backAction,
+  })  : this.widget = _buildDefaultTitle(title),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +45,11 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      backAction();
+                      if (backAction != null) {
+                        backAction?.call();
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 ),
@@ -49,18 +58,12 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                 width: 10,
               ),
               Expanded(
-                child: Center(
-                  child: Text(
-                    title.toUpperCase(),
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                ),
+                child: widget,
               ),
               SizedBox(
                 width: 10,
               ),
+
               // Padding(
               //   padding: const EdgeInsets.only(left: 8),
               //   child: Container(
@@ -92,4 +95,19 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(45);
+
+  static Widget _buildDefaultTitle(String title) {
+    return Builder(
+      builder: (context) {
+        return Center(
+          child: Text(
+            title.toUpperCase(),
+            style: Theme.of(context).textTheme.headline3!.copyWith(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        );
+      }
+    );
+  }
 }
