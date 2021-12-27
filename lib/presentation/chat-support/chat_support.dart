@@ -44,35 +44,80 @@ class ChatMessageNoAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isMine) {
       return Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        margin: const EdgeInsets.symmetric(vertical: 4.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Expanded(
-              child: Text(
-                text,
-                textAlign: TextAlign.end,
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  text,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1,
+                  textAlign: TextAlign.end,
+                ),
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(left: 16.0),
-              child: CircleAvatar(child: Text("I")),
+              margin: const EdgeInsets.only(left: 8.0),
+              child: CircleAvatar(
+                child: Text(
+                  "I",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Colors.white),
+                ),
+                radius: 16,
+                backgroundColor: Theme.of(context).primaryColorLight,
+              ),
             ),
           ],
         ),
       );
     } else {
       return Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        margin: const EdgeInsets.symmetric(vertical: 4.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(child: Text("CS")),
+              margin: const EdgeInsets.only(right: 8.0),
+              child: CircleAvatar(
+                child: Text(
+                  "CS",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Colors.white),
+                ),
+                radius: 16,
+                backgroundColor: Colors.green,
+              ),
             ),
-            Expanded(
-              child: Text(text),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  text,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1,
+                  textAlign: TextAlign.end,
+                ),
+              ),
             ),
           ],
         ),
