@@ -61,20 +61,9 @@ class _CartScreenState extends State<CartScreen>
       child: SafeArea(
         child: Scaffold(
           appBar: AppBarComponent.titleOnly(
-              title: "Giỏ hàng",
+            title: "Giỏ hàng",
           ),
-          body: Container(
-            padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-            margin: EdgeInsets.only(top: 32),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(48),
-                topRight: Radius.circular(48),
-              ),
-            ),
-            child: _handleStateResult(),
-          ),
+          body: _handleStateResult(),
         ),
       ),
     );
@@ -83,11 +72,22 @@ class _CartScreenState extends State<CartScreen>
   Widget _handleStateResult() {
     return BlocBuilder<CartUpdateBloc, CartUpdateState>(
       builder: (ctx, state) {
-        if (state is CartUpdatedState) {
-          return _handleSuccessBuilder(state, ctx);
-        } else {
-          return SizedBox.shrink();
-        }
+        return Container(
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+          margin: EdgeInsets.only(top: 32),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(48),
+              topRight: Radius.circular(48),
+            ),
+          ),
+          child: state is CartUpdatedState
+              ? _handleSuccessBuilder(state, ctx)
+              : Center(
+                  child: Text("Không có sản phẩm nào trong giỏ"),
+                ),
+        );
       },
     );
   }

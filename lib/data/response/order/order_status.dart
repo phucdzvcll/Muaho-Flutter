@@ -6,8 +6,9 @@ part 'order_status.g.dart';
 @JsonSerializable()
 class OrderStatus extends Equatable {
   final String status;
+  final int? orderId;
 
-  OrderStatus({required this.status});
+  OrderStatus({required this.status, this.orderId});
 
   factory OrderStatus.fromJson(Map<String, dynamic> json) =>
       _$OrderStatusFromJson(json);
@@ -15,5 +16,5 @@ class OrderStatus extends Equatable {
   Map<String, dynamic> toJson() => _$OrderStatusToJson(this);
 
   @override
-  List<Object?> get props => [status];
+  List<Object?> get props => [status, orderId];
 }

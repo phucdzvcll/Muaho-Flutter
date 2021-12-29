@@ -37,4 +37,9 @@ void dataDiConfig(GetIt injector) {
       injector(instanceName: DioInstanceType.DioTokenHandler.name)));
   injector.registerLazySingleton<CreateOrderRepository>(
       () => OrderRepositoryImpl(service: injector()));
+
+  injector.registerLazySingleton(() => AddressService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name)));
+  injector.registerLazySingleton<AddressInfoRepository>(
+      () => AddressInfoRepositoryImpl(service: injector()));
 }

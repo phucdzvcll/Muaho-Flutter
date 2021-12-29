@@ -1,6 +1,5 @@
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
-import 'package:muaho/data/remote/order/order_service.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
 
@@ -17,14 +16,14 @@ class OrderRepositoryImpl implements CreateOrderRepository {
         totalBeforeDiscount: calculatorTotal(paymentEntity.productEntities),
         shopId: paymentEntity.shopID,
         deliveryAddressID: 5,
-        userId: 227,
         products: mapOrderProduct(paymentEntity.productEntities),
         voucherDiscount: 0,
         voucherId: null));
-    var result = await handleNetworkResult(createOrder);
+    NetworkResult<OrderStatus> result = await handleNetworkResult(createOrder);
     if (result.isSuccess()) {
-      return SuccessValue(
-          OrderStatusResult(status: (result.response?.status).defaultEmpty()));
+      return SuccessValue(OrderStatusResult(
+          status: (result.response?.status).defaultEmpty(),
+          orderID: (result.response?.orderId).defaultZero()));
     } else {
       return FailValue(Failure());
     }

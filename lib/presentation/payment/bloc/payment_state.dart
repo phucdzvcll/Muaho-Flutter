@@ -19,4 +19,6 @@ class CreateOrderSuccess extends PaymentState {
   CreateOrderSuccess({required this.orderId});
 }
 
+class CreatingOrder extends PaymentState {}
+
 class CreateOrderFailed extends PaymentState {}

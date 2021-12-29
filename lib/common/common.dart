@@ -1,5 +1,6 @@
 export 'constant.dart';
 export 'extensions/bool.dart';
+export 'extensions/date.dart';
 export 'extensions/list.dart';
 export 'extensions/network.dart';
 export 'extensions/number.dart';

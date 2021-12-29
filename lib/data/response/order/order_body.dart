@@ -9,7 +9,6 @@ class OrderBody extends Equatable {
   final double totalBeforeDiscount;
   final double? voucherDiscount;
   final double total;
-  final int userId;
   final int deliveryAddressID;
   final int shopId;
   final List<OrderProduct> products;
@@ -17,7 +16,6 @@ class OrderBody extends Equatable {
   OrderBody(
       {required this.totalBeforeDiscount,
       required this.total,
-      required this.userId,
       required this.deliveryAddressID,
       required this.shopId,
       required this.voucherDiscount,
@@ -33,7 +31,6 @@ class OrderBody extends Equatable {
   List<Object?> get props => [
         totalBeforeDiscount,
         total,
-        userId,
         deliveryAddressID,
         shopId,
         voucherDiscount,

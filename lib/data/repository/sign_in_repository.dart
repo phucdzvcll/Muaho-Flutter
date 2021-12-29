@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
@@ -43,6 +45,7 @@ class SignInRepositoryImpl implements SignInRepository {
       userStore
         ..setToken(refreshTokenResponse.jwtToken.defaultEmpty())
         ..setUseName(userName);
+      log(refreshTokenResponse.jwtToken.defaultEmpty());
       return SuccessValue(SignInEntity(userName: userName));
     } else {
       String? firebaseToken = await _loginFirebaseAnonymousUser(auth);

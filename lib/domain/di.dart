@@ -31,4 +31,7 @@ void domainDiConfig(GetIt injector) {
 
   injector.registerFactory(
       () => CreateOrderUseCase(createOrderRepository: injector()));
+
+  injector
+      .registerFactory(() => GetListAddressInfoUseCase(repository: injector()));
 }

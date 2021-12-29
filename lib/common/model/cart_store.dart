@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
+import 'package:muaho/domain/models/address/address_entity.dart';
 import 'package:muaho/domain/models/shop/shop_product_entity.dart';
 
-class CartSummary {
+class CartSummary extends Equatable {
   final double totalAmount;
   final int itemQuantity;
   final int unitQuantity;
@@ -12,9 +14,16 @@ class CartSummary {
       {required this.totalAmount,
       required this.itemQuantity,
       required this.unitQuantity});
+
+  @override
+  List<Object?> get props => [
+        totalAmount,
+        itemQuantity,
+        unitQuantity,
+      ];
 }
 
-class CartShopInfo {
+class CartShopInfo extends Equatable {
   final int shopID;
   final String shopName;
   final String shopAddress;
@@ -24,18 +33,35 @@ class CartShopInfo {
     required this.shopName,
     required this.shopAddress,
   });
+
+  @override
+  List<Object?> get props => [
+        shopID,
+        shopID,
+        shopAddress,
+      ];
 }
 
-class CartInfo {
+class CartInfo extends Equatable {
   final CartShopInfo cartShopInfo;
   final CartSummary cartSummary;
   final List<ProductEntity> productStores;
+  final AddressInfoEntity addressInfo;
 
   CartInfo({
     required this.cartSummary,
     required this.productStores,
     required this.cartShopInfo,
+    required this.addressInfo,
   });
+
+  @override
+  List<Object?> get props => [
+        cartSummary,
+        productStores,
+        cartShopInfo,
+        addressInfo,
+      ];
 }
 
 class CartStore {
@@ -43,6 +69,14 @@ class CartStore {
   String shopName = "";
   String shopAddress = "";
   List<ProductEntity> productStores = [];
+  AddressInfoEntity _addressInfo = AddressInfoEntity(
+    id: -1,
+    contactPhoneNumber: "",
+    address: "",
+    lat: 0,
+    lng: 0,
+    createDate: DateTime.now().toString(),
+  );
   Stream<CartInfo>? _updateCartBroadcastStream;
   final StreamController<CartInfo> _updateCartController =
       new StreamController();
@@ -129,6 +163,15 @@ class CartStore {
     }
   }
 
+  setAddressInfo(AddressInfoEntity addressInfo) {
+    this._addressInfo = addressInfo;
+    _sendUpdateCartEvent();
+  }
+
+  getAddressInfo() {
+    return this._addressInfo;
+  }
+
   CartInfo getCartInfo() {
     return CartInfo(
       cartSummary: getCartOverView(),
@@ -138,6 +181,7 @@ class CartStore {
         shopName: shopName,
         shopAddress: shopAddress,
       ),
+      addressInfo: _addressInfo,
     );
   }
 

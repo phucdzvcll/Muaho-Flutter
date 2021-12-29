@@ -63,29 +63,6 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 10,
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 8),
-              //   child: Container(
-              //     width: 32,
-              //     height: 32,
-              //     decoration: BoxDecoration(
-              //         color: Colors.white,
-              //         border: Border.all(
-              //             color: Theme.of(context).backgroundColor, width: 1),
-              //         borderRadius: BorderRadius.circular(8)),
-              //     child: IconButton(
-              //       padding: EdgeInsets.zero,
-              //       icon: Icon(
-              //         Icons.search_rounded,
-              //         color: Colors.black,
-              //       ),
-              //       onPressed: () {
-              //         searchAction();
-              //       },
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -97,17 +74,15 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(45);
 
   static Widget _buildDefaultTitle(String title) {
-    return Builder(
-      builder: (context) {
-        return Center(
-          child: Text(
-            title.toUpperCase(),
-            style: Theme.of(context).textTheme.headline3!.copyWith(
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-        );
-      }
-    );
+    return Builder(builder: (context) {
+      return Center(
+        child: Text(
+          title.toUpperCase(),
+          style: Theme.of(context).textTheme.headline3!.copyWith(
+                color: Theme.of(context).primaryColor,
+              ),
+        ),
+      );
+    });
   }
 }

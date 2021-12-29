@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:muaho/domain/common/either.dart';
+import 'package:muaho/domain/common/failure.dart';
+import 'package:muaho/domain/models/payment//order_status_result.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/domain/use_case/order/create_order_use_case.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
@@ -25,11 +28,13 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
 
   Stream<PaymentState> _handleCreateOrder(CreateOrderEvent event) async* {
     if (event.paymentEntity.productEntities.isNotEmpty) {
-      var result = await createOrderUseCase.execute(event.paymentEntity);
+      Either<Failure, OrderStatusResult> result =
+          await createOrderUseCase.execute(event.paymentEntity);
+      yield CreatingOrder();
       if (result.isSuccess) {
         cartUpdateBloc.cartStore.createOrderSuccess();
-        //todo remove hard code order id = 1
-        yield CreateOrderSuccess(orderId: 1);
+        await Future.delayed(Duration(seconds: 1));
+        yield CreateOrderSuccess(orderId: result.success.orderID);
       } else {
         yield CreateOrderFailed();
       }

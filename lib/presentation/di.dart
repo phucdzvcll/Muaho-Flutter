@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:muaho/presentation/address/bloc/address_bloc.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 
 import 'cart/bloc/cart_bloc.dart';
@@ -49,6 +50,12 @@ void presentationDiConfig(GetIt injector) {
       OrderHistoryCompleteBloc(getOrderHistoryCompleteUseCase: injector()));
 
   injector.registerFactory(() => ChatBloc(userStore: injector()));
+
+  injector.registerFactoryParam<AddressBloc, CartUpdateBloc, void>(
+      (cartUpdateBloc, _) => AddressBloc(
+            getListAddressInfoUseCase: injector(),
+            cartUpdateBloc: cartUpdateBloc,
+          ));
 
   injector.registerFactoryParam<CartBloc, CartUpdateBloc, void>(
       (cartUpdateBloc, _) => CartBloc(

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/main.dart';
+import 'package:muaho/presentation/address/address_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
@@ -36,9 +37,18 @@ class PaymentScreen extends StatelessWidget {
                     builder: (ctx, state) {
                       return BlocListener<PaymentBloc, PaymentState>(
                         listener: (_, state) {
-                          if (state is CreateOrderSuccess ||
-                              state is CreateOrderFailed) {
-                            _showDialogResult(ctx, state);
+                          if (state is CreateOrderSuccess) {
+                            Navigator.popUntil(context,
+                                ModalRoute.withName(HomeScreen.routeName));
+                            Navigator.pushNamed(
+                              context,
+                              OrderDetail.routeName,
+                              arguments: OrderDetailArgument(
+                                orderID: state.orderId,
+                              ),
+                            );
+                          } else if (state is CreatingOrder) {
+                            _showDialogResult(context);
                           }
                         },
                         child: Container(
@@ -67,27 +77,14 @@ class PaymentScreen extends StatelessWidget {
                                       child: GestureDetector(
                                         onTap: () {
                                           if (cartUpdateState.cartInfo
-                                              .productStores.isNotEmpty) {
+                                                  .productStores.isNotEmpty &&
+                                              cartUpdateState.cartInfo
+                                                      .addressInfo.id !=
+                                                  -1) {
                                             _showNotifyDialog(
                                                 ctx, cartUpdateState);
                                           } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Container(
-                                                  height: 35,
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Không có sản phẩm nào trong giỏ hàng!",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                                duration: Duration(
-                                                    milliseconds: 2000),
-                                              ),
-                                            );
+                                            _snakeBarBuilder(context);
                                           }
                                         },
                                         child: Container(
@@ -135,8 +132,46 @@ class PaymentScreen extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _showDialogResult(
-      BuildContext context, PaymentState state) async {
+  void _snakeBarBuilder(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        margin: const EdgeInsets.only(bottom: 100, left: 50, right: 50),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Color(0x85444444),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Expanded(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.error_outline_outlined,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "Bạn chưa có địa chỉ giao hàng",
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1
+                      ?.copyWith(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  Future<dynamic> _showDialogResult(BuildContext context) async {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -144,34 +179,23 @@ class PaymentScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
-          "Thông báo",
+          "Tạo đơn hàng....",
           style: Theme.of(context).textTheme.headline1,
         ),
-        content: Text(
-          state is CreateOrderSuccess
-              ? "Tạo đơn hàng thành công"
-              : "Tạo Đơn Hàng thất bại",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Đang tạo đơn hàng",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            CircularProgressIndicator(),
+          ],
         ),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("Yes"),
-            onPressed: () {
-              Navigator.popUntil(
-                  context, ModalRoute.withName(HomeScreen.routeName));
-              if (state is CreateOrderSuccess) {
-                Navigator.pushNamed(
-                  context,
-                  OrderDetail.routeName,
-                  arguments: OrderDetailArgument(
-                    orderID: state.orderId,
-                  ),
-                );
-              }
-            },
-          ),
-        ],
       ),
     );
   }
@@ -250,7 +274,9 @@ class PaymentScreen extends StatelessWidget {
                     style: Theme.of(ctx).textTheme.headline1,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(ctx, AddressScreen.routeName);
+                    },
                     child: Text(
                       "Chỉnh sửa",
                       style: Theme.of(ctx)
@@ -261,8 +287,7 @@ class PaymentScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              //todo setup feature user address
-              Text(""),
+              Text(state.cartInfo.addressInfo.address),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 20),
                 width: double.infinity,
