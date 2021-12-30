@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:muaho/common/geolocator/geolocator.dart';
 
 import 'common.dart';
 
@@ -8,6 +9,8 @@ void commonDiConfig(GetIt injector) {
   injector.registerLazySingleton<AppLocalization>(() {
     return AppLocalization();
   });
+
+  injector.registerLazySingleton<AppGeoLocator>(() => AppGeoLocator());
 
   //store
   injector.registerLazySingleton<FlutterSecureStorage>(

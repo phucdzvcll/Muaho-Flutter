@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:muaho/presentation/address/address_info/bloc/address_bloc.dart';
+import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 
 import 'cart/bloc/cart_bloc.dart';
@@ -38,6 +39,10 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactory<CartUpdateBloc>(() => CartUpdateBloc(
         cartStore: injector(),
+      ));
+
+  injector.registerFactory<CreateAddressBloc>(() => CreateAddressBloc(
+        appGeoLocator: injector(),
       ));
 
   injector.registerFactory(

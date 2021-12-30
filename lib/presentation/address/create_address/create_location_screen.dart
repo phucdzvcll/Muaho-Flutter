@@ -1,29 +1,141 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:muaho/common/extensions/number.dart';
+import 'package:muaho/common/extensions/string.dart';
+import 'package:muaho/main.dart';
+import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
 
 class CreateAddressScreen extends StatelessWidget {
   CreateAddressScreen({Key? key}) : super(key: key);
   static final String routeName = 'CreateAddressScreen';
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(10.753793862399876, 106.70607183278857),
-    zoom: 16.8,
-  );
   final Completer<GoogleMapController> _controller = Completer();
 
   @override
   Widget build(BuildContext context) {
     EdgeInsets safePadding = MediaQuery.of(context).padding;
     return new Scaffold(
-      body: Stack(
-        children: [
-          _mapBuilder(context, _controller),
-          _btnCurrentLocation(context),
-          _btnBack(safePadding, context)
-        ],
+      resizeToAvoidBottomInset: true,
+      body: BlocProvider<CreateAddressBloc>(
+        create: (context) => getIt()..add(RequestPermission()),
+        child: BlocBuilder<CreateAddressBloc, CreateAddressState>(
+          builder: (ctx, state) {
+            return _bodyBuilder(ctx, safePadding, state);
+          },
+        ),
       ),
     );
+  }
+
+  Widget _bodyBuilder(
+      BuildContext context, EdgeInsets safePadding, CreateAddressState state) {
+    if (state is GetCurrentLocationSuccess) {
+      final CameraPosition position = CameraPosition(
+        target: LatLng(state.addressTemp.lng.defaultZero(),
+            state.addressTemp.lat.defaultZero()),
+        zoom: 16.8,
+      );
+      return Column(
+        children: [
+          Flexible(
+            flex: 1,
+            child: Stack(
+              children: [
+                _mapBuilder(context, _controller, state, position),
+                _btnCurrentLocation(context, position),
+                _btnBack(safePadding, context)
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)),
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          label: Text("Địa chỉ giao hàng"),
+                          hintText: "Muaho sẽ giao hàng ở địa chỉ này!",
+                          labelStyle: Theme.of(context).textTheme.headline3,
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColorLight,
+                              width: 1,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).backgroundColor,
+                              width: 1.0,
+                            ),
+                          ),
+                        ),
+                        initialValue: state.addressTemp.address.defaultEmpty(),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)),
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          label: Text("Số điện thoại"),
+                          hintText: "0909xxxxxx",
+                          labelStyle: Theme.of(context).textTheme.headline3,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColorLight,
+                              width: 1,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).backgroundColor,
+                              width: 1.0,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      );
+    } else if (state is CreateAddressInitial) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Center(
+        child: Text(state.toString()),
+      );
+    }
   }
 
   Positioned _btnBack(EdgeInsets safePadding, BuildContext context) {
@@ -54,7 +166,7 @@ class CreateAddressScreen extends StatelessWidget {
     );
   }
 
-  Widget _btnCurrentLocation(BuildContext context) {
+  Widget _btnCurrentLocation(BuildContext context, CameraPosition position) {
     return Positioned(
       right: 10,
       bottom: 10,
@@ -77,8 +189,7 @@ class CreateAddressScreen extends StatelessWidget {
           ),
           onPressed: () async {
             GoogleMapController controller = await _controller.future;
-            controller
-                .animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
+            controller.animateCamera(CameraUpdate.newCameraPosition(position));
           },
         ),
       ),
@@ -86,21 +197,22 @@ class CreateAddressScreen extends StatelessWidget {
   }
 
   Container _mapBuilder(
-      BuildContext context, Completer<GoogleMapController> ctl) {
+      BuildContext context,
+      Completer<GoogleMapController> ctl,
+      GetCurrentLocationSuccess state,
+      CameraPosition position) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.width,
       child: GoogleMap(
         onMapCreated: (controller) {
           ctl.complete(controller);
         },
         markers: {
-          Marker(markerId: MarkerId("current"), position: _kGooglePlex.target),
+          Marker(markerId: MarkerId("current"), position: position.target),
         },
         zoomControlsEnabled: false,
         mapType: MapType.terrain,
-        initialCameraPosition: _kGooglePlex,
-        myLocationEnabled: true,
+        initialCameraPosition: position,
+        myLocationEnabled: false,
       ),
     );
   }
