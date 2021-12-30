@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   final Widget widget;
   final Function()? backAction;
+  final List<IconButton>? actions;
 
-  const AppBarComponent({
-    Key? key,
-    required this.widget,
-    this.backAction,
-  }) : super(key: key);
+  const AppBarComponent(
+      {Key? key, required this.widget, this.backAction, this.actions})
+      : super(key: key);
 
   AppBarComponent.titleOnly({
     Key? key,
     required String title,
     this.backAction,
+    this.actions,
   })  : this.widget = _buildDefaultTitle(title),
         super(key: key);
 
@@ -63,6 +63,24 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 10,
               ),
+              actions != null
+                  ? Row(
+                      children: actions!
+                          .map(
+                            (e) => Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: Theme.of(context).backgroundColor,
+                                      width: 1)),
+                              child: e,
+                            ),
+                          )
+                          .toList())
+                  : SizedBox.shrink()
             ],
           ),
         ),

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/domain/models/address/address_entity.dart';
+import 'package:muaho/presentation/address/create_address/create_location_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/payment/payment_screen.dart';
 
-import '../../main.dart';
+import '../../../main.dart';
 import 'bloc/address_bloc.dart';
 
 class AddressScreen extends StatelessWidget {
@@ -37,7 +38,23 @@ class AddressScreen extends StatelessWidget {
                 child: SafeArea(
                   child: Scaffold(
                     backgroundColor: Colors.white,
-                    appBar: AppBarComponent.titleOnly(title: "Chọn địa chỉ"),
+                    appBar: AppBarComponent.titleOnly(
+                      title: "Chọn địa chỉ giao hàng",
+                      actions: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, CreateAddressScreen.routeName);
+                          },
+                          icon: Icon(
+                            Icons.add_location_alt_outlined,
+                            size: 20,
+                            color: Colors.green,
+                          ),
+                        )
+                      ],
+                    ),
                     body: Container(
                       margin: const EdgeInsets.only(top: 32),
                       child: _handleBuilder(state, ctx),

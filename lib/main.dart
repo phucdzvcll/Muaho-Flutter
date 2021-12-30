@@ -10,7 +10,8 @@ import 'package:muaho/common/di.dart';
 import 'package:muaho/data/di.dart';
 import 'package:muaho/domain/di.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
-import 'package:muaho/presentation/address/address_screen.dart';
+import 'package:muaho/presentation/address/address_info/address_screen.dart';
+import 'package:muaho/presentation/address/create_address/create_location_screen.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/di.dart';
@@ -112,6 +113,7 @@ class MyApp extends StatelessWidget {
           ChatScreen.routeName: (context) => ChatScreen(),
           PaymentScreen.routeName: (context) => PaymentScreen(),
           AddressScreen.routeName: (context) => AddressScreen(),
+          CreateAddressScreen.routeName: (context) => CreateAddressScreen(),
         },
         // ),
       ),

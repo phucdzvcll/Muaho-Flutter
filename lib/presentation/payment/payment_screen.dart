@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/main.dart';
-import 'package:muaho/presentation/address/address_screen.dart';
+import 'package:muaho/presentation/address/address_info/address_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
@@ -145,25 +145,23 @@ class PaymentScreen extends StatelessWidget {
             color: Color(0x85444444),
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Expanded(
-            child: Row(
-              children: [
-                Icon(
-                  Icons.error_outline_outlined,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Bạn chưa có địa chỉ giao hàng",
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1
-                      ?.copyWith(color: Colors.white),
-                ),
-              ],
-            ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.error_outline_outlined,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                "Bạn chưa có địa chỉ giao hàng",
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1
+                    ?.copyWith(color: Colors.white),
+              ),
+            ],
           ),
         ),
         behavior: SnackBarBehavior.floating,
