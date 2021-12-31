@@ -8,3 +8,11 @@ class CreateOrderEvent extends PaymentEvent {
 
   CreateOrderEvent({required this.paymentEntity});
 }
+
+class UpdateAddressEvent extends PaymentEvent {
+  final AddressInfoEntity addressInfoEntity;
+
+  UpdateAddressEvent({
+    required this.addressInfoEntity,
+  });
+}

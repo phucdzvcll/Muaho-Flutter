@@ -4,6 +4,7 @@ export 'common/use_case.dart';
 //base
 export 'common/use_case.dart';
 export 'models/address/address_entity.dart';
+export 'models/address/create_address_result.dart';
 export 'models/history/order_history_complete.dart';
 export 'models/history/order_history_delivering.dart';
 //Model

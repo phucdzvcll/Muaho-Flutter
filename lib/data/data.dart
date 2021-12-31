@@ -16,6 +16,7 @@ export 'repository/shop_repository.dart';
 export 'repository/sign_in_repository.dart';
 export 'response/address/address_info_response.dart';
 export 'response/address/address_info_response.dart';
+export 'response/address/create_address_body.dart';
 export 'response/history/order_history_complete_response.dart';
 export 'response/history/order_history_delivery_response.dart';
 export 'response/history/order_history_detail_response.dart';

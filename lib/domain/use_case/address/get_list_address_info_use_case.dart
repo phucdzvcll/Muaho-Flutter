@@ -6,7 +6,7 @@ import 'package:muaho/domain/repository/address_infor_repository.dart';
 
 class GetListAddressInfoUseCase
     extends BaseUseCase<EmptyInput, List<AddressInfoEntity>> {
-  final AddressInfoRepository repository;
+  final AddressRepository repository;
 
   @override
   Future<Either<Failure, List<AddressInfoEntity>>> executeInternal(

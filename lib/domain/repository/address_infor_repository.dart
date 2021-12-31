@@ -1,7 +1,8 @@
-import 'package:muaho/domain/common/either.dart';
-import 'package:muaho/domain/common/failure.dart';
-import 'package:muaho/domain/models/address/address_entity.dart';
+import 'package:muaho/domain/domain.dart';
 
-abstract class AddressInfoRepository {
+abstract class AddressRepository {
   Future<Either<Failure, List<AddressInfoEntity>>> getListAddressInfo();
+
+  Future<Either<Failure, CreateAddressResult>> createAddress(
+      AddressInfoEntity addressInfoEntity);
 }

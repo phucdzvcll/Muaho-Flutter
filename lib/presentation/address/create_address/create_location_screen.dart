@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:muaho/presentation/address/address_info/bloc/address_bloc.dart';
 import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
 
 import '../../../main.dart';
@@ -36,10 +35,17 @@ class CreateAddressScreen extends StatelessWidget {
             );
           } else if (state is AddressUpdateState) {
             _addressTextEditingController.text = state.address;
-          } else if (state is AddressEvent) {
+          } else if (state is AddressEmpty) {
             _snakeBarBuilder(context, "Bạn chưa nhập địa chỉ");
           } else if (state is PhoneEmpty) {
             _snakeBarBuilder(context, "Bạn chưa nhập số điện thoại");
+          } else if (state is CreatingAddress) {
+            _showWaiting(context);
+          } else if (state is CreateAddressSuccess) {
+            Navigator.pop(context);
+            Navigator.pop(context, true);
+          } else if (state is CreateAddressFail) {
+            _snakeBarBuilder(context, "Thất Bại");
           }
         },
         child: Scaffold(
@@ -146,7 +152,7 @@ class CreateAddressScreen extends StatelessWidget {
           ),
         ),
         decoration: BoxDecoration(
-          color: Colors.orange,
+          color: Theme.of(ctx).primaryColorLight,
           borderRadius: BorderRadius.circular(16),
         ),
       ),
@@ -471,6 +477,35 @@ class CreateAddressScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Future<dynamic> _showWaiting(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).backgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
+        title: Text(
+          "Tạo địa chỉ....",
+          style: Theme.of(context).textTheme.headline1,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Đang tạo địa chỉ",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            CircularProgressIndicator(),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -43,6 +43,7 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactory<CreateAddressBloc>(() => CreateAddressBloc(
         appGeoLocator: injector(),
+        createAddressUseCase: injector(),
       ));
 
   injector.registerFactory(
@@ -56,11 +57,9 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactory(() => ChatBloc(userStore: injector()));
 
-  injector.registerFactoryParam<AddressBloc, CartUpdateBloc, void>(
-      (cartUpdateBloc, _) => AddressBloc(
-            getListAddressInfoUseCase: injector(),
-            cartUpdateBloc: cartUpdateBloc,
-          ));
+  injector.registerFactory(() => AddressBloc(
+        getListAddressInfoUseCase: injector(),
+      ));
 
   injector.registerFactoryParam<CartBloc, CartUpdateBloc, void>(
       (cartUpdateBloc, _) => CartBloc(

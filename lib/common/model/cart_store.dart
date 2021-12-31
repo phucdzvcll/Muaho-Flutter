@@ -46,7 +46,7 @@ class CartInfo extends Equatable {
   final CartShopInfo cartShopInfo;
   final CartSummary cartSummary;
   final List<ProductEntity> productStores;
-  final AddressInfoEntity addressInfo;
+  final AddressInfoEntity? addressInfo;
 
   CartInfo({
     required this.cartSummary,
@@ -69,14 +69,7 @@ class CartStore {
   String shopName = "";
   String shopAddress = "";
   List<ProductEntity> productStores = [];
-  AddressInfoEntity _addressInfo = AddressInfoEntity(
-    id: -1,
-    contactPhoneNumber: "",
-    address: "",
-    lat: 0,
-    lng: 0,
-    createDate: DateTime.now().toString(),
-  );
+  AddressInfoEntity? _addressInfo;
   Stream<CartInfo>? _updateCartBroadcastStream;
   final StreamController<CartInfo> _updateCartController =
       new StreamController();
@@ -163,7 +156,7 @@ class CartStore {
     }
   }
 
-  setAddressInfo(AddressInfoEntity addressInfo) {
+  updateAddressInfo(AddressInfoEntity addressInfo) {
     this._addressInfo = addressInfo;
     _sendUpdateCartEvent();
   }

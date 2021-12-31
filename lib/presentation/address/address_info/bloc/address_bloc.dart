@@ -1,31 +1,36 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 
 part 'address_event.dart';
 part 'address_state.dart';
 
 class AddressBloc extends Bloc<AddressEvent, AddressState> {
   final GetListAddressInfoUseCase getListAddressInfoUseCase;
-  final CartUpdateBloc cartUpdateBloc;
 
-  AddressBloc(
-      {required this.getListAddressInfoUseCase, required this.cartUpdateBloc})
-      : super(AddressInitial()) {
+  AddressBloc({
+    required this.getListAddressInfoUseCase,
+  }) : super(AddressInitial()) {
     on<RequestListAddressEvent>((event, emit) async {
-      Either<Failure, List<AddressInfoEntity>> execute =
-          await getListAddressInfoUseCase.execute(EmptyInput());
-      if (execute.isSuccess) {
-        emit(GetListAddressSuccess(addressInfoEntities: execute.success));
-      } else {
-        emit(Error());
-      }
+      await _handleRequestListAddress(emit);
+    });
+
+    on<RefreshListAddressEvent>((event, emit) async {
+      await _handleRequestListAddress(emit);
     });
 
     on<ChangeCurrentAddress>((event, emit) {
-      cartUpdateBloc.cartStore.setAddressInfo(event.addressInfoEntity);
-      emit(ChangeAddressSuccess());
+      emit(ChangeAddressSuccess(addressInfoEntity: event.addressInfoEntity));
     });
+  }
+
+  Future<void> _handleRequestListAddress(Emitter<AddressState> emit) async {
+    Either<Failure, List<AddressInfoEntity>> execute =
+        await getListAddressInfoUseCase.execute(EmptyInput());
+    if (execute.isSuccess) {
+      emit(GetListAddressSuccess(addressInfoEntities: execute.success));
+    } else {
+      emit(Error());
+    }
   }
 }

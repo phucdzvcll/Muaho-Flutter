@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:muaho/domain/use_case/address/create_address_use_case.dart';
 
 import 'domain.dart';
 
@@ -31,6 +32,10 @@ void domainDiConfig(GetIt injector) {
 
   injector.registerFactory(
       () => CreateOrderUseCase(createOrderRepository: injector()));
+
+  injector.registerFactory(() => CreateAddressUseCase(
+        addressInfoRepository: injector(),
+      ));
 
   injector
       .registerFactory(() => GetListAddressInfoUseCase(repository: injector()));

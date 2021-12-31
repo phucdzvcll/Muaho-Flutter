@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/domain/models/address/address_entity.dart';
 import 'package:muaho/presentation/address/create_address/create_location_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
-import 'package:muaho/presentation/payment/payment_screen.dart';
 
 import '../../../main.dart';
 import 'bloc/address_bloc.dart';
@@ -30,7 +28,7 @@ class AddressScreen extends StatelessWidget {
             return BlocListener<AddressBloc, AddressState>(
               listener: (context, state) {
                 if (state is ChangeAddressSuccess) {
-                  Navigator.popAndPushNamed(ctx, PaymentScreen.routeName);
+                  Navigator.pop(context, state.addressInfoEntity);
                 }
               },
               child: Container(
@@ -40,24 +38,48 @@ class AddressScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     appBar: AppBarComponent.titleOnly(
                       title: "Chọn địa chỉ giao hàng",
-                      actions: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, CreateAddressScreen.routeName);
-                          },
-                          icon: Icon(
-                            Icons.add_location_alt_outlined,
-                            size: 20,
-                            color: Colors.green,
+                    ),
+                    body: Stack(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(top: 32),
+                          child: _handleBuilder(state, ctx),
+                        ),
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              width: double.infinity,
+                              height: 60,
+                              margin: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: Theme.of(context).primaryColorLight),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  var result = await Navigator.pushNamed(
+                                      context, CreateAddressScreen.routeName);
+                                  if (result != null &&
+                                      result is bool &&
+                                      result == true) {
+                                    BlocProvider.of<AddressBloc>(ctx)
+                                        .add(RefreshListAddressEvent());
+                                  }
+                                },
+                                child: Center(
+                                  child: Text(
+                                    "Thêm Địa Chỉ",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        ?.copyWith(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         )
                       ],
-                    ),
-                    body: Container(
-                      margin: const EdgeInsets.only(top: 32),
-                      child: _handleBuilder(state, ctx),
                     ),
                   ),
                 ),
@@ -71,13 +93,17 @@ class AddressScreen extends StatelessWidget {
 
   Widget _handleBuilder(AddressState state, BuildContext context) {
     if (state is GetListAddressSuccess) {
-      return Column(
-        children: state.addressInfoEntities
-            .map((e) => _addressBuilder(e, context))
-            .toList(),
+      return ListView.builder(
+        padding: const EdgeInsets.only(bottom: 76),
+        itemBuilder: (context, index) {
+          return _addressBuilder(state.addressInfoEntities[index], context);
+        },
+        itemCount: state.addressInfoEntities.length,
       );
     } else {
-      return CircularProgressIndicator();
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 
@@ -85,7 +111,8 @@ class AddressScreen extends StatelessWidget {
       AddressInfoEntity addressInfoEntity, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showWarningChangeAddressDialog(context, addressInfoEntity);
+        BlocProvider.of<AddressBloc>(context)
+            .add(ChangeCurrentAddress(addressInfoEntity: addressInfoEntity));
       },
       child: Stack(
         children: [
@@ -140,55 +167,22 @@ class AddressScreen extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
-            right: 20,
-            bottom: 10,
-            top: 10,
-            child: IconButton(
-              icon: Icon(
-                Icons.highlight_off_outlined,
-                size: 28,
-                color: Colors.deepOrange,
+          Visibility(
+            visible: false,
+            //todo handle remove address
+            child: Positioned(
+              right: 20,
+              bottom: 10,
+              top: 10,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete_rounded,
+                  size: 28,
+                  color: Colors.deepOrange,
+                ),
+                onPressed: () {},
               ),
-              onPressed: () {},
             ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Future<dynamic> showWarningChangeAddressDialog(
-      BuildContext context, AddressInfoEntity addressInfoEntity) {
-    return showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: MyTheme.backgroundColor,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0))),
-        title: Text(
-          "Chọn Địa Chỉ",
-          style: Theme.of(context).textTheme.headline1,
-        ),
-        content: Text(
-          "Địa chỉ này sẽ là địa chỉ giao hàng của bạn!",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("Yes"),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-              BlocProvider.of<AddressBloc>(context).add(
-                  ChangeCurrentAddress(addressInfoEntity: addressInfoEntity));
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("No"),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop();
-            },
           )
         ],
       ),

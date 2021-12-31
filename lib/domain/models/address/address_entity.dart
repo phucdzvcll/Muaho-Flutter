@@ -6,7 +6,6 @@ class AddressInfoEntity extends Equatable {
   final String address;
   final double lat;
   final double lng;
-  final String createDate;
 
   const AddressInfoEntity({
     required this.id,
@@ -14,7 +13,6 @@ class AddressInfoEntity extends Equatable {
     required this.address,
     required this.lat,
     required this.lng,
-    required this.createDate,
   });
 
   @override
@@ -24,6 +22,5 @@ class AddressInfoEntity extends Equatable {
         address,
         lat,
         lng,
-        createDate,
       ];
 }

@@ -91,3 +91,18 @@ class PhoneEmpty extends CreateAddressState {
   @override
   List<Object?> get props => [];
 }
+
+class CreatingAddress extends CreateAddressState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CreateAddressSuccess extends CreateAddressState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CreateAddressFail extends CreateAddressState {
+  @override
+  List<Object?> get props => [];
+}

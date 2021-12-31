@@ -15,4 +15,10 @@ class GetListAddressSuccess extends AddressState {
 
 class Error extends AddressState {}
 
-class ChangeAddressSuccess extends AddressState {}
+class ChangeAddressSuccess extends AddressState {
+  final AddressInfoEntity addressInfoEntity;
+
+  ChangeAddressSuccess({
+    required this.addressInfoEntity,
+  });
+}

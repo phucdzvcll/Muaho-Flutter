@@ -12,3 +12,5 @@ class ChangeCurrentAddress extends AddressEvent {
     required this.addressInfoEntity,
   });
 }
+
+class RefreshListAddressEvent extends AddressEvent {}

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/address/address_info/address_screen.dart';
@@ -78,9 +79,9 @@ class PaymentScreen extends StatelessWidget {
                                         onTap: () {
                                           if (cartUpdateState.cartInfo
                                                   .productStores.isNotEmpty &&
-                                              cartUpdateState.cartInfo
-                                                      .addressInfo.id !=
-                                                  -1) {
+                                              cartUpdateState
+                                                      .cartInfo.addressInfo !=
+                                                  null) {
                                             _showNotifyDialog(
                                                 ctx, cartUpdateState);
                                           } else {
@@ -273,7 +274,13 @@ class PaymentScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(ctx, AddressScreen.routeName);
+                      Navigator.pushNamed(ctx, AddressScreen.routeName)
+                          .then((value) {
+                        if (value != null && value is AddressInfoEntity) {
+                          BlocProvider.of<PaymentBloc>(ctx).add(
+                              UpdateAddressEvent(addressInfoEntity: value));
+                        }
+                      });
                     },
                     child: Text(
                       "Chỉnh sửa",
@@ -285,7 +292,7 @@ class PaymentScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(state.cartInfo.addressInfo.address),
+              Text(state.cartInfo.addressInfo?.address ?? ""),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 20),
                 width: double.infinity,

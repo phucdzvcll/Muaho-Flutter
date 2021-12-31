@@ -11,4 +11,7 @@ abstract class AddressService {
 
   @GET("/user/address")
   Future<List<AddressInfoResponse>> getListAddressInfo();
+
+  @POST("/user/address")
+  Future createAddress(@Body() CreateAddressBody body);
 }

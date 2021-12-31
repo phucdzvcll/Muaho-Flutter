@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/geolocator/geolocator.dart';
+import 'package:muaho/domain/domain.dart';
+import 'package:muaho/domain/use_case/address/create_address_use_case.dart';
 
 part 'create_address_event.dart';
 part 'create_address_state.dart';
@@ -14,12 +16,17 @@ class _RequestCurrentLocation extends CreateAddressEvent {
 
 class CreateAddressBloc extends Bloc<CreateAddressEvent, CreateAddressState> {
   final AppGeoLocator appGeoLocator;
+  final CreateAddressUseCase createAddressUseCase;
   String _address = "";
   String _contactPhone = "";
+  double _lat = 0;
+  double _lng = 0;
   RegExp regExp = new RegExp(r'(84|0[3|5|7|8|9])+([0-9]{8})\b');
 
-  CreateAddressBloc({required this.appGeoLocator})
-      : super(CreateAddressInitial()) {
+  CreateAddressBloc({
+    required this.appGeoLocator,
+    required this.createAddressUseCase,
+  }) : super(CreateAddressInitial()) {
     on<RequestLocation>(
       (event, emit) async {
         bool serviceEnabled = await appGeoLocator.isLocationEnable();
@@ -80,11 +87,29 @@ class CreateAddressBloc extends Bloc<CreateAddressEvent, CreateAddressState> {
       }
     });
 
-    on<SubmitCreateAddress>((event, emit) {
+    on<SubmitCreateAddress>((event, emit) async {
       if (_address.isEmpty) {
         emit(AddressEmpty());
       } else if (_contactPhone.isEmpty) {
         emit(PhoneEmpty());
+      } else {
+        Either<Failure, CreateAddressResult> result =
+            await createAddressUseCase.execute(
+          AddressInfoEntity(
+            id: -1,
+            contactPhoneNumber: _contactPhone,
+            address: _address,
+            lat: _lat,
+            lng: _lng,
+          ),
+        );
+        emit(CreatingAddress());
+        Future.delayed(Duration(milliseconds: 2000));
+        if (result.isSuccess) {
+          emit(CreateAddressSuccess());
+        } else {
+          emit(CreateAddressFail());
+        }
       }
     });
   }
@@ -94,7 +119,9 @@ class CreateAddressBloc extends Bloc<CreateAddressEvent, CreateAddressState> {
     required double lat,
     required double lng,
   }) async {
-    emit(LocationUpdateState(lat: lat, lng: lng));
+    _lat = lat;
+    _lng = lng;
+    emit(LocationUpdateState(lat: _lat, lng: _lng));
     int startTime = DateTime.now().millisecondsSinceEpoch;
     emit(RequestingAddressState());
     List<Place>? places = await appGeoLocator.getPlaces(lat, lng);
