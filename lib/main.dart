@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:app_links/app_links.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,9 +29,6 @@ import 'package:muaho/presentation/sign_in/sign_in.dart';
 
 import 'presentation/chat-support/chat_support.dart';
 
-//flutter pub run easy_localization:generate --source-dir ./assets/translations
-//flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
-//flutter pub run build_runner build --delete-conflicting-outputs
 final getIt = GetIt.instance;
 int startTime = 0;
 
@@ -38,7 +38,24 @@ Future<void> main() async {
   _initDi();
   await Firebase.initializeApp();
   await getIt<AppLocalization>().initializeApp();
-
+  final _appLinks = AppLinks(
+    onAppLink: (Uri uri, String stringUri) {
+      var scheme = uri.scheme;
+      var host = uri.host;
+      if (scheme == "muaho" && host == "deeplink") {
+        //muaho://deeplink/shop?id=1
+        var path = uri.path;
+        if (path == "/shop") {
+          String id = uri.queryParameters["id"] ?? "";
+          log("open shop detail with id = $id");
+        } else if (path == "/search") {
+          //muaho://deeplink/search?keyword=thit
+          String keyword = uri.queryParameters["keyword"] ?? "";
+          log("open search screen with keyword = $keyword");
+        }
+      }
+    },
+  );
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Color(0x00FFFFFF),

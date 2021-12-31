@@ -1,0 +1,15 @@
+//start deeplink
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink"
+
+//localization
+flutter pub run easy_localization:generate --source-dir ./assets/translations
+flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
+
+//gen json
+flutter pub run build_runner build --delete-conflicting-outputs
+
+//gen splash screen
+flutter pub run flutter_native_splash:create
+
+//deeplink
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=1" <com.tiny.muaho>
