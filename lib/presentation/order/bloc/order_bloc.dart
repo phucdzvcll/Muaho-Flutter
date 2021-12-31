@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/model/cart_store.dart';
@@ -11,7 +12,10 @@ import 'package:muaho/presentation/order/model/order_detail_model.dart';
 part 'order_event.dart';
 part 'order_state.dart';
 
-class _OrderSuccessEvent extends OrderEvent {}
+class _OrderSuccessEvent extends OrderEvent{
+  @override
+  List<Object?> get props => [];
+}
 
 class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final GetShopProductUseCase getShopProductUseCase;
@@ -25,6 +29,35 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     _cartUpdateSubscription =
         cartUpdateBloc.stream.asBroadcastStream().listen((event) {
       _handleCartUpdate();
+    });
+
+    on<GetShopDetailEvent>((event, emit) async {
+      await _handleRequestEvent(event, emit);
+    });
+
+    on<FilterProductEvent>((event, emit) async {
+      await _handleFilterEvent(event, emit);
+    });
+
+    on<AddToCartEvent>((event, emit) async {
+      await _handleAddToCartEvent(event, emit);
+    });
+
+    on<ReducedProductEvent>((event, emit) async {
+      await _handleReducedProductEventEvent(event, emit);
+    });
+
+    on<RemoveProductEvent>((event, emit) async {
+      await _handleRemoveProductEvent(event, emit);
+    });
+
+    on<ChangeShopEvent>((event, emit) async {
+      await _handleChangeShopEvent(event, emit);
+    });
+
+    on<_OrderSuccessEvent>((event, emit) async {
+      filterProductsByProductStore();
+      emit(OrderSuccess(shopDetailModel: mapOrderDetailModel()));
     });
   }
 
@@ -44,30 +77,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     return super.close();
   }
 
-  @override
-  Stream<OrderState> mapEventToState(OrderEvent event) async* {
-    if (event is GetShopDetailEvent) {
-      yield* _handleRequestEvent(event);
-    } else if (event is FilterProductEvent) {
-      yield* _handleFilterEvent(event);
-    } else if (event is AddToCartEvent) {
-      yield* _handleAddToCartEvent(event);
-    } else if (event is ReducedProductEvent) {
-      yield* _handleReducedProductEventEvent(event);
-    } else if (event is RemoveProductEvent) {
-      yield* _handleRemoveProductEvent(event);
-    } else if (event is ChangeShopEvent) {
-      yield* _handleChangeShopEvent(event);
-    } else if (event is _OrderSuccessEvent) {
-      filterProductsByProductStore();
-      yield (OrderSuccess(shopDetailModel: mapOrderDetailModel()));
-    }
-  }
-
-  Stream<OrderState> _handleRequestEvent(GetShopDetailEvent event) async* {
+  Future _handleRequestEvent(GetShopDetailEvent event, Emitter<OrderState> emit) async {
     Either<Failure, ShopProductEntity> result = await getShopProductUseCase
         .execute(ShopProductParam(shopID: event.shopID));
-    yield OrderLoading();
+    emit(OrderLoading());
     if (result.isSuccess) {
       _totalProducts.clear();
       _totalProducts.addAll(result.success.products);
@@ -78,17 +91,17 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       _shopID = event.shopID;
       filterProductsByGroup(-1);
       filterProductsByProductStore();
-      yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+      emit(OrderSuccess(shopDetailModel: mapOrderDetailModel()));
     } else {
-      yield OrderError();
+      emit(OrderError());
     }
   }
 
-  Stream<OrderState> _handleFilterEvent(FilterProductEvent event) async* {
+  Future _handleFilterEvent(FilterProductEvent event, Emitter<OrderState> emit) async {
     filterProductsByGroup(event.groupID);
     filterProductsByProductStore();
     _currentGroupId = event.groupID;
-    yield OrderSuccess(shopDetailModel: mapOrderDetailModel());
+    emit(OrderSuccess(shopDetailModel: mapOrderDetailModel()));
   }
 
   void filterProductsByProductStore() {
@@ -128,7 +141,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         cartInfo: cartUpdateBloc.cartStore.getCartOverView());
   }
 
-  Stream<OrderState> _handleAddToCartEvent(AddToCartEvent event) async* {
+  Future _handleAddToCartEvent(AddToCartEvent event, Emitter<OrderState> emit) async {
     AddToCartResult addToCart = cartUpdateBloc.cartStore.addToCart(
         productStore: event.productStore,
         shopId: _shopID,
@@ -139,13 +152,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         //nothing to do here
         break;
       case AddToCartResult.WarningChangeShop:
-        yield WarningChangeShop(productStore: event.productStore);
+        emit(WarningChangeShop(productStore: event.productStore));
         break;
     }
   }
 
-  Stream<OrderState> _handleReducedProductEventEvent(
-      ReducedProductEvent event) async* {
+  Future _handleReducedProductEventEvent(
+      ReducedProductEvent event, Emitter<OrderState> emit) async {
     ReducedResult reducedProduct =
         cartUpdateBloc.cartStore.reducedProduct(productID: event.productID);
     switch (reducedProduct) {
@@ -153,7 +166,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         //nothing to do here
         break;
       case ReducedResult.WarningRemove:
-        yield WarningRemoveProduct(productID: event.productID);
+        emit(WarningRemoveProduct(productID: event.productID));
         break;
       case ReducedResult.NotFound:
         // todo Handle this case not found.
@@ -161,12 +174,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     }
   }
 
-  Stream<OrderState> _handleRemoveProductEvent(
-      RemoveProductEvent event) async* {
+  Future _handleRemoveProductEvent(
+      RemoveProductEvent event, Emitter<OrderState> emit) async {
     cartUpdateBloc.cartStore.removeProduct(productID: event.productID);
   }
 
-  Stream<OrderState> _handleChangeShopEvent(ChangeShopEvent event) async* {
+  Future _handleChangeShopEvent(ChangeShopEvent event, Emitter<OrderState> emit) async {
     cartUpdateBloc.cartStore.changeShop(
         shopId: _shopID, shopAddress: _address, shopName: _shopName);
     cartUpdateBloc.cartStore.addToCart(

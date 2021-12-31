@@ -1,8 +1,14 @@
 part of 'home_page_bloc.dart';
 
 @immutable
-abstract class HomePageEvent {}
+abstract class HomePageEvent extends Equatable {}
 
-class HomePageRequestEvent extends HomePageEvent {}
+class HomePageRequestEvent extends HomePageEvent {
+  @override
+  List<Object?> get props => [];
+}
 
-class ChangeCart extends HomePageEvent {}
+class ChangeCart extends HomePageEvent {
+  @override
+  List<Object?> get props => [];
+}

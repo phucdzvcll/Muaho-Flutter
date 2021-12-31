@@ -1,10 +1,13 @@
 part of 'search_shop_bloc.dart';
 
 @immutable
-abstract class SearchShopEvent {}
+abstract class SearchShopEvent extends Equatable {}
 
-class SearchEvent implements SearchShopEvent {
+class SearchEvent extends SearchShopEvent {
   final String keyword;
 
   SearchEvent({required this.keyword});
+
+  @override
+  List<Object?> get props => [keyword];
 }

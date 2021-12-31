@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
@@ -11,29 +12,28 @@ part 'order_detail_state.dart';
 
 class OrderDetailBloc extends Bloc<OrderDetailEvent, OrderDetailState> {
   OrderDetailBloc({required this.getOrderDetailUseCase})
-      : super(OrderDetailInitial());
+      : super(OrderDetailInitial()) {
+    on<GetOrderDetailEvent>((event, emit) async {
+      await _handleRequestEvent(event, emit);
+    });
+  }
 
   final GetOrderDetailUseCase getOrderDetailUseCase;
 
-  @override
-  Stream<OrderDetailState> mapEventToState(OrderDetailEvent event) async* {
-    if (event is GetOrderDetailEvent) {
-      yield* _handleRequestEvent(event);
-    }
-  }
-
-  Stream<OrderDetailState> _handleRequestEvent(
-      GetOrderDetailEvent event) async* {
-    yield OrderDetailLoading();
+  Future _handleRequestEvent(
+      GetOrderDetailEvent event, Emitter<OrderDetailState> emit) async {
+    emit(OrderDetailLoading());
     Either<Failure, OrderDetailEntity> result = await getOrderDetailUseCase
         .execute(OrderDetailParam(orderID: event.orderID));
     if (result.isSuccess) {
-      yield OrderDetailSuccess(
-          orderDetailSuccessModel: OrderDetailSuccessModel(
-              entity: result.success,
-              cartInfo: getCartOverView(result.success)));
+      emit(OrderDetailSuccess(
+        orderDetailSuccessModel: OrderDetailSuccessModel(
+          entity: result.success,
+          cartInfo: getCartOverView(result.success),
+        ),
+      ));
     } else {
-      yield OrderDetailError();
+      emit(OrderDetailError());
     }
   }
 

@@ -1,9 +1,12 @@
 part of 'address_bloc.dart';
 
 @immutable
-abstract class AddressEvent {}
+abstract class AddressEvent extends Equatable {}
 
-class RequestListAddressEvent extends AddressEvent {}
+class RequestListAddressEvent extends AddressEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class ChangeCurrentAddress extends AddressEvent {
   final AddressInfoEntity addressInfoEntity;
@@ -11,6 +14,12 @@ class ChangeCurrentAddress extends AddressEvent {
   ChangeCurrentAddress({
     required this.addressInfoEntity,
   });
+
+  @override
+  List<Object?> get props => [addressInfoEntity];
 }
 
-class RefreshListAddressEvent extends AddressEvent {}
+class RefreshListAddressEvent extends AddressEvent {
+  @override
+  List<Object?> get props => [];
+}
