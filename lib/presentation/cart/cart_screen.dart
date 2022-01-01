@@ -102,7 +102,6 @@ class _CartScreenState extends State<CartScreen>
       floating: true,
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
-        stretchModes: [StretchMode.fadeTitle],
         background: _appbarHeaderBuilder(),
       ),
     );

@@ -95,9 +95,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           physics: ScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 0.73,
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 20),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 20,
+                            mainAxisSpacing: 20,
+                          ),
                           shrinkWrap: true,
                           itemCount: state.result.listHotShop.length,
                           itemBuilder: (ctx, index) {
@@ -142,47 +143,69 @@ class _SearchScreenState extends State<SearchScreen> {
         Navigator.pushNamed(context, OrderScreen.routeName,
             arguments: ShopArgument(shopId: hotShop.id));
       },
-      child: Container(
-        padding: EdgeInsets.only(top: 10),
-        child: Center(
-          child: Column(
-            children: [
-              ClipRRect(
+      child: Stack(
+        children: [
+          Container(
+            child: Center(
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: ImageNetworkBuilder(
-                  size: Size.square(150),
-                  imgUrl: hotShop.thumbUrl,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: ImageNetworkBuilder(
+                    size: Size.square(1),
+                    imgUrl: hotShop.thumbUrl,
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  hotShop.name,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2!
-                      .copyWith(fontWeight: FontWeight.w600),
+            ),
+          ),
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                  color: Color(0xA1FFFFFF),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
+                width: double.infinity,
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  hotShop.address,
+                  hotShop.name + "\n",
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle2!
-                      .copyWith(fontSize: 12),
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff000000),
+                    shadows: <Shadow>[
+                      Shadow(
+                        offset: Offset(1.0, 1.0),
+                        blurRadius: 3.0,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
+          //   child: Text(
+          //     hotShop.address,
+          //     maxLines: 2,
+          //     textAlign: TextAlign.center,
+          //     overflow: TextOverflow.ellipsis,
+          //     style: Theme.of(context)
+          //         .textTheme
+          //         .subtitle2!
+          //         .copyWith(fontSize: 12),
+          //   ),
+          // ),
+        ],
       ),
     );
   }

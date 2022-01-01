@@ -41,12 +41,11 @@ class _HomePageState extends State<HomePage>
         child: SafeArea(
           child: Scaffold(
               backgroundColor: Colors.white,
-              body: SingleChildScrollView(
-                child: BlocBuilder<HomePageBloc, HomePageState>(
-                  builder: (ctx, state) {
-                    return _handleBuilder(state, ctx, arg);
-                  },
-                ),
+              body: BlocBuilder<HomePageBloc, HomePageState>(
+                builder: (ctx, state) {
+                  return SingleChildScrollView(
+                      child: _handleBuilder(state, ctx, arg));
+                },
               )),
         ),
       ),
@@ -183,55 +182,84 @@ class _HomePageState extends State<HomePage>
   }
 
   Widget _productCategoriesBuild(HomePageModel state, BuildContext ctx) {
-    final double imgSquareSize = (MediaQuery.of(ctx).size.width - 200) / 4;
-
+    List<Row> rows = [];
+    var list = state.productCategories;
+    for (var i = 0; i < list.length; i += 4) {
+      Row productCategoryRowBuilder = _productCategoryRowBuilder(
+        list[i],
+        list.getOrNull(i + 1),
+        list.getOrNull(i + 2),
+        list.getOrNull(i + 3),
+      );
+      rows.add(productCategoryRowBuilder);
+    }
     return Column(
+      children: rows,
+    );
+  }
+
+  Row _productCategoryRowBuilder(
+    ProductCategoryHomeEntity category1,
+    ProductCategoryHomeEntity? category2,
+    ProductCategoryHomeEntity? category3,
+    ProductCategoryHomeEntity? category4,
+  ) {
+    return Row(
       mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _titleCategory(),
-        Padding(
-          padding: const EdgeInsets.only(right: 20, left: 20),
-          child: GridView.count(
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            childAspectRatio: 0.7,
-            physics: BouncingScrollPhysics(),
-            children: state.productCategories
-                .map(
-                  (e) => Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Theme.of(context).primaryColor, width: 1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(11),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ImageNetworkBuilder(
-                              imgUrl: e.thumbUrl,
-                              size: Size.square(imgSquareSize),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          e.name,
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-                .toList(),
+        Expanded(
+          child: _productCategoryBuilder(category1),
+        ),
+        Expanded(
+          child: category2 != null
+              ? _productCategoryBuilder(category2)
+              : SizedBox.shrink(),
+        ),
+        Expanded(
+          child: category3 != null
+              ? _productCategoryBuilder(category3)
+              : SizedBox.shrink(),
+        ),
+        Expanded(
+          child: category4 != null
+              ? _productCategoryBuilder(category4)
+              : SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  Widget _productCategoryBuilder(ProductCategoryHomeEntity e) {
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(11),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: ImageNetworkBuilder(
+                  imgUrl: e.thumbUrl,
+                  size: Size.square(1),
+                ),
+              ),
+            ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            e.name,
+            textAlign: TextAlign.center,
+          ),
+        )
       ],
     );
   }
@@ -271,7 +299,13 @@ class _HomePageState extends State<HomePage>
             ),
           ),
         ),
+        SizedBox(
+          height: 10,
+        ),
         _productCategoriesBuild(homePageModel, ctx),
+        SizedBox(
+          height: 72,
+        ),
       ],
     );
   }
