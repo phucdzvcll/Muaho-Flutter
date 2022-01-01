@@ -8,6 +8,7 @@ class SlideBannerResponse {
   final String? subject;
   final String? description;
   final String? thumbUrl;
+  final String? deeplink;
 
 //<editor-fold desc="Data Methods">
   @override
@@ -20,6 +21,7 @@ class SlideBannerResponse {
     required this.subject,
     required this.description,
     required this.thumbUrl,
+    required this.deeplink,
   });
 
   factory SlideBannerResponse.fromJson(Map<String, dynamic> json) =>

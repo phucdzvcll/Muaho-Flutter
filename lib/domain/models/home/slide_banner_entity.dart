@@ -6,11 +6,14 @@ class SlideBannerEntity extends Equatable {
   final String description;
   final String thumbUrl;
 
+  final String deepLinkUrl;
+
   const SlideBannerEntity({
     required this.id,
     required this.subject,
     required this.description,
     required this.thumbUrl,
+    required this.deepLinkUrl,
   });
 
   @override
@@ -19,5 +22,6 @@ class SlideBannerEntity extends Equatable {
         subject,
         description,
         thumbUrl,
+        deepLinkUrl,
       ];
 }

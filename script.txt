@@ -12,4 +12,28 @@ flutter pub run build_runner build --delete-conflicting-outputs
 flutter pub run flutter_native_splash:create
 
 //deeplink
-adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=1" <com.tiny.muaho>
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=1"
+
+//test deeplink
+
+muaho://deeplink/search?keyword=value
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/search?keyword=thit"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/search?keyword=sua"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/search?keyword="
+
+muaho://deeplink/shop?id=1
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=1"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=43"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=sdfdss"
+
+//muaho://deeplink/orderDetail?orderId=1
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/orderDetail?orderId=1"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/orderDetail?orderId=46"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/orderDetail?orderId=sdfsdfsdfkj"
+
+//muaho://deeplink/category?categoryId=1
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=1"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=1534"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=sdfdjsfgdsjkfhsdgfj"
+
+

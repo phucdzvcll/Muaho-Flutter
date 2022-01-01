@@ -12,6 +12,7 @@ SlideBannerResponse _$SlideBannerResponseFromJson(Map<String, dynamic> json) =>
       subject: json['subject'] as String?,
       description: json['description'] as String?,
       thumbUrl: json['thumbUrl'] as String?,
+      deeplink: json['deeplink'] as String?,
     );
 
 Map<String, dynamic> _$SlideBannerResponseToJson(
@@ -21,4 +22,5 @@ Map<String, dynamic> _$SlideBannerResponseToJson(
       'subject': instance.subject,
       'description': instance.description,
       'thumbUrl': instance.thumbUrl,
+      'deeplink': instance.deeplink,
     };

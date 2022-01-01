@@ -7,6 +7,7 @@ import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
+import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
@@ -298,73 +299,81 @@ class _HomePageState extends State<HomePage>
         onPageChanged: (index, reason) =>
             {_currentBannerIndexNotifier.value = index},
       ),
-      items: banners.map((i) {
+      items: banners.map((banner) {
         return Builder(
           builder: (BuildContext context) {
-            return FittedBox(
-              fit: BoxFit.fill,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Stack(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(32),
-                    child: ImageNetworkBuilder(
-                      imgUrl: i.thumbUrl,
-                      size: Size(600, 280),
-                    ),
-                  ),
-                  Positioned(
-                    top: 16,
-                    left: 24,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32),
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          color: Theme.of(context).backgroundColor),
-                      child: SizedBox(
-                        width: MediaQuery.of(ctx).size.width,
-                        height: MediaQuery.of(ctx).size.width / 6,
-                        child: Center(
-                            child: Padding(
-                          padding: const EdgeInsets.only(left: 32.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  i.description,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2!
-                                      .copyWith(
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w600,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  i.subject,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                  textAlign: TextAlign.left,
-                                ),
-                              )
-                            ],
-                          ),
-                        )),
+            return GestureDetector(
+              onTap: () {
+                BlocProvider.of<DeeplinkHandleBloc>(context).add(
+                  OpenInternalDeeplinkEvent(deepLinkUrl: banner.deepLinkUrl),
+                );
+              },
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Stack(children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(32),
+                      child: ImageNetworkBuilder(
+                        imgUrl: banner.thumbUrl,
+                        size: Size(600, 280),
                       ),
                     ),
-                  ),
-                ]),
+                    Positioned(
+                      top: 16,
+                      left: 24,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(32),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor),
+                            color: Theme.of(context).backgroundColor),
+                        child: SizedBox(
+                          width: MediaQuery.of(ctx).size.width,
+                          height: MediaQuery.of(ctx).size.width / 6,
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.only(left: 32.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    banner.description,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2!
+                                        .copyWith(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    banner.subject,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
               ),
             );
           },

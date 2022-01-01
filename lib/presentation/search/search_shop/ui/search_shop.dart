@@ -12,7 +12,7 @@ import 'package:muaho/presentation/search/search_shop/bloc/search_shop_bloc.dart
 
 class SearchShopScreen extends StatefulWidget {
   static const routeName = '/search_shop';
-  final SearchArgument args;
+  final SearchShopArgument args;
 
   const SearchShopScreen({Key? key, required this.args}) : super(key: key);
 
@@ -227,8 +227,8 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
   }
 }
 
-class SearchArgument {
+class SearchShopArgument {
   final String keyword;
 
-  SearchArgument({required this.keyword});
+  SearchShopArgument({required this.keyword});
 }

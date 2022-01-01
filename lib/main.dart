@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:app_links/app_links.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +14,7 @@ import 'package:muaho/presentation/address/address_info/address_screen.dart';
 import 'package:muaho/presentation/address/create_address/create_location_screen.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
+import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/di.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
@@ -38,24 +36,6 @@ Future<void> main() async {
   _initDi();
   await Firebase.initializeApp();
   await getIt<AppLocalization>().initializeApp();
-  final _appLinks = AppLinks(
-    onAppLink: (Uri uri, String stringUri) {
-      var scheme = uri.scheme;
-      var host = uri.host;
-      if (scheme == "muaho" && host == "deeplink") {
-        //muaho://deeplink/shop?id=1
-        var path = uri.path;
-        if (path == "/shop") {
-          String id = uri.queryParameters["id"] ?? "";
-          log("open shop detail with id = $id");
-        } else if (path == "/search") {
-          //muaho://deeplink/search?keyword=thit
-          String keyword = uri.queryParameters["keyword"] ?? "";
-          log("open search screen with keyword = $keyword");
-        }
-      }
-    },
-  );
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Color(0x00FFFFFF),
@@ -70,12 +50,16 @@ Future<void> main() async {
 
   runApp(
     EasyLocalization(
-        supportedLocales: [Locale('en'), Locale('vi')],
-        path: 'assets/translations',
-        startLocale: Locale('vi'),
-        fallbackLocale: Locale('vi'),
-        assetLoader: CodegenLoader(),
-        child: MyApp()),
+      supportedLocales: [Locale('en'), Locale('vi')],
+      path: 'assets/translations',
+      startLocale: Locale('vi'),
+      fallbackLocale: Locale('vi'),
+      assetLoader: CodegenLoader(),
+      child: BlocProvider<DeeplinkHandleBloc>(
+        create: (context) => getIt(),
+        child: MyApp(),
+      ),
+    ),
   );
 }
 
@@ -104,7 +88,7 @@ class MyApp extends StatelessWidget {
         theme: MyTheme.lightTheme,
         onGenerateRoute: (settings) {
           if (settings.name == SearchShopScreen.routeName) {
-            final args = settings.arguments as SearchArgument;
+            final args = settings.arguments as SearchShopArgument;
             return MaterialPageRoute(builder: (context) {
               return SearchShopScreen(args: args);
             });

@@ -1,7 +1,9 @@
+import 'package:app_links/app_links.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/presentation/address/address_info/bloc/address_bloc.dart';
 import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
+import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 
 import 'cart/bloc/cart_bloc.dart';
 import 'chat-support/bloc/chat_bloc.dart';
@@ -65,4 +67,11 @@ void presentationDiConfig(GetIt injector) {
       (cartUpdateBloc, _) => CartBloc(
             cartUpdateBloc: cartUpdateBloc,
           ));
+
+  injector.registerLazySingleton(
+    () => AppLinks(onAppLink: (Uri uri, String stringUri) {}),
+  );
+
+  injector.registerLazySingleton(
+      () => DeeplinkHandleBloc(appLinks: injector())..add(InitDeeplinkEvent()));
 }

@@ -126,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return ElevatedButton(
       onPressed: () {
         Navigator.pushNamed(context, SearchShopScreen.routeName,
-            arguments: SearchArgument(keyword: hotKeyword.name));
+            arguments: SearchShopArgument(keyword: hotKeyword.name));
       },
       child: Text(
         hotKeyword.name,
@@ -239,7 +239,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           onPressed: () {
                             if (_controller.text != "") {
                               Navigator.pushNamed(context, "/search_shop",
-                                  arguments: SearchArgument(
+                                  arguments: SearchShopArgument(
                                       keyword: _controller.text));
                             }
                           },

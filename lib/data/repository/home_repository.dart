@@ -10,16 +10,19 @@ class HomeRepositoryImpl implements HomePageRepository {
 
   @override
   Future<Either<Failure, BannersResult>> getListSlideBanner() async {
-    var requestGetSlideBanner = homeService.getSlideBanners();
+    Future<List<SlideBannerResponse>> requestGetSlideBanner =
+        homeService.getSlideBanners();
     var result = await handleNetworkResult(requestGetSlideBanner);
     if (result.isSuccess()) {
       List<SlideBannerEntity> slideBanner = [];
       result.response?.forEach((element) {
         var banner = SlideBannerEntity(
-            id: element.id.defaultZero(),
-            subject: element.subject.defaultEmpty(),
-            description: element.description.defaultEmpty(),
-            thumbUrl: element.thumbUrl.defaultEmpty());
+          id: element.id.defaultZero(),
+          subject: element.subject.defaultEmpty(),
+          description: element.description.defaultEmpty(),
+          thumbUrl: element.thumbUrl.defaultEmpty(),
+          deepLinkUrl: element.deeplink.defaultEmpty(),
+        );
         slideBanner.add(banner);
       });
       return SuccessValue(BannersResult(listBanner: slideBanner));

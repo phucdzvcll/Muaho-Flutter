@@ -1,7 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/presentation/chat-support/chat_support.dart';
+import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
+import 'package:muaho/presentation/deeplink/deeplink_navigator.dart';
 import 'package:muaho/presentation/home/history/history_page.dart';
 import 'package:muaho/presentation/home/home_page/home_page.dart';
 import 'package:muaho/presentation/home/setting_page/setting_page.dart';
@@ -15,17 +18,25 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin {
+class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController(keepPage: false);
-
-  @override
-  bool get wantKeepAlive => true;
-
+  final DeepLinkNavigator deepLinkNavigator = DeepLinkNavigator();
   ValueNotifier<int> _currentPage = ValueNotifier<int>(0);
 
   @override
   Widget build(BuildContext context) {
+    return BlocListener<DeeplinkHandleBloc, DeeplinkHandleState>(
+      listener: (ctx, state) async {
+        if (state is DeepLinkState) {
+          deepLinkNavigator.open(
+              context: context, deepLinkDestination: state.deepLinkDestination);
+        }
+      },
+      child: _buildBody(context),
+    );
+  }
+
+  Container _buildBody(BuildContext context) {
     return Container(
       color: Colors.white,
       child: SafeArea(
