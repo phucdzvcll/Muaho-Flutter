@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/chat/list_msg.dart';
@@ -12,22 +13,37 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 part 'chat_event.dart';
 part 'chat_state.dart';
 
-class _ChatNeedCreateTicketEvent extends ChatEvent {}
+class _ChatNeedCreateTicketEvent extends ChatEvent {
+  @override
+  List<Object?> get props => [];
+}
 
-class _ChatLostConnectionEvent extends ChatEvent {}
+class _ChatLostConnectionEvent extends ChatEvent {
+  @override
+  List<Object?> get props => [];
+}
 
-class _ChatMsgListEvent extends ChatEvent {}
+class _ChatMsgListEvent extends ChatEvent {
+  @override
+  List<Object?> get props => [];
+}
 
 class _OpenChatSessionEvent extends ChatEvent {
   final int userId;
 
   _OpenChatSessionEvent({required this.userId});
+
+  @override
+  List<Object?> get props => [userId];
 }
 
 class _InsertChatMsgEvent extends ChatEvent {
   final MessageModel msg;
 
   _InsertChatMsgEvent({required this.msg});
+
+  @override
+  List<Object?> get props => [msg];
 }
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {

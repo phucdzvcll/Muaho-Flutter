@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/extensions/number.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/history/models/order_history_delivering_model.dart';
 
 part 'order_history_delivering_event.dart';
+
 part 'order_history_delivering_state.dart';
 
 class OrderHistoryDeliveringBloc
@@ -12,32 +14,35 @@ class OrderHistoryDeliveringBloc
   final GetOrderHistoryDeliveryUseCase getOrderHistoryDeliveryUseCase;
 
   OrderHistoryDeliveringBloc({required this.getOrderHistoryDeliveryUseCase})
-      : super(OrderHistoryDeliveringInitial());
-
-  @override
-  Stream<OrderHistoryDeliveringState> mapEventToState(
-      OrderHistoryDeliveringEvent event) async* {
-    if (event is GetOrderHistoryDeliveringEvent) {
-      yield* _handleGetOrderDelivering(event);
-    }
+      : super(OrderHistoryDeliveringInitial()) {
+    on<GetOrderHistoryDeliveringEvent>((event, emit) async {
+      await _handleGetOrderDelivering(event, emit);
+    });
   }
 
-  Stream<OrderHistoryDeliveringState> _handleGetOrderDelivering(
-      GetOrderHistoryDeliveringEvent event) async* {
-    yield OrderHistoryDeliveringLoading();
+  Future _handleGetOrderDelivering(
+    GetOrderHistoryDeliveringEvent event,
+    Emitter<OrderHistoryDeliveringState> emit,
+  ) async {
+    emit(OrderHistoryDeliveringLoading());
     Either<Failure, List<OrderHistoryDelivering>> result =
         await getOrderHistoryDeliveryUseCase.execute(EmptyInput());
     if (result.isSuccess) {
-      yield OrderHistoryDeliveringSuccess(
-          orderHistoryDeliveries: result.success
-              .map((e) => OrderHistoryDeliveringModel(
+      OrderHistoryDeliveringSuccess orderHistoryDeliveringSuccess = OrderHistoryDeliveringSuccess(
+        orderHistoryDeliveries: result.success
+            .map(
+              (e) => OrderHistoryDeliveringModel(
                   orderID: e.orderId,
                   shopName: e.shopName,
                   subText: "${e.itemCount} Đơn vị - ${e.status}",
-                  totalPrice: e.total.format() + " VNĐ"))
-              .toList());
+                  totalPrice: e.total.format() + " VNĐ"),
+            )
+            .toList(),
+      );
+
+      emit(orderHistoryDeliveringSuccess);
     } else {
-      yield OrderHistoryDeliveringError();
+      emit(OrderHistoryDeliveringError());
     }
   }
 }

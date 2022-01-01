@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
 
@@ -11,6 +12,9 @@ class _CartUpdateEvent extends CartUpdateEvent {
   final CartInfo cartInfo;
 
   _CartUpdateEvent({required this.cartInfo});
+
+  @override
+  List<Object?> get props => [cartInfo];
 }
 
 class CartUpdateBloc extends Bloc<CartUpdateEvent, CartUpdateState> {
@@ -22,6 +26,7 @@ class CartUpdateBloc extends Bloc<CartUpdateEvent, CartUpdateState> {
         cartStore.updateCartBroadcastStream?.listen((event) {
       this.add(_CartUpdateEvent(cartInfo: event));
     });
+
     on<_CartUpdateEvent>((event, emit) {
       emit(CartUpdatedState(cartInfo: event.cartInfo));
     });

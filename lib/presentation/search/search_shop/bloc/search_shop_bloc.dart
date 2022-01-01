@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/domain/domain.dart';
 
@@ -9,20 +10,21 @@ class SearchShopBloc extends Bloc<SearchShopEvent, SearchShopState> {
   final GetListShopBySearchUseCase getListShopBySearchUseCase;
 
   SearchShopBloc({required this.getListShopBySearchUseCase})
-      : super(SearchShopInitial());
+      : super(SearchShopInitial()) {
+    on<SearchEvent>((event, emit) async {
+      await _handleSearchEvent(event, emit);
+    });
+  }
 
-  @override
-  Stream<SearchShopState> mapEventToState(SearchShopEvent event) async* {
-    yield SearchShopLoading();
-    if (event is SearchEvent) {
-      Either<Failure, List<SearchShop>> result =
-          await getListShopBySearchUseCase
-              .execute(GetListShopBySearchParam(keyword: event.keyword));
-      if (result.isSuccess) {
-        yield SearchShopSuccess(shops: result.success);
-      } else {
-        yield SearchShopError();
-      }
+  Future _handleSearchEvent(SearchEvent event, Emitter<SearchShopState> emit) async {
+    emit(SearchShopLoading());
+    Either<Failure, List<SearchShop>> result =
+    await getListShopBySearchUseCase
+        .execute(GetListShopBySearchParam(keyword: event.keyword));
+    if (result.isSuccess) {
+      emit(SearchShopSuccess(shops: result.success));
+    } else {
+      emit(SearchShopError());
     }
   }
 }

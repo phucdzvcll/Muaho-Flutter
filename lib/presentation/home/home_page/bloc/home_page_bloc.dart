@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/home_page/model/home_page_model.dart';
@@ -12,27 +13,30 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc({
     required this.useCaseProductCategories,
     required this.bannerUseCase,
-  }) : super(HomePageInitial());
+  }) : super(HomePageInitial()) {
+    on<HomePageRequestEvent>((event, emit) async {
+      await _handleHomePageRequestEvent(emit);
+    });
+
+    on<ChangeCart>((event, emit) async {
+      HomePageSuccessState homePageSuccessState = HomePageSuccessState(
+        homePageModel: HomePageModel(
+            productCategories: _productCategories,
+            slideBannerEntity: _slideBannerEntity),
+      );
+
+      emit(homePageSuccessState);
+    });
+  }
+
+
   final GetListProductCategoriesHomeUseCase useCaseProductCategories;
   final GetListBannerUseCase bannerUseCase;
   List<ProductCategoryHomeEntity> _productCategories = [];
   List<SlideBannerEntity> _slideBannerEntity = [];
 
-  @override
-  Stream<HomePageState> mapEventToState(HomePageEvent event) async* {
-    if (event is HomePageRequestEvent) {
-      yield* _handleHomePageRequestEvent();
-    } else if (event is ChangeCart) {
-      yield HomePageSuccessState(
-        homePageModel: HomePageModel(
-            productCategories: _productCategories,
-            slideBannerEntity: _slideBannerEntity),
-      );
-    }
-  }
-
-  Stream<HomePageState> _handleHomePageRequestEvent() async* {
-    yield HomePageLoading();
+  Future _handleHomePageRequestEvent(Emitter<HomePageState> emit) async {
+    emit(HomePageLoading());
 
     Either<Failure, ProductCategoriesHomeResults> productCategoriesResult =
         await useCaseProductCategories.execute(EmptyInput());
@@ -50,10 +54,12 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     if (bannersResult.isSuccess) {
       _slideBannerEntity.addAll(bannersResult.success.listBanner);
     }
-    yield HomePageSuccessState(
+    HomePageSuccessState homePageSuccessState = HomePageSuccessState(
       homePageModel: HomePageModel(
           productCategories: _productCategories,
           slideBannerEntity: _slideBannerEntity),
     );
+
+    emit(homePageSuccessState);
   }
 }
