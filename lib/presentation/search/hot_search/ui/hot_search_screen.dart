@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
@@ -50,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 24.0),
                           child: Text(
-                            "Mặt hàng thường mua",
+                            LocaleKeys.hotSearch_hotItems,
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
                                       color: Theme.of(context).primaryColor,
@@ -82,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 24.0),
                           child: Text(
-                            "Cửa hàng nổi bật",
+                            LocaleKeys.hotSearch_hotShop,
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
                                       color: Theme.of(context).primaryColor,
@@ -111,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
                 } else {
                   return Center(
-                    child: Text("Error"),
+                    child: Text(LocaleKeys.hotSearch_errorMsg),
                   );
                 }
               },
@@ -237,14 +238,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: EdgeInsets.zero,
                           icon: Icon(Icons.search),
                           onPressed: () {
-                            if (_controller.text != "") {
-                              Navigator.pushNamed(context, "/search_shop",
+                            if (_controller.text.isNotEmpty) {
+                              Navigator.pushNamed(context, SearchShopScreen.routeName,
                                   arguments: SearchShopArgument(
                                       keyword: _controller.text));
                             }
                           },
                         ),
-                        hintText: 'Bạn muốn mua gì?',
+                        hintText: LocaleKeys.hotSearch_searchHint.translate(),
                         hintStyle: TextStyle(),
                         border: InputBorder.none),
                   ),

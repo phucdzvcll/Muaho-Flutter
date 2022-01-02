@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/localization/app_localization.dart';
 import 'package:muaho/domain/models/address/address_entity.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/address/create_address/create_location_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
@@ -37,7 +39,7 @@ class AddressScreen extends StatelessWidget {
                   child: Scaffold(
                     backgroundColor: Colors.white,
                     appBar: AppBarComponent.titleOnly(
-                      title: "Chọn địa chỉ giao hàng",
+                      title: LocaleKeys.addressList_titleScreen.translate(),
                     ),
                     body: Stack(
                       children: [
@@ -68,7 +70,7 @@ class AddressScreen extends StatelessWidget {
                                 },
                                 child: Center(
                                   child: Text(
-                                    "Thêm Địa Chỉ",
+                                    LocaleKeys.addressList_addAddressButton.translate(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -137,7 +139,7 @@ class AddressScreen extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "Địa chỉ: ",
+                        text: LocaleKeys.addressList_address.translate(),
                         style: Theme.of(context).textTheme.headline1?.copyWith(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -154,7 +156,7 @@ class AddressScreen extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "SĐT: ",
+                        text: LocaleKeys.addressList_phone.translate(),
                         style: Theme.of(context).textTheme.headline1?.copyWith(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

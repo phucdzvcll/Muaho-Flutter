@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
@@ -48,7 +49,7 @@ class _OrderDetailState extends State<OrderDetail>
             builder: (context, state) {
               return Scaffold(
                 appBar: AppBarComponent.titleOnly(
-                    title: "Chi tiết đơn hàng",
+                    title: LocaleKeys.orderDetail_titleScreen.translate(),
                 ),
                 body: Container(
                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
@@ -99,7 +100,7 @@ class _OrderDetailState extends State<OrderDetail>
                         )
                       : SliverToBoxAdapter(
                           child: Center(
-                            child: Text("error"),
+                            child: Text(LocaleKeys.orderDetail_error.translate()),
                           ),
                         )),
             ],
@@ -192,7 +193,7 @@ class _OrderDetailState extends State<OrderDetail>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      (product.price * product.quantity).format() + " Vnd",
+                      (product.price * product.quantity).format() + " " + LocaleKeys.orderDetail_vndCurrency.translate(),
                       style: Theme.of(context)
                           .textTheme
                           .headline1!

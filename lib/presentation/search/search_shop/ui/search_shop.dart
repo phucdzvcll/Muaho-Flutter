@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
@@ -27,7 +28,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBarComponent.titleOnly(title: "Chọn Cửa Hàng"),
+          appBar: AppBarComponent.titleOnly(title: LocaleKeys.searchShop_chooseShop),
           body: Container(
             margin: EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
@@ -62,14 +63,14 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
     } else if (state is SearchShopSuccess) {
       if (state.shops.isEmpty) {
         return Center(
-          child: Text("Nothing here"),
+          child: Text(LocaleKeys.searchShop_noDataMsg),
         );
       } else {
         return _requestSearchShopSuccessBuilder(state, ctx);
       }
     } else {
       return Center(
-        child: Text("Error"),
+        child: Text(LocaleKeys.searchShop_errorMsg),
       );
     }
   }
@@ -88,7 +89,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Tất cả cửa hàng",
+                      LocaleKeys.searchShop_allShop,
                       textAlign: TextAlign.end,
                       style: Theme.of(context)
                           .textTheme
@@ -122,7 +123,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                                   )),
                           child: Row(
                             children: [
-                              Text("Bộ Lọc",
+                              Text(LocaleKeys.searchShop_filterButton,
                                   style: Theme.of(context).textTheme.subtitle2),
                               Padding(
                                 padding: const EdgeInsets.only(left: 4.0),

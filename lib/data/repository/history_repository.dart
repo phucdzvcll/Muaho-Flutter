@@ -46,6 +46,7 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
             shopName: element.shopName.defaultEmpty(),
             itemCount: element.itemCount.defaultZero(),
             total: element.total.defaultZero(),
+            //todo parse status to enum
             status: element.status.defaultEmpty(),
             thumbUrl: element.thumbUrl.defaultEmpty()));
       });

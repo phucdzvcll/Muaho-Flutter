@@ -28,7 +28,7 @@ class HotSearchBloc extends Bloc<HotSearchEvent, HotSearchState> {
     if (result.isSuccess) {
       emit(HotSearchSuccessState(result: result.success));
     } else {
-      emit(HotSearchErrorState(mess: "error"));
+      emit(HotSearchErrorState());
     }
   }
 }

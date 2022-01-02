@@ -18,12 +18,11 @@ class HotSearchSuccessState extends HotSearchState {
 }
 
 class HotSearchErrorState extends HotSearchState {
-  final String mess;
 
-  HotSearchErrorState({required this.mess});
+  HotSearchErrorState();
 
   @override
-  List<Object?> get props => [mess];
+  List<Object?> get props => [];
 }
 
 class HotSearchInitState extends HotSearchState {

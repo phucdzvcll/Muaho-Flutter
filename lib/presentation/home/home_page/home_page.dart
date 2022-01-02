@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Hello",
+                        LocaleKeys.home_hiUser.translate(),
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
@@ -249,7 +250,7 @@ class _HomePageState extends State<HomePage>
             child: Padding(
               padding: EdgeInsets.all(MyTheme.paddingSize),
               child: Text(
-                "Mua gì hôm nay?",
+                LocaleKeys.home_newsTitle.translate(),
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
@@ -413,7 +414,7 @@ class _HomePageState extends State<HomePage>
                 Padding(
                   padding: EdgeInsets.all(MyTheme.paddingSize),
                   child: Text(
-                    "Danh mục cửa hàng",
+                    LocaleKeys.home_shopCategory.translate(),
                     style: Theme.of(context)
                         .textTheme
                         .headline1!
@@ -423,7 +424,7 @@ class _HomePageState extends State<HomePage>
                 Padding(
                   padding: EdgeInsets.all(MyTheme.paddingSize),
                   child: Text(
-                    "Xem tất cả",
+                    LocaleKeys.home_viewAllCategory.translate(),
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         fontSize: 14, color: Theme.of(context).primaryColor),
                   ),

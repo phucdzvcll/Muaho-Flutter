@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
@@ -57,7 +58,7 @@ class _OrderScreenState extends State<OrderScreen>
             child: Scaffold(
               backgroundColor: Theme.of(context).backgroundColor,
               appBar: AppBarComponent.titleOnly(
-                title: "Chọn Sản Phẩm",
+                title: LocaleKeys.order_titleScreen.translate(),
               ),
               body: Container(
                 margin: EdgeInsets.only(top: 32),
@@ -92,7 +93,7 @@ class _OrderScreenState extends State<OrderScreen>
         ],
       );
     } else if (state is OrderError) {
-      return Text("Error");
+      return Text(LocaleKeys.order_errorMsg.translate());
     } else if (state is OrderLoading || state is OrderInitial) {
       return CircularProgressIndicator();
     } else {
@@ -271,17 +272,17 @@ class _OrderScreenState extends State<OrderScreen>
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
-          "Bạn có muốn đổi cửa hàng?",
+          LocaleKeys.order_changeShopTitle.translate(),
           style: Theme.of(context).textTheme.headline1,
         ),
         content: Text(
-          "Những món bạn chọn ở cửa hàng trước sẽ bị xóa.",
+          LocaleKeys.order_changeShopMsg.translate(),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         actions: [
           CupertinoDialogAction(
-            child: Text("Yes"),
+            child: Text(LocaleKeys.order_yesChangeShop.translate()),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
               BlocProvider.of<OrderBloc>(context)
@@ -289,7 +290,7 @@ class _OrderScreenState extends State<OrderScreen>
             },
           ),
           CupertinoDialogAction(
-            child: Text("No"),
+            child: Text(LocaleKeys.order_noChangeShop.translate()),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },
@@ -309,17 +310,17 @@ Future<dynamic> showDialogWarningRemoveProduct(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0))),
       title: Text(
-        "Xóa sản phẩm khỏi giỏ hàng?",
+        LocaleKeys.order_deleteItemTitle.translate(),
         style: Theme.of(context).textTheme.headline1,
       ),
       content: Text(
-        "Sản phẩm này sẽ bị xóa khỏi giỏ hàng của bạn!",
+        LocaleKeys.order_deleteItemMsg.translate(),
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodyText1,
       ),
       actions: [
         CupertinoDialogAction(
-          child: Text("Yes"),
+          child: Text(LocaleKeys.order_yesDeleteItem.translate()),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
             BlocProvider.of<OrderBloc>(context)
@@ -327,7 +328,7 @@ Future<dynamic> showDialogWarningRemoveProduct(
           },
         ),
         CupertinoDialogAction(
-          child: Text("No"),
+          child: Text(LocaleKeys.order_noDeleteItem.translate()),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
           },
