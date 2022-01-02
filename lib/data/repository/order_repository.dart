@@ -25,7 +25,9 @@ class OrderRepositoryImpl implements CreateOrderRepository {
           status: (result.response?.status).defaultEmpty(),
           orderID: (result.response?.orderId).defaultZero()));
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 

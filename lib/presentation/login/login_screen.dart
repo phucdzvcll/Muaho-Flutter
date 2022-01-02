@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/login/register_screen.dart';
@@ -21,12 +23,23 @@ class LoginScreen extends StatelessWidget {
       create: (context) => getIt(),
       child: Builder(builder: (ctx) {
         return BlocListener<LoginBloc, LoginState>(
-          listenWhen: (pre, curr) => curr is LoginSuccess || curr is LoginFail,
+          listenWhen: (pre, curr) =>
+              curr is LoginSuccess ||
+              curr is LoginFail ||
+              curr is LoginValidatedState,
           listener: (context, state) async {
             if (state is LoginSuccess) {
-              _snakeBarBuilder(ctx, "Thành công");
+              ctx.showSnackBar("Thành công");
             } else if (state is LoginFail) {
-              _snakeBarBuilder(ctx, state.errorMss);
+              if (state.errorMss == LoginError.emailNotExist) {
+                ctx.showSnackBar("Email không tồn tại");
+              } else if (state.errorMss == LoginError.emailOrPassNotMatch) {
+                ctx.showSnackBar("Email hoặc mật khẩu không đúng");
+              } else {
+                ctx.showSnackBar("Có lỗi đang xảy ra, vui lòng thử lại");
+              }
+            } else if (state is LoginValidatedState) {
+              ctx.showSnackBar(state.mess);
             }
           },
           child: Container(
@@ -38,6 +51,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   backgroundColor: Colors.white,
                   body: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
                     scrollDirection: Axis.vertical,
                     child: _loginBuilder(ctx),
                   ),
@@ -45,44 +59,6 @@ class LoginScreen extends StatelessWidget {
               )),
         );
       }),
-    );
-  }
-
-  void _snakeBarBuilder(BuildContext context, String content) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        content: Container(
-          padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.only(bottom: 60),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Color(0x85444444),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.error_outline_outlined,
-                color: Colors.white,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                content,
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1
-                    ?.copyWith(color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-        behavior: SnackBarBehavior.floating,
-      ),
     );
   }
 
@@ -221,7 +197,7 @@ class LoginScreen extends StatelessWidget {
       builder: (context, state) {
         return GestureDetector(
           onTap: () {
-            if (!(state is LoggingState)) {
+            if (!(state is RequestingLoginState)) {
               BlocProvider.of<LoginBloc>(ctx).add(
                 PressLoginBtnEvent(),
               );
@@ -232,7 +208,7 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             width: double.infinity,
             child: Center(
-              child: state is LoggingState
+              child: state is RequestingLoginState
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

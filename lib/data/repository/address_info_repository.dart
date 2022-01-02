@@ -23,14 +23,16 @@ class AddressInfoRepositoryImpl implements AddressRepository {
         );
       }).toList());
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 
   @override
   Future<Either<Failure, CreateAddressResult>> createAddress(
       addressEntity) async {
-    NetworkResult createAddress = await handleNetworkResult(
+    NetworkResult result = await handleNetworkResult(
       service.createAddress(
         CreateAddressBody(
           address: addressEntity.address,
@@ -41,10 +43,12 @@ class AddressInfoRepositoryImpl implements AddressRepository {
       ),
     );
 
-    if (createAddress.isSuccess()) {
+    if (result.isSuccess()) {
       return SuccessValue(CreateAddressResult(status: Status.Success));
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 }

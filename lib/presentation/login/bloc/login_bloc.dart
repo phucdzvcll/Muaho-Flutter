@@ -48,21 +48,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<PressLoginBtnEvent>((event, emit) async {
-      emit(LoggingState());
+      emit(RequestingLoginState());
       if (email.isEmpty || password.isEmpty) {
-        await Future.delayed(Duration(milliseconds: 1000));
         emit(
-          LoginFail(errorMss: "Vui lòng nhập đầy đủ email và password"),
+          LoginValidatedState(mess: "Vui lòng nhập đầy đủ email và password"),
         );
       } else if (!emailValid(email)) {
-        await Future.delayed(Duration(milliseconds: 1000));
         emit(
-          LoginFail(errorMss: "Email không hợp lệ"),
+          LoginValidatedState(mess: "Email không hợp lệ"),
         );
       } else if (password.length < 6) {
-        await Future.delayed(Duration(milliseconds: 1000));
         emit(
-          LoginFail(errorMss: "Password phải có ít nhất 6 kí tự"),
+          LoginValidatedState(mess: "Password phải có ít nhất 6 kí tự"),
         );
       } else {
         int startTime = DateTime.now().millisecondsSinceEpoch;
@@ -78,11 +75,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (result.isSuccess) {
           emit(LoginSuccess());
         } else {
-          emit(
-            LoginFail(
-              errorMss: (result.fail as FeatureFailure).msg,
-            ),
-          );
+          var fail = result.fail;
+          if (fail is LoginFailure) {
+            emit(
+              LoginFail(
+                errorMss: fail.loginError,
+              ),
+            );
+          } else {
+            emit(
+              LoginFail(
+                errorMss: LoginError.defaultError,
+              ),
+            );
+          }
         }
       }
     });

@@ -38,7 +38,9 @@ class ShopRepositoryImpl implements ShopRepository {
           vouchers: vouchers,
           products: products));
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 

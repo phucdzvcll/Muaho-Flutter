@@ -1,29 +1,22 @@
-class Failure {
+import 'package:muaho/common/extensions/network.dart';
+
+abstract class Failure {
   const Failure();
 }
 
-class Maintenance extends Failure {
-  const Maintenance(this.errorCode, this.msg);
-
-  final int errorCode;
-  final String msg;
-}
+class CommonError extends Failure {}
 
 class ServerError extends Failure {
-  const ServerError(this.errorCode, this.msg);
+  const ServerError({required this.errorCode, required this.msg});
 
   final int errorCode;
-  final String msg;
+  final NetworkError msg;
 }
 
 class UnCatchError extends Failure {
-  const UnCatchError(this.exception);
+  const UnCatchError({required this.exception});
 
   final Exception exception;
 }
 
-class FeatureFailure extends Failure {
-  final String msg;
-
-  const FeatureFailure({required this.msg});
-}
+abstract class FeatureFailure extends Failure {}

@@ -32,7 +32,9 @@ class SignInRepositoryImpl implements SignInRepository {
           refreshToken: result.response!.refreshToken.defaultEmpty());
       return SuccessValue(entity);
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 
@@ -68,11 +70,13 @@ class SignInRepositoryImpl implements SignInRepository {
 
           return SuccessValue(SignInEntity(userName: userName));
         } else {
-          return FailValue(Failure());
+          return FailValue(result.fail);
         }
+      } else {
+        return FailValue(
+          CommonError(),
+        );
       }
-
-      return FailValue(Failure());
     }
   }
 
@@ -95,21 +99,24 @@ class SignInRepositoryImpl implements SignInRepository {
   @override
   Future<Either<Failure, LoginEmailEntity>> loginEmail(
       String email, String password) async {
-    var signInWithEmailAndPassword = firebaseAuth.signInWithEmailAndPassword(
-        email: email, password: password);
-    var result = await handleNetworkResult(signInWithEmailAndPassword);
-    if (result.isSuccess()) {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       return SuccessValue(LoginEmailEntity());
-    } else {
-      if (result.fError == FirebaseError.EMAIL_NOT_EXIST) {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "user-not-found") {
         return FailValue(
-          FeatureFailure(msg: "Email không tồn tại"),
+          LoginFailure(loginError: LoginError.emailNotExist),
         );
       } else {
         return FailValue(
-          FeatureFailure(msg: "Email hoặc mật khẩu không đúng"),
+          LoginFailure(loginError: LoginError.emailOrPassNotMatch),
         );
       }
+    } on Exception catch (e) {
+      return FailValue(
+        UnCatchError(exception: e),
+      );
     }
   }
 }

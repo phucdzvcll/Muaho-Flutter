@@ -26,7 +26,9 @@ class HomeRepositoryImpl implements HomePageRepository {
       });
       return SuccessValue(BannersResult(listBanner: slideBanner));
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 
@@ -47,7 +49,9 @@ class HomeRepositoryImpl implements HomePageRepository {
       return SuccessValue(
           ProductCategoriesHomeResults(listProductCategory: categories));
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 }

@@ -8,7 +8,9 @@ abstract class BaseUseCase<I, O> {
     try {
       return await executeInternal(input);
     } on Exception catch (e) {
-      return FailValue(Failure());
+      return FailValue(
+        UnCatchError(exception: e),
+      );
     }
   }
 }

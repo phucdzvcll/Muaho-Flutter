@@ -27,7 +27,9 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
       });
       return SuccessValue(list);
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 
@@ -51,7 +53,9 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
       });
       return SuccessValue(list);
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 
@@ -88,7 +92,9 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
           products: products);
       return SuccessValue(orderDetailEntity);
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 }

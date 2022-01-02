@@ -45,8 +45,9 @@ class LoginSuccess extends LoginState {
 }
 
 class LoginFail extends LoginState {
-  final String errorMss;
+  final LoginError errorMss;
   final int dateTime = DateTime.now().millisecondsSinceEpoch;
+
   @override
   List<Object?> get props => [errorMss, dateTime];
 
@@ -55,7 +56,18 @@ class LoginFail extends LoginState {
   });
 }
 
-class LoggingState extends LoginState {
+class LoginValidatedState extends LoginState {
+  final String mess;
+
+  const LoginValidatedState({
+    required this.mess,
+  });
+
+  @override
+  List<Object?> get props => [mess];
+}
+
+class RequestingLoginState extends LoginState {
   @override
   List<Object?> get props => [];
 }

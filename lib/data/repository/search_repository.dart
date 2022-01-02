@@ -31,7 +31,9 @@ class SearchRepositoryImpl implements SearchRepository {
       return SuccessValue(
           HostSearchResult(listHotKeywords: keywords, listHotShop: shops));
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 
@@ -52,7 +54,9 @@ class SearchRepositoryImpl implements SearchRepository {
       });
       return SuccessValue(shops);
     } else {
-      return FailValue(Failure());
+      return FailValue(
+        ServerError(msg: result.error, errorCode: result.errorCode),
+      );
     }
   }
 }

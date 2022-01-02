@@ -14,6 +14,20 @@ class LoginEmailUseCase extends BaseUseCase<LoginParam, LoginEmailEntity> {
   });
 }
 
+enum LoginError {
+  emailNotExist,
+  emailOrPassNotMatch,
+  defaultError,
+}
+
+class LoginFailure extends FeatureFailure {
+  final LoginError loginError;
+
+  LoginFailure({
+    required this.loginError,
+  });
+}
+
 class LoginParam {
   final String email;
   final String password;
