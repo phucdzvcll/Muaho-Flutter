@@ -20,9 +20,9 @@ import 'package:muaho/presentation/home/history/history_order_detail/order_detai
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/login/login_screen.dart';
-import 'package:muaho/presentation/login/register_screen.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/payment/payment_screen.dart';
+import 'package:muaho/presentation/register/register_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';

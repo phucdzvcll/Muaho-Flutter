@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +13,39 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _emailAnimationController;
+  late AnimationController _passwordAnimationController;
+  late AnimationController _passwordConfirmAnimationController;
+
   bool obscureText = true;
   bool _isShowVisibilityPasswordIcon = false;
   bool _isShowVisibilityConfirmPasswordIcon = false;
   bool _isShowRemoveEmailInputIcon = false;
-
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _confirmPasswordController =
       new TextEditingController();
+
+  @override
+  void initState() {
+    _emailAnimationController = new AnimationController(vsync: this);
+    _passwordAnimationController = new AnimationController(vsync: this);
+    _passwordConfirmAnimationController = new AnimationController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailAnimationController.dispose();
+    _passwordAnimationController.dispose();
+    _passwordConfirmAnimationController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +68,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _loginBuilder(BuildContext ctx) {
     ThemeData theme = Theme.of(ctx);
     return Container(
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: Colors.white),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           FadeInDown(
             duration: Duration(milliseconds: 1000),
             child: _logoBuilder(theme, ctx),
           ),
           FadeInLeft(
-            child: _emailInput(theme),
+            child: Flash(
+              controller: (c) {
+                _emailAnimationController = c;
+              },
+              manualTrigger: true,
+              delay: Duration(milliseconds: 900),
+              duration: Duration(milliseconds: 300),
+              child: _emailInput(theme),
+            ),
             delay: Duration(milliseconds: 200),
             duration: Duration(milliseconds: 700),
           ),
@@ -138,7 +173,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _doneBtn(BuildContext ctx) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        _emailAnimationController.reset();
+        _emailAnimationController.forward();
+      },
       child: Container(
         margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(16),
@@ -163,62 +201,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _emailInput(ThemeData theme) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       width: double.infinity,
       child: TextFormField(
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            if (!_isShowRemoveEmailInputIcon) {
-              setState(() {
-                _isShowRemoveEmailInputIcon = true;
-              });
-            }
+        onTap: () {
+          log("Tab");
+        },
+        validator: (value) {
+          if (value != null) {
+            return 'Please enter some text';
           } else {
-            setState(() {
-              _isShowRemoveEmailInputIcon = false;
-            });
+            return null;
           }
         },
-        textAlignVertical: TextAlignVertical.center,
-        controller: _emailController,
         decoration: InputDecoration(
-          suffixIcon: Visibility(
-            visible: _isShowRemoveEmailInputIcon,
-            child: GestureDetector(
-              onTap: () {
-                _emailController.clear();
-                setState(() {
-                  _isShowRemoveEmailInputIcon = false;
-                });
-              },
-              child: Icon(
-                Icons.highlight_off_outlined,
-                color: Colors.grey,
+            border: InputBorder.none,
+            label: Text("Email"),
+            hintText: "muaho@email.com",
+            labelStyle: theme.textTheme.headline3,
+            contentPadding:
+                const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black87,
+                width: 1,
               ),
             ),
-          ),
-          border: InputBorder.none,
-          label: Text("Email"),
-          hintText: "muaho@email.com",
-          labelStyle: theme.textTheme.headline3,
-          isCollapsed: true,
-          contentPadding:
-              const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: theme.primaryColorLight,
-              width: 1,
+            focusColor: Colors.deepOrange,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.green,
+                width: 1.0,
+              ),
             ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: theme.backgroundColor,
-              width: 1.0,
-            ),
-          ),
-        ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+                width: 1,
+              ),
+            )),
       ),
     );
   }

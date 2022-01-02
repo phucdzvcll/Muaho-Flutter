@@ -6,7 +6,7 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
-import 'package:muaho/presentation/login/register_screen.dart';
+import 'package:muaho/presentation/register/register_screen.dart';
 
 import 'bloc/login_bloc.dart';
 
