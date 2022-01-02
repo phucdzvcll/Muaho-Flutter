@@ -5,4 +5,7 @@ abstract class SignInRepository {
       {required String firebaseToken});
 
   Future<Either<Failure, SignInEntity>> loginAnonymous();
+
+  Future<Either<Failure, LoginEmailEntity>> loginEmail(
+      String email, String password);
 }

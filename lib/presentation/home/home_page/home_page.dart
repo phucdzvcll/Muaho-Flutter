@@ -9,6 +9,7 @@ import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
+import 'package:muaho/presentation/login/login_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -72,11 +73,16 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(MyTheme.radiusSize),
-            child: ImageNetworkBuilder(
-              imgUrl: "https://picsum.photos/50",
-              size: Size.square(50),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, LoginScreen.routeName);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+              child: ImageNetworkBuilder(
+                imgUrl: "https://picsum.photos/50",
+                size: Size.square(50),
+              ),
             ),
           ),
           Expanded(

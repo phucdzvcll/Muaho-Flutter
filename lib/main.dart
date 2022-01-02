@@ -19,6 +19,8 @@ import 'package:muaho/presentation/di.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
+import 'package:muaho/presentation/login/login_screen.dart';
+import 'package:muaho/presentation/login/register_screen.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/payment/payment_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
@@ -115,6 +117,8 @@ class MyApp extends StatelessWidget {
           PaymentScreen.routeName: (context) => PaymentScreen(),
           AddressScreen.routeName: (context) => AddressScreen(),
           CreateAddressScreen.routeName: (context) => CreateAddressScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
+          RegisterScreen.routeName: (context) => RegisterScreen(),
         },
         // ),
       ),

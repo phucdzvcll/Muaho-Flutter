@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:synchronized/synchronized.dart' as sLock;
@@ -66,6 +67,7 @@ class DioFactory {
 
 final tokenHeaderName = "Authorization";
 final tokenPrefix = "Bearer ";
+
 Map<String, String> _buildHeaders(String? token) {
   Map<String, String> headers = {tokenHeaderName: "$tokenPrefix$token"};
 
@@ -147,7 +149,30 @@ Future<NetworkResult<T>> handleNetworkResult<T>(
         break;
     }
     return networkResult;
+  } on FirebaseAuthException catch (e) {
+    NetworkResult<T> networkResult =
+        NetworkResult<T>(fError: FirebaseError.DEFAULT);
+    switch (e.code) {
+      case "user-not-found":
+        {
+          networkResult = NetworkResult(fError: FirebaseError.EMAIL_NOT_EXIST);
+          break;
+        }
+      default:
+        {
+          networkResult =
+              NetworkResult(fError: FirebaseError.EMAIL_OR_PASS_NOT_MATCH);
+          break;
+        }
+    }
+    return networkResult;
   }
+}
+
+enum FirebaseError {
+  EMAIL_NOT_EXIST,
+  EMAIL_OR_PASS_NOT_MATCH,
+  DEFAULT,
 }
 
 enum NetworkError {
@@ -162,9 +187,13 @@ class NetworkResult<T> {
   final T? response;
   final NetworkError error;
   final int errorCode;
+  final FirebaseError fError;
 
   NetworkResult(
-      {this.response, this.error = NetworkError.DEFAULT, this.errorCode = 0});
+      {this.response,
+      this.error = NetworkError.DEFAULT,
+      this.errorCode = 0,
+      this.fError = FirebaseError.DEFAULT});
 
   bool isSuccess() {
     return response != null;

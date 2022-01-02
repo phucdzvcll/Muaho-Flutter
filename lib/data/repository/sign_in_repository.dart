@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:muaho/data/response/sign_in/refresh_token_response.dart';
@@ -10,10 +11,12 @@ import 'package:muaho/domain/models/sign_in/jwt_entity.dart';
 class SignInRepositoryImpl implements SignInRepository {
   final SignInService service;
   final UserStore userStore;
+  final FirebaseAuth firebaseAuth;
 
   SignInRepositoryImpl({
     required this.service,
     required this.userStore,
+    required this.firebaseAuth,
   });
 
   @override
@@ -86,6 +89,27 @@ class SignInRepositoryImpl implements SignInRepository {
       return firebaseToken;
     } else {
       return null;
+    }
+  }
+
+  @override
+  Future<Either<Failure, LoginEmailEntity>> loginEmail(
+      String email, String password) async {
+    var signInWithEmailAndPassword = firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+    var result = await handleNetworkResult(signInWithEmailAndPassword);
+    if (result.isSuccess()) {
+      return SuccessValue(LoginEmailEntity());
+    } else {
+      if (result.fError == FirebaseError.EMAIL_NOT_EXIST) {
+        return FailValue(
+          FeatureFailure(msg: "Email không tồn tại"),
+        );
+      } else {
+        return FailValue(
+          FeatureFailure(msg: "Email hoặc mật khẩu không đúng"),
+        );
+      }
     }
   }
 }

@@ -57,6 +57,7 @@ dependencies:
   google_maps_flutter: ^2.1.1
   equatable: ^2.0.3
   app_links: ^2.2.0
+  email_validator: ^2.0.1
 
   # socket.io
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
