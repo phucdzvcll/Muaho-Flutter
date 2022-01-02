@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/adjustment_auantity_Button.dart';
@@ -61,7 +62,7 @@ class _CartScreenState extends State<CartScreen>
       child: SafeArea(
         child: Scaffold(
           appBar: AppBarComponent.titleOnly(
-            title: "Giỏ hàng",
+            title: LocaleKeys.cart_titleScreen.translate(),
           ),
           body: _handleStateResult(),
         ),
@@ -85,7 +86,7 @@ class _CartScreenState extends State<CartScreen>
           child: state is CartUpdatedState
               ? _handleSuccessBuilder(state, ctx)
               : Center(
-                  child: Text("Không có sản phẩm nào trong giỏ"),
+                  child: Text(LocaleKeys.cart_noItemMsg.translate()),
                 ),
         );
       },
@@ -221,8 +222,11 @@ class _CartScreenState extends State<CartScreen>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        (product.productPrice * product.quantity).format() +
-                            " Vnd",
+                        LocaleKeys.cart_totalAmountLabel.translate(
+                          namedArgs: {
+                            "totalAmount" : (product.productPrice * product.quantity).format()
+                          }
+                        ),
                         style: Theme.of(blocContext)
                             .textTheme
                             .headline1!
@@ -270,7 +274,7 @@ class _CartScreenState extends State<CartScreen>
                   ? _sliverListProductBuilder(state, ctx)
                   : SliverToBoxAdapter(
                       child: Center(
-                        child: Text("Không có sản phẩm nào trong giỏ"),
+                        child: Text(LocaleKeys.cart_noItemMsg.translate()),
                       ),
                     )
             ],
@@ -395,17 +399,17 @@ class _CartScreenState extends State<CartScreen>
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
-          "Xóa sản phẩm",
+          LocaleKeys.cart_deleteItemTitle.translate(),
           style: Theme.of(context).textTheme.headline1,
         ),
         content: Text(
-          "Món hàng này sẽ bị xóa khỏi giỏ hàng của bạn",
+          LocaleKeys.cart_deleteItemMsg.translate(),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         actions: [
           CupertinoDialogAction(
-            child: Text("Yes"),
+            child: Text(LocaleKeys.cart_yesDeleteItem.translate()),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
               BlocProvider.of<CartBloc>(context)
@@ -413,7 +417,7 @@ class _CartScreenState extends State<CartScreen>
             },
           ),
           CupertinoDialogAction(
-            child: Text("No"),
+            child: Text(LocaleKeys.cart_noDeleteItem.translate()),
             onPressed: () {
               Navigator.of(context, rootNavigator: true).pop();
             },

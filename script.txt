@@ -37,3 +37,6 @@ adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/categor
 adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=sdfdjsfgdsjkfhsdgfj"
 
 
+//tool
+//find hard code string
+"(.*?)"|'(.*?)'

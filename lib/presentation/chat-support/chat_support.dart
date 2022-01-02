@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/localization/app_localization.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 
@@ -69,7 +71,7 @@ class ChatMessageNoAnimation extends StatelessWidget {
               margin: const EdgeInsets.only(left: 8.0),
               child: CircleAvatar(
                 child: Text(
-                  "I",
+                  LocaleKeys.chatWithSupport_userName.translate(),
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1
@@ -93,7 +95,7 @@ class ChatMessageNoAnimation extends StatelessWidget {
               margin: const EdgeInsets.only(right: 8.0),
               child: CircleAvatar(
                 child: Text(
-                  "CS",
+                  LocaleKeys.chatWithSupport_csName.translate(),
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1
@@ -186,7 +188,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBarComponent.titleOnly(
-            title: "Chat with supporters",
+            title: LocaleKeys.chatWithSupport_titleScreen.translate(),
           ),
           body: Container(
             child: Column(
@@ -232,11 +234,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           );
         } else if (state is ChatLostConnectionState) {
           return Center(
-            child: Text("Lost connection!"),
+            child: Text(LocaleKeys.chatWithSupport_lostConnectErrorMsg.translate()),
           );
         } else {
           return Center(
-            child: Text("Let's connect & chat with supporters."),
+            child: Text(LocaleKeys.chatWithSupport_netWorkErrorMsg.translate()),
           );
         }
       },

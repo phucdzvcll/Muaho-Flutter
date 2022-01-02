@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:muaho/common/localization/app_localization.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/home/history/delivering/order_history_delivery_tab.dart';
 
 import 'complete/order_history_complete_tab.dart';
@@ -43,8 +45,8 @@ class HistoryPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       tabs: [
-                        Text("Đang giao"),
-                        Text("Đã giao"),
+                        Text(LocaleKeys.orderHistory_deliveringTitle.translate()),
+                        Text(LocaleKeys.orderHistory_deliveredTitle.translate()),
                       ],
                     ),
                   ),

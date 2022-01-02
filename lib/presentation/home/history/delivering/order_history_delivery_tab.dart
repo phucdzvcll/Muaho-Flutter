@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/localization/app_localization.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/order_product_builder.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
@@ -34,7 +35,7 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab> {
   Widget _handleBuilder(
       OrderHistoryDeliveringState state, BuildContext context) {
     if (state is OrderHistoryDeliveringError) {
-      return Text("Error");
+      return Text(LocaleKeys.orderHistoryDelivering_error.translate());
     } else if (state is OrderHistoryDeliveringSuccess) {
       return ListView.builder(
         shrinkWrap: true,

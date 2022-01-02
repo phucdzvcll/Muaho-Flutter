@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/address/address_info/address_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
@@ -32,7 +33,7 @@ class PaymentScreen extends StatelessWidget {
                 child: Scaffold(
                   backgroundColor: Theme.of(context).backgroundColor,
                   appBar: AppBarComponent.titleOnly(
-                    title: "Thanh Toán",
+                    title: LocaleKeys.payment_screenTitle.translate(),
                   ),
                   body: BlocBuilder<PaymentBloc, PaymentState>(
                     builder: (ctx, state) {
@@ -101,7 +102,7 @@ class PaymentScreen extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                "Hoàn tất đặt hàng",
+                                                LocaleKeys.payment_successOrderMsg.translate(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline1!
@@ -156,7 +157,7 @@ class PaymentScreen extends StatelessWidget {
                 width: 10,
               ),
               Text(
-                "Bạn chưa có địa chỉ giao hàng",
+                LocaleKeys.payment_missingDeliveryAddressMsg.translate(),
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1
@@ -178,14 +179,14 @@ class PaymentScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
-          "Tạo đơn hàng....",
+          LocaleKeys.payment_requestingCreateOrderTitle.translate(),
           style: Theme.of(context).textTheme.headline1,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Đang tạo đơn hàng",
+              LocaleKeys.payment_requestingCreateOrderMsg.translate(),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
             ),
@@ -208,17 +209,17 @@ class PaymentScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
-          "Thông báo",
+          LocaleKeys.payment_saveOrderConfirmTitle.translate(),
           style: Theme.of(context).textTheme.headline1,
         ),
         content: Text(
-          "Đơn hàng sẽ được gửi đi!",
+          LocaleKeys.payment_saveOrderConfirmMsg.translate(),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         actions: [
           CupertinoDialogAction(
-            child: Text("Yes"),
+            child: Text(LocaleKeys.payment_yesSaveOrder.translate()),
             onPressed: () {
               Navigator.pop(context);
               BlocProvider.of<PaymentBloc>(context).add(CreateOrderEvent(
@@ -232,7 +233,7 @@ class PaymentScreen extends StatelessWidget {
             },
           ),
           CupertinoDialogAction(
-            child: Text("No"),
+            child: Text(LocaleKeys.payment_noSaveOrder.translate()),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -269,7 +270,7 @@ class PaymentScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Giao tới địa chỉ",
+                    LocaleKeys.payment_deliveryAddress.translate(),
                     style: Theme.of(ctx).textTheme.headline1,
                   ),
                   TextButton(
@@ -283,7 +284,7 @@ class PaymentScreen extends StatelessWidget {
                       });
                     },
                     child: Text(
-                      "Chỉnh sửa",
+                      LocaleKeys.payment_editAddress.translate(),
                       style: Theme.of(ctx)
                           .textTheme
                           .headline2!
@@ -292,7 +293,7 @@ class PaymentScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(state.cartInfo.addressInfo?.address ?? ""),
+              Text(state.cartInfo.addressInfo?.address ?? ''),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 20),
                 width: double.infinity,
@@ -346,7 +347,7 @@ class PaymentScreen extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        "Tổng cộng",
+                        LocaleKeys.payment_total.translate(),
                         style: Theme.of(ctx)
                             .textTheme
                             .headline2!

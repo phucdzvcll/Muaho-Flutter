@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:muaho/common/localization/app_localization.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
 
 import '../../../main.dart';
@@ -36,16 +38,16 @@ class CreateAddressScreen extends StatelessWidget {
           } else if (state is AddressUpdateState) {
             _addressTextEditingController.text = state.address;
           } else if (state is AddressEmpty) {
-            _snakeBarBuilder(context, "Bạn chưa nhập địa chỉ");
+            _snakeBarBuilder(context, LocaleKeys.createAddress_invalidAddress.translate());
           } else if (state is PhoneEmpty) {
-            _snakeBarBuilder(context, "Bạn chưa nhập số điện thoại");
+            _snakeBarBuilder(context, LocaleKeys.createAddress_invalidPhone.translate());
           } else if (state is CreatingAddress) {
             _showWaiting(context);
           } else if (state is CreateAddressSuccess) {
             Navigator.pop(context);
             Navigator.pop(context, true);
           } else if (state is CreateAddressFail) {
-            _snakeBarBuilder(context, "Thất Bại");
+            _snakeBarBuilder(context, LocaleKeys.createAddress_errorCreateFail.translate());
           }
         },
         child: Scaffold(
@@ -144,7 +146,7 @@ class CreateAddressScreen extends StatelessWidget {
         width: double.infinity,
         child: Center(
           child: Text(
-            "Thêm địa chỉ",
+            LocaleKeys.createAddress_createAddressButton.translate(),
             style: Theme.of(ctx)
                 .textTheme
                 .headline1
@@ -265,8 +267,8 @@ class CreateAddressScreen extends StatelessWidget {
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   contentPadding: const EdgeInsets.only(
                       right: 16, left: 8, top: 20, bottom: 20),
-                  label: Text("Số điện thoại"),
-                  hintText: "0909xxxxxx",
+                  label: Text(LocaleKeys.createAddress_inputPhoneTitle.translate()),
+                  hintText: LocaleKeys.createAddress_inputPhoneHint.translate(),
                   labelStyle: Theme.of(context).textTheme.headline3,
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -347,8 +349,8 @@ class CreateAddressScreen extends StatelessWidget {
                           )
                         : null,
                     border: InputBorder.none,
-                    label: Text("Địa chỉ giao hàng"),
-                    hintText: "Muaho sẽ giao hàng ở địa chỉ này!",
+                    label: Text(LocaleKeys.createAddress_inputAddressTitle.translate()),
+                    hintText: LocaleKeys.createAddress_creatingAddressTitle.translate(),
                     labelStyle: Theme.of(context).textTheme.headline3,
                     contentPadding: const EdgeInsets.only(
                         right: 16, left: 8, top: 20, bottom: 20),
@@ -488,14 +490,14 @@ class CreateAddressScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
-          "Tạo địa chỉ....",
+          LocaleKeys.createAddress_creatingAddressTitle.translate(),
           style: Theme.of(context).textTheme.headline1,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Đang tạo địa chỉ",
+              LocaleKeys.createAddress_creatingAddress.translate(),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
             ),

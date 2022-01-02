@@ -56,6 +56,7 @@ Future<void> main() async {
       path: 'assets/translations',
       startLocale: Locale('vi'),
       fallbackLocale: Locale('vi'),
+      useOnlyLangCode: true,
       assetLoader: CodegenLoader(),
       child: BlocProvider<DeeplinkHandleBloc>(
         create: (context) => getIt(),

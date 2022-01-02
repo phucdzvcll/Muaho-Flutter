@@ -49,36 +49,6 @@ class SignIn extends StatelessWidget {
       return SizedBox.shrink();
     }
   }
-
-  AlertDialog showAlertDialog(
-      BuildContext context, String mess, Function handleSignIn) {
-    // set up the button
-    Widget okButton = ElevatedButton(
-      child: Text("Đồng Ý"),
-      style: MyTheme.buttonStyleNormal,
-      onPressed: () {
-        handleSignIn();
-      },
-    );
-
-    // set up the AlertDialog
-    return AlertDialog(
-      backgroundColor: MyTheme.backgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16.0))),
-      title: Text(
-        "Đăng Nhập",
-        style: Theme.of(context).textTheme.headline1,
-      ),
-      content: Text(
-        mess,
-        style: Theme.of(context).textTheme.bodyText1,
-      ),
-      actions: [
-        okButton,
-      ],
-    );
-  }
 }
 
 class SignInArguments {
