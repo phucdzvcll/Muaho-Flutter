@@ -66,8 +66,43 @@ dev_dependencies:
     sdk: flutter
   flutter_native_splash: ^1.2.3
   build_runner: ^2.1.4
+  flutter_gen_runner: ^4.1.3
   retrofit_generator: ^2.0.0
   google_fonts: ^2.1.0
+
+flutter_gen:
+  output: lib/generated/ # Optional (default: lib/gen/)
+  line_length: 80 # Optional (default: 80)
+
+  # Optional
+  integrations:
+    flutter_svg: true
+    flare_flutter: false
+    rive: false
+
+  assets:
+    # Optional
+    enabled: true
+    # Optional
+    # Set to true if you want this package to be a package dependency
+    # See: https://flutter.dev/docs/development/ui/assets-and-images#from-packages
+    package_parameter_enabled: false
+    # Optional
+    # Avaliable values:
+    # - camel-case
+    # - snake-case
+    # - dot-delimiter
+    style: dot-delimiter
+
+    fonts:
+      # Optional
+      enabled: true
+
+    colors:
+      # Optional
+      enabled: false
+      # Optional
+      inputs: [ ]
 
 flutter_native_splash:
   color: "#ffffff"

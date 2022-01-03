@@ -51,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 24.0),
                           child: Text(
-                            LocaleKeys.hotSearch_hotItems,
+                            LocaleKeys.hotSearch_hotItems.translate(),
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
                                       color: Theme.of(context).primaryColor,
@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 24.0),
                           child: Text(
-                            LocaleKeys.hotSearch_hotShop,
+                            LocaleKeys.hotSearch_hotShop.translate(),
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
                                       color: Theme.of(context).primaryColor,
@@ -112,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
                 } else {
                   return Center(
-                    child: Text(LocaleKeys.hotSearch_errorMsg),
+                    child: Text(LocaleKeys.hotSearch_errorMsg.translate()),
                   );
                 }
               },

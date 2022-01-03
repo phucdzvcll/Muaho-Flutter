@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
+import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
@@ -122,8 +123,7 @@ class _OrderDetailState extends State<OrderDetail>
                     icon: FadeInLeft(
                       delay: Duration(milliseconds: 200),
                       duration: Duration(milliseconds: 1000),
-                      child: SvgPicture.asset(
-                        "assets/images/delivery_dining_black_24dp.svg",
+                      child: Assets.images.deliveryDiningBlack24dp.svg(
                         width: 48,
                         height: 48,
                         color: Theme.of(context).primaryColorLight,
