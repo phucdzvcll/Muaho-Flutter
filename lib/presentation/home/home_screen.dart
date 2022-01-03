@@ -36,60 +36,55 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Container _buildBody(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-        child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                ChatScreen.routeName,
-              );
-            },
-            child: Swing(
-              duration: Duration(milliseconds: 1200),
-              delay: Duration(milliseconds: 200),
-              child: ZoomIn(
-                duration: Duration(milliseconds: 1200),
-                child: Icon(
-                  Icons.contact_support,
-                  size: 32,
-                ),
-              ),
+  Widget _buildBody(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            ChatScreen.routeName,
+          );
+        },
+        child: Swing(
+          duration: Duration(milliseconds: 1200),
+          delay: Duration(milliseconds: 200),
+          child: ZoomIn(
+            duration: Duration(milliseconds: 1200),
+            child: Icon(
+              Icons.contact_support,
+              size: 32,
             ),
           ),
-          backgroundColor: Colors.white,
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-            child: Container(
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: MyTheme.primaryButtonColor,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavigationBarItem(Icons.home, 0),
-                  _buildNavigationBarItem(Icons.dynamic_feed_rounded, 1),
-                  _buildNavigationBarItem(Icons.settings, 2),
-                ],
-              ),
-            ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: MyTheme.primaryButtonColor,
           ),
-          body: Center(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) => {_currentPage.value = index},
-              children: [
-                const HomePage(),
-                const HistoryPage(),
-                const SettingPage(),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavigationBarItem(Icons.home, 0),
+              _buildNavigationBarItem(Icons.dynamic_feed_rounded, 1),
+              _buildNavigationBarItem(Icons.settings, 2),
+            ],
           ),
+        ),
+      ),
+      body: Center(
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) => {_currentPage.value = index},
+          children: [
+            const HomePage(),
+            const HistoryPage(),
+            const SettingPage(),
+          ],
         ),
       ),
     );
