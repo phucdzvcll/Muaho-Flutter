@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/register/register_screen.dart';
@@ -29,14 +30,16 @@ class LoginScreen extends StatelessWidget {
               curr is LoginValidatedState,
           listener: (context, state) async {
             if (state is LoginSuccess) {
-              ctx.showSnackBar("Thành công");
+              ctx.showSnackBar(LocaleKeys.login_successTitle.translate());
             } else if (state is LoginFail) {
               if (state.errorMss == LoginError.emailNotExist) {
-                ctx.showSnackBar("Email không tồn tại");
+                ctx.showSnackBar(
+                    LocaleKeys.login_emailNotExistTitle.translate());
               } else if (state.errorMss == LoginError.emailOrPassNotMatch) {
-                ctx.showSnackBar("Email hoặc mật khẩu không đúng");
+                ctx.showSnackBar(
+                    LocaleKeys.login_emailOrPassNotMatchMess.translate());
               } else {
-                ctx.showSnackBar("Có lỗi đang xảy ra, vui lòng thử lại");
+                ctx.showSnackBar(LocaleKeys.login_errorDefaultMess.translate());
               }
             } else if (state is LoginValidatedState) {
               ctx.showSnackBar(state.mess);
@@ -138,10 +141,11 @@ class LoginScreen extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: "Bạn chưa có tài khoản",
+                        text: LocaleKeys.login_youDonNotHaveAccountQuestion
+                            .translate(),
                         style: theme.textTheme.bodyText2),
                     TextSpan(
-                        text: " đăng kí ngay",
+                        text: LocaleKeys.login_registerNowLabel.translate(),
                         style: theme.textTheme.bodyText1?.copyWith(
                           color: theme.primaryColorLight,
                         ),
@@ -174,7 +178,7 @@ class LoginScreen extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Nhanh chóng, tiện lợi, an toàn",
+              LocaleKeys.login_sloganHeadline.translate(),
               style: theme.textTheme.headline3
                   ?.copyWith(color: theme.primaryColorLight, fontSize: 28),
             ),
@@ -182,7 +186,7 @@ class LoginScreen extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Uy tín luôn là tôn chỉ hàng đầu",
+              LocaleKeys.login_sloganSub.translate(),
               style: theme.textTheme.headline3
                   ?.copyWith(color: theme.primaryColorLight, fontSize: 22),
             ),
@@ -220,7 +224,7 @@ class LoginScreen extends StatelessWidget {
                           width: 10,
                         ),
                         Text(
-                          "Đang đang nhập...",
+                          LocaleKeys.login_requestLoginMess.translate(),
                           style: Theme.of(ctx)
                               .textTheme
                               .headline1
@@ -229,7 +233,7 @@ class LoginScreen extends StatelessWidget {
                       ],
                     )
                   : Text(
-                      "Đăng nhập",
+                      LocaleKeys.login_loginLabel.translate(),
                       style: Theme.of(ctx)
                           .textTheme
                           .headline1
@@ -312,8 +316,8 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
           border: InputBorder.none,
-          label: Text("Email"),
-          hintText: "muaho@email.com",
+          label: Text(LocaleKeys.login_passwordLabel.translate()),
+          hintText: LocaleKeys.login_emailHinText.translate(),
           labelStyle: theme.textTheme.headline3,
           isCollapsed: true,
           contentPadding:
@@ -357,7 +361,7 @@ class LoginScreen extends StatelessWidget {
           decoration: InputDecoration(
             suffixIcon: Visibility(
               visible: state is ValidatedPasswordState &&
-                  !(state.validatedState == EmailValidatedState.Empty),
+                  EmailValidatedState.Empty.name != state.validatedState.name,
               child: GestureDetector(
                 onTap: () {
                   BlocProvider.of<LoginBloc>(ctx).add(
@@ -376,8 +380,8 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             border: InputBorder.none,
-            label: Text("Password"),
-            hintText: "password",
+            label: Text(LocaleKeys.login_passwordLabel.translate()),
+            hintText: LocaleKeys.login_passwordHintText.translate(),
             labelStyle: theme.textTheme.headline3,
             contentPadding:
                 const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
+import 'package:muaho/main.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -9,6 +11,8 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final AppLocalization appLocalization = getIt.get();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,144 +33,240 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  userInfoBuilder(context),
-                  Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(top: 35, left: 20, right: 20),
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 4.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(2.0, 2.0),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        _itemSettingBuilder(
-                          title: 'Muaho',
-                          subtitle: 'Đổi tên',
-                          leadingIcon: Icon(
-                            Icons.account_circle_sharp,
-                            color: Theme.of(context).primaryColorLight,
-                          ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
-                          ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0.5,
-                        ),
-                        _itemSettingBuilder(
-                          title: 'Số điện thoại',
-                          subtitle: '0909909909',
-                          leadingIcon: Icon(
-                            Icons.phone_iphone_sharp,
-                            color: Colors.blue,
-                          ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
-                          ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0.5,
-                        ),
-                        _itemSettingBuilder(
-                          title: 'Địa chỉ',
-                          subtitle: '171/6ter Tôn Thất Thuyết',
-                          leadingIcon: Icon(
-                            Icons.home_sharp,
-                            color: Colors.amber,
-                          ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
-                          ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0.5,
-                        ),
-                        _itemSettingBuilder(
-                          title: 'Khuyến mãi',
-                          subtitle: 'Bạn có 8 mã khuyến mãi',
-                          leadingIcon: Icon(
-                            Icons.local_offer,
-                            color: Colors.red,
-                          ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
-                          ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0.5,
-                        ),
-                        _itemSettingBuilder(
-                          title: 'Ngôn ngữ',
-                          subtitle: 'Tiếng Việt',
-                          leadingIcon: Icon(
-                            Icons.language,
-                            color: Colors.green,
-                          ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
-                          ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0.5,
-                        ),
-                        _itemSettingBuilder(
-                          title: 'Đổi mật khẩu',
-                          leadingIcon: Icon(
-                            Icons.change_circle,
-                            color: Colors.brown,
-                          ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
-                          ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0.5,
-                        ),
-                        _itemSettingBuilder(
-                          title: 'Đăng xuất',
-                          leadingIcon: Icon(
-                            Icons.logout,
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    userInfoBuilder(context),
+                    Container(
+                      width: double.infinity,
+                      margin:
+                          const EdgeInsets.only(top: 35, left: 20, right: 20),
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
                             color: Colors.grey,
+                            blurRadius: 4.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(2.0, 2.0),
                           ),
-                          trailingIcon: Icon(
-                            Icons.navigate_next_sharp,
-                            color: Colors.grey[400] ?? Colors.grey,
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          _itemSettingBuilder(
+                            title: LocaleKeys.setting_updateInfo.translate(),
+                            leadingIcon: Icon(
+                              Icons.account_circle_sharp,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {},
+                            underlineWidth: 0.5,
                           ),
-                          onPress: () {
-                            context.showSnackBar("đổi tên");
-                          },
-                          underlineWidth: 0,
-                        )
-                      ],
+                          _itemSettingBuilder(
+                            title:
+                                LocaleKeys.setting_phoneNumberTitle.translate(),
+                            subtitle: '0909909909',
+                            leadingIcon: Icon(
+                              Icons.phone_iphone_sharp,
+                              color: Colors.blue,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {},
+                            underlineWidth: 0.5,
+                          ),
+                          _itemSettingBuilder(
+                            title: LocaleKeys.setting_addressTitle.translate(),
+                            subtitle: '171/6ter Tôn Thất Thuyết',
+                            leadingIcon: Icon(
+                              Icons.home_sharp,
+                              color: Colors.amber,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {},
+                            underlineWidth: 0.5,
+                          ),
+                          _itemSettingBuilder(
+                            title: LocaleKeys.setting_discountTitle.translate(),
+                            subtitle: LocaleKeys.setting_discountSubtitle
+                                .translate(namedArgs: {
+                              "discount": "8",
+                            }),
+                            leadingIcon: Icon(
+                              Icons.local_offer,
+                              color: Colors.red,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {},
+                            underlineWidth: 0.5,
+                          ),
+                          _itemSettingBuilder(
+                            title: LocaleKeys.setting_languageTitle.translate(),
+                            subtitle: LocaleKeys.setting_currentLanguageSubtitle
+                                .translate(),
+                            leadingIcon: Icon(
+                              Icons.language,
+                              color: Colors.green,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {
+                              _showDialogResult(context);
+                            },
+                            underlineWidth: 0.5,
+                          ),
+                          _itemSettingBuilder(
+                            title: LocaleKeys.setting_changePasswordTitle
+                                .translate(),
+                            leadingIcon: Icon(
+                              Icons.change_circle,
+                              color: Colors.brown,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {},
+                            underlineWidth: 0.5,
+                          ),
+                          _itemSettingBuilder(
+                            title: LocaleKeys.setting_logoutTitle.translate(),
+                            leadingIcon: Icon(
+                              Icons.logout,
+                              color: Colors.grey,
+                            ),
+                            trailingIcon: Icon(
+                              Icons.navigate_next_sharp,
+                              color: Colors.grey[400] ?? Colors.grey,
+                            ),
+                            onPress: () {},
+                            underlineWidth: 0,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> _showDialogResult(BuildContext context) async {
+    int _value = 1;
+    if (appLocalization.getCurrentLocale(context).languageCode == 'vi') {
+      _value = 1;
+    } else {
+      _value = 2;
+    }
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        titlePadding: const EdgeInsets.all(0),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
+          ),
+          side: BorderSide(
+              color: Theme.of(context).primaryColorLight, width: 1.5),
+        ),
+        title: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                LocaleKeys.setting_languageSelectionTitle.translate(),
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                await appLocalization.setLocale(
+                  context,
+                  Locale("vi"),
+                );
+                context.pop();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Radio(
+                    value: 1,
+                    groupValue: _value,
+                    activeColor: Theme.of(context).primaryColorLight,
+                    onChanged: (int? value) async {
+                      await appLocalization.setLocale(
+                        context,
+                        Locale("vi"),
+                      );
+                      context.pop();
+                    },
+                  ),
+                  Text("Tiếng Việt"),
+                ],
+              ),
+            ),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                await appLocalization.setLocale(
+                  context,
+                  Locale("en"),
+                );
+                context.pop();
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Radio(
+                    value: 2,
+                    activeColor: Theme.of(context).primaryColorLight,
+                    groupValue: _value,
+                    onChanged: (value) async {
+                      await appLocalization.setLocale(
+                        context,
+                        Locale("en"),
+                      );
+                      context.pop();
+                    },
+                  ),
+                  Text("English"),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -182,13 +282,15 @@ class _SettingPageState extends State<SettingPage> {
   }) {
     return GestureDetector(
       onTap: onPress,
+      behavior: HitTestBehavior.opaque,
       child: Column(
         children: [
           SizedBox(
-            height: 10,
+            height: subtitle != null ? 10 : 18,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
                 flex: 3,
@@ -229,7 +331,7 @@ class _SettingPageState extends State<SettingPage> {
             ],
           ),
           SizedBox(
-            height: 12,
+            height: subtitle != null ? 12 : 20,
           ),
           DecoratedBox(
             decoration: BoxDecoration(

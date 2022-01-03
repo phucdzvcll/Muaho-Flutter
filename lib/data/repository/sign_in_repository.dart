@@ -100,9 +100,29 @@ class SignInRepositoryImpl implements SignInRepository {
   Future<Either<Failure, LoginEmailEntity>> loginEmail(
       String email, String password) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return SuccessValue(LoginEmailEntity());
+      UserCredential userCredential = await firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      IdTokenResult? token = await userCredential.user?.getIdTokenResult(true);
+      String? firebaseToken = token?.token;
+
+      Either<Failure, JwtEntity> result =
+          await getJwtToken(firebaseToken: firebaseToken.defaultEmpty());
+
+      if (result.isSuccess) {
+        //Di singleton JWT
+        var jwt = result.success.jwtToken;
+        var rJwt = result.success.refreshToken;
+        var userName = result.success.userName;
+        userStore
+          ..setToken(jwt)
+          ..setUseName(userName);
+        await userStore.save(userName: userName, refreshToken: rJwt);
+        return SuccessValue(LoginEmailEntity());
+      }
+      return FailValue(
+        LoginFailure(loginError: LoginError.defaultError),
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         return FailValue(
@@ -124,8 +144,10 @@ class SignInRepositoryImpl implements SignInRepository {
   Future<Either<Failure, RegisterEmailEntity>> registerEmail(
       String email, String password) async {
     try {
-      await firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      User? anonymousUser = firebaseAuth.currentUser;
+      await anonymousUser?.updateEmail(email);
+      await anonymousUser?.updatePassword(password);
+
       return SuccessValue(RegisterEmailEntity());
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {

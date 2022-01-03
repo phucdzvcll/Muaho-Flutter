@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/use_case/sign_in/register_email_use_case.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
@@ -202,10 +203,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: "Bạn đã có tài khoản",
+                        text: LocaleKeys.register_youDonHaveAccountQuestion
+                            .translate(),
                         style: theme.textTheme.bodyText2),
                     TextSpan(
-                      text: " đăng nhập ngay",
+                      text: LocaleKeys.register_loginNowLabel.translate(),
                       style: theme.textTheme.bodyText1?.copyWith(
                         color: theme.primaryColorLight,
                       ),
@@ -239,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Khuyến mãi cực hấp dẫn.",
+              LocaleKeys.register_sloganHeadline.translate(),
               style: theme.textTheme.headline3
                   ?.copyWith(color: theme.primaryColorLight, fontSize: 26),
             ),
@@ -247,7 +249,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "Đăng ký ngay!",
+              LocaleKeys.register_sloganSub.translate(),
               style: theme.textTheme.headline3
                   ?.copyWith(color: theme.primaryColorLight, fontSize: 22),
             ),
@@ -280,7 +282,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                   child: CircularProgressIndicator(),
                 )
               : Text(
-                  "Đăng kí",
+                  LocaleKeys.register_registerLabel.translate(),
                   style: Theme.of(ctx)
                       .textTheme
                       .headline1
@@ -331,9 +333,9 @@ class _RegisterScreenState extends State<RegisterScreen>
         case EmailValidated.Invalid:
           return null;
         case EmailValidated.Illegal:
-          return "Email không hợp lệ";
+          return LocaleKeys.register_emailNotInvalidMess.translate();
         case EmailValidated.Empty:
-          return "Email không được để trống";
+          return LocaleKeys.register_emailEmptyInvalidMess.translate();
       }
     } else {
       return null;
@@ -374,8 +376,8 @@ class _RegisterScreenState extends State<RegisterScreen>
             ),
           ),
           border: InputBorder.none,
-          label: Text("Email"),
-          hintText: "muaho@email.com",
+          label: Text(LocaleKeys.register_emailLabel.translate()),
+          hintText: LocaleKeys.register_emailHintText.translate(),
           labelStyle: theme.textTheme.headline3,
           contentPadding:
               const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),
@@ -443,11 +445,11 @@ class _RegisterScreenState extends State<RegisterScreen>
         case PasswordValidated.Invalid:
           return null;
         case PasswordValidated.Illegal:
-          return "Mật khẩu quá ngắn";
+          return LocaleKeys.register_passwordTooSortMess.translate();
         case PasswordValidated.Empty:
-          return "Mật khẩu không được để trống";
+          return LocaleKeys.register_passwordEmptyMess.translate();
         case PasswordValidated.Weak:
-          return "Mật khẩu quá yếu";
+          return LocaleKeys.register_passwordTooWeakMess.translate();
       }
     } else {
       return null;
@@ -489,8 +491,8 @@ class _RegisterScreenState extends State<RegisterScreen>
             ),
           ),
           border: InputBorder.none,
-          label: Text("Password"),
-          hintText: "password",
+          label: Text(LocaleKeys.register_passwordLabel.translate()),
+          hintText: LocaleKeys.register_passwordHintText.translate(),
           labelStyle: theme.textTheme.headline3,
           contentPadding:
               const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),
@@ -558,9 +560,9 @@ class _RegisterScreenState extends State<RegisterScreen>
         case ConfirmPasswordValidated.Correct:
           return null;
         case ConfirmPasswordValidated.Illegal:
-          return "Mật khẩu không trùng khớp";
+          return LocaleKeys.register_confirmPasswordNotMatchMess.translate();
         case ConfirmPasswordValidated.Empty:
-          return "Vui lòng xác nhận lại mật khẩu";
+          return LocaleKeys.register_requestConfirmPasswordMess.translate();
       }
     } else {
       return null;
@@ -607,8 +609,10 @@ class _RegisterScreenState extends State<RegisterScreen>
             ),
           ),
           border: InputBorder.none,
-          label: Text("Confirm password"),
-          hintText: "nhập lại password",
+          label: Text(
+            LocaleKeys.register_confirmPasswordLabel.translate(),
+          ),
+          hintText: LocaleKeys.register_confirmPasswordHintText.translate(),
           labelStyle: theme.textTheme.headline3,
           contentPadding:
               const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),

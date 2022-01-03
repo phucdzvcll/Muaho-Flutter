@@ -10,7 +10,7 @@
     "errorMsg": "Error",
     "hotShop": "Cửa hàng nổi bật",
     "hotItems": "Mặt hàng thường mua",
-    "searchHint" : "Bạn muốn mua gì?"
+    "searchHint": "Bạn muốn mua gì?"
   },
   "payment": {
     "total": "Tổng cộng",
@@ -25,7 +25,6 @@
     "missingDeliveryAddressMsg": "Bạn chưa có địa chỉ giao hàng",
     "successOrderMsg": "Hoàn tất đặt hàng",
     "screenTitle": "Thanh Toán"
-
   },
   "order": {
     "titleScreen": "Chọn Sản Phẩm",
@@ -43,7 +42,7 @@
     "viewAllCategory": "Xem tất cả",
     "shopCategory": "Danh mục cửa hàng",
     "newsTitle": "Mua gì hôm nay?",
-    "hiUser": "Hello"
+    "hiUser": "Xin chào"
   },
   "orderDetail": {
     "titleScreen": "Chi tiết đơn hàng",
@@ -82,21 +81,69 @@
     "totalAmountLabel": "{totalAmount} VND"
   },
   "createAddress": {
-    "creatingAddress" : "Đang tạo địa chỉ",
-    "creatingAddressTitle" : "Tạo địa chỉ....",
-    "inputAddressHint" : "Muaho sẽ giao hàng ở địa chỉ này!",
-    "inputAddressTitle" : "Địa chỉ giao hàng",
-    "inputPhoneHint" : "0909xxxxxx",
-    "inputPhoneTitle" : "Số điện thoại",
-    "createAddressButton" : "Thêm địa chỉ",
-    "errorCreateFail" : "Thất Bại",
-    "invalidPhone" : "Bạn chưa nhập số điện thoại",
-    "invalidAddress" : "Bạn chưa nhập địa chỉ"
+    "creatingAddress": "Đang tạo địa chỉ",
+    "creatingAddressTitle": "Tạo địa chỉ....",
+    "inputAddressHint": "Muaho sẽ giao hàng ở địa chỉ này!",
+    "inputAddressTitle": "Địa chỉ giao hàng",
+    "inputPhoneHint": "0909xxxxxx",
+    "inputPhoneTitle": "Số điện thoại",
+    "createAddressButton": "Thêm địa chỉ",
+    "errorCreateFail": "Thất Bại",
+    "invalidPhone": "Bạn chưa nhập số điện thoại",
+    "invalidAddress": "Bạn chưa nhập địa chỉ"
   },
   "addressList": {
-    "titleScreen" : "Chọn địa chỉ giao hàng",
-    "phone" : "SĐT: ",
-    "address" : "Địa chỉ: ",
-    "addAddressButton" : "Thêm Địa Chỉ"
+    "titleScreen": "Chọn địa chỉ giao hàng",
+    "phone": "SĐT: ",
+    "address": "Địa chỉ: ",
+    "addAddressButton": "Thêm Địa Chỉ"
+  },
+  "setting": {
+    "updateInfo": "Cập nhật thông tin",
+    "phoneNumberTitle": "Số điện thoại",
+    "addressTitle": "Địa chỉ",
+    "discountTitle": "Khuyến mãi",
+    "languageTitle": "Ngôn ngữ",
+    "logoutTitle": "Đăng xuất",
+    "changePasswordTitle": "Đổi mật khẩu",
+    "currentLanguageSubtitle": "Tiếng Việt",
+    "languageSelectionTitle": "Chọn ngôn ngữ",
+    "discountSubtitle": "Bạn có {discount} mã khuyến mãi"
+  },
+  "login": {
+    "successTitle": "Thành công",
+    "emailNotExistTitle": "Email không tồn tại",
+    "emailOrPassNotMatchMess": "Email hoặc mật khẩu không đúng",
+    "errorDefaultMess": "Có lỗi đang xảy ra, vui lòng thử lại",
+    "youDonNotHaveAccountQuestion": "Bạn chưa có tài khoản",
+    "registerNowLabel": " đăng kí ngay",
+    "sloganHeadline": "Nhanh chóng, tiện lợi, an toàn",
+    "sloganSub": "Uy tín luôn là tôn chỉ hàng đầu",
+    "requestLoginMess": "Đang đang nhập...",
+    "loginLabel": "Đăng nhập",
+    "emailLabel": "Email",
+    "emailHinText": "muaho@email.com",
+    "passwordLabel": "Mật khẩu",
+    "passwordHintText": "Mật khẩu"
+  },
+  "register": {
+    "youDonHaveAccountQuestion": "Bạn đã có tài khoản",
+    "loginNowLabel": " đăng nhập ngay",
+    "sloganHeadline": "Khuyến mãi cực hấp dẫn.",
+    "sloganSub": "Đăng ký ngay!",
+    "registerLabel": "Đăng kí",
+    "emailNotInvalidMess": "Email không hợp lệ",
+    "emailEmptyInvalidMess": "Email không được để trống",
+    "emailLabel": "Email",
+    "emailHintText": "muaho@email.com",
+    "passwordTooSortMess": "Mật khẩu quá ngắn",
+    "passwordEmptyMess": "Mật khẩu không được để trống",
+    "passwordTooWeakMess": "Mật khẩu quá yếu",
+    "passwordLabel": "Password",
+    "passwordHintText": "password",
+    "confirmPasswordNotMatchMess": "Mật khẩu không trùng khớp",
+    "requestConfirmPasswordMess": "Vui lòng xác nhận lại mật khẩu",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "confirmPasswordHintText": "nhập lại mật khẩu"
   }
 }

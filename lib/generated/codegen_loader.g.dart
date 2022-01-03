@@ -17,51 +17,51 @@ class CodegenLoader extends AssetLoader{
   static const Map<String,dynamic> en = {
   "searchShop": {
     "filterButton": "Bộ lọc",
-    "allShop": "Tất cả cửa hàng",
+    "allShop": "All stores",
     "errorMsg": "Error",
     "noDataMsg": "Nothing here",
-    "chooseShop": "Chọn Cửa Hàng"
+    "chooseShop": "Select store"
   },
   "hotSearch": {
     "errorMsg": "Error",
-    "hotShop": "Cửa hàng nổi bật",
-    "hotItems": "Mặt hàng thường mua",
-    "searchHint": "Bạn muốn mua gì?"
+    "hotShop": "Featured stores",
+    "hotItems": "Commonly purchased items",
+    "searchHint": "What do you want to buy?"
   },
   "payment": {
-    "total": "Tổng cộng",
-    "editAddress": "Chỉnh sửa",
-    "deliveryAddress": "Giao tới địa chỉ",
+    "total": "Total",
+    "editAddress": "Edit",
+    "deliveryAddress": "Deliver to the address",
     "noSaveOrder": "No",
     "yesSaveOrder": "Yes",
-    "saveOrderConfirmMsg": "Đơn hàng sẽ được gửi đi!",
-    "saveOrderConfirmTitle": "Thông báo",
-    "requestingCreateOrderMsg": "Đang tạo đơn hàng",
-    "requestingCreateOrderTitle": "Tạo đơn hàng....",
-    "missingDeliveryAddressMsg": "Bạn chưa có địa chỉ giao hàng",
-    "successOrderMsg": "Hoàn tất đặt hàng",
-    "screenTitle": "Thanh Toán"
+    "saveOrderConfirmMsg": "Your order will be dispatched!",
+    "saveOrderConfirmTitle": "Notify",
+    "requestingCreateOrderMsg": "Creating an order",
+    "requestingCreateOrderTitle": "Create order....",
+    "missingDeliveryAddressMsg": "You don't have a shipping address yet",
+    "successOrderMsg": "Complete your order",
+    "screenTitle": "Payment"
   },
   "order": {
-    "titleScreen": "Chọn Sản Phẩm",
+    "titleScreen": "Select product",
     "noDeleteItem": "No",
     "yesDeleteItem": "Yes",
-    "deleteItemMsg": "Sản phẩm này sẽ bị xóa khỏi giỏ hàng của bạn!",
-    "deleteItemTitle": "Xóa sản phẩm khỏi giỏ hàng?",
+    "deleteItemMsg": "This product will be removed from your cart!",
+    "deleteItemTitle": "Remove product from cart?",
     "noChangeShop": "No",
     "yesChangeShop": "Yes",
-    "changeShopMsg": "Những món bạn chọn ở cửa hàng trước sẽ bị xóa.",
-    "changeShopTitle": "Bạn có muốn đổi cửa hàng?",
+    "changeShopMsg": "The items you selected in the previous store will be deleted.",
+    "changeShopTitle": "Do you want to change stores?",
     "errorMsg": "Error"
   },
   "home": {
-    "viewAllCategory": "Xem tất cả",
-    "shopCategory": "Danh mục cửa hàng",
-    "newsTitle": "Mua gì hôm nay?",
+    "viewAllCategory": "View all",
+    "shopCategory": "Store directory",
+    "newsTitle": "What to buy today?",
     "hiUser": "Hello"
   },
   "orderDetail": {
-    "titleScreen": "Chi tiết đơn hàng",
+    "titleScreen": "Order details",
     "vndCurrency": "VND",
     "error": "Error"
   },
@@ -72,12 +72,12 @@ class CodegenLoader extends AssetLoader{
     "error": "Error"
   },
   "orderHistory": {
-    "deliveredTitle": "Đã giao",
-    "deliveringTitle": "Đang giao"
+    "deliveredTitle": "Delivered",
+    "deliveringTitle": "Delivering"
   },
   "cartOverView": {
     "totalAmountLabel": "{totalAmount} VND",
-    "productQuantityLabel": "{itemQuantity} đơn vị - {unitQuantity} sản phầm"
+    "productQuantityLabel": "{itemQuantity} unit - {unitQuantity} items"
   },
   "chatWithSupport": {
     "titleScreen": "Chat with supporters",
@@ -87,32 +87,80 @@ class CodegenLoader extends AssetLoader{
     "userName": "I"
   },
   "cart": {
-    "titleScreen": "Giỏ hàng",
+    "titleScreen": "Cart",
     "noDeleteItem": "No",
     "yesDeleteItem": "Yes",
-    "deleteItemMsg": "Sản phẩm này sẽ bị xóa khỏi giỏ hàng của bạn!",
-    "deleteItemTitle": "Xóa sản phẩm",
+    "deleteItemMsg": "This product will be removed from your cart!",
+    "deleteItemTitle": "Delete product",
     "errorMsg": "Error",
-    "noItemMsg": "Không có sản phẩm nào trong giỏ",
+    "noItemMsg": "There are no products in the cart",
     "totalAmountLabel": "{totalAmount} VND"
   },
   "createAddress": {
-    "creatingAddress": "Đang tạo địa chỉ",
-    "creatingAddressTitle": "Tạo địa chỉ....",
-    "inputAddressHint": "Muaho sẽ giao hàng ở địa chỉ này!",
-    "inputAddressTitle": "Địa chỉ giao hàng",
+    "creatingAddress": "Address creation",
+    "creatingAddressTitle": "Create an address....",
+    "inputAddressHint": "Muaho will deliver at this address!",
+    "inputAddressTitle": "Delivery address",
     "inputPhoneHint": "0909xxxxxx",
-    "inputPhoneTitle": "Số điện thoại",
-    "createAddressButton": "Thêm địa chỉ",
-    "errorCreateFail": "Thất Bại",
-    "invalidPhone": "Bạn chưa nhập số điện thoại",
-    "invalidAddress": "Bạn chưa nhập địa chỉ"
+    "inputPhoneTitle": "Phone number",
+    "createAddressButton": "Add address",
+    "errorCreateFail": "Failure",
+    "invalidPhone": "You did not enter a phone number",
+    "invalidAddress": "You do not enter an address"
   },
   "addressList": {
-    "titleScreen": "Chọn địa chỉ giao hàng",
+    "titleScreen": "Selected delivery address",
     "phone": "SĐT: ",
-    "address": "Địa chỉ: ",
-    "addAddressButton": "Thêm Địa Chỉ"
+    "address": "Address: ",
+    "addAddressButton": "Add address"
+  },
+  "setting": {
+    "updateInfo": "Update information",
+    "phoneNumberTitle": "Phone number",
+    "addressTitle": "Address",
+    "discountTitle": "Discount",
+    "languageTitle": "Language",
+    "logoutTitle": "Logout",
+    "changePasswordTitle": "Change password",
+    "currentLanguageSubtitle": "English",
+    "languageSelectionTitle": "Language Selection",
+    "discountSubtitle": "You have {discount} voucher"
+  },
+  "login": {
+    "successTitle": "Success",
+    "emailNotExistTitle": "Email does not exist",
+    "emailOrPassNotMatchMess": "Email or password is incorrect",
+    "errorDefaultMess": "An error is occurring, please try again",
+    "youDonNotHaveAccountQuestion": "Do not have an account",
+    "registerNowLabel": " register now",
+    "sloganHeadline": "Fast, convenient, safe",
+    "sloganSub": "Reputation is always the first principle",
+    "requestLoginMess": "Login...",
+    "loginLabel": "Login",
+    "emailLabel": "Email",
+    "emailHinText": "muaho@email.com",
+    "passwordLabel": "Password",
+    "passwordHintText": "Password"
+  },
+  "register": {
+    "youDonHaveAccountQuestion": "Do you have an account",
+    "loginNowLabel": " login now",
+    "sloganHeadline": "Very attractive promotion.",
+    "sloganSub": "Register Now!",
+    "registerLabel": "Register",
+    "emailNotInvalidMess": "Invalid email",
+    "emailEmptyInvalidMess": "Email cannot be blank",
+    "emailLabel": "Email",
+    "emailHintText": "muaho@email.com",
+    "passwordTooSortMess": "Password is too short",
+    "passwordEmptyMess": "Password can not be blank",
+    "passwordTooWeakMess": "Password is too weak",
+    "passwordLabel": "Password",
+    "passwordHintText": "password",
+    "confirmPasswordNotMatchMess": "Password does not match",
+    "requestConfirmPasswordMess": "Please confirm the password again",
+    "confirmPasswordLabel": "Confirm password",
+    "confirmPasswordHintText": "Enter the password"
   }
 };
 static const Map<String,dynamic> vi = {
@@ -159,7 +207,7 @@ static const Map<String,dynamic> vi = {
     "viewAllCategory": "Xem tất cả",
     "shopCategory": "Danh mục cửa hàng",
     "newsTitle": "Mua gì hôm nay?",
-    "hiUser": "Hello"
+    "hiUser": "Xin chào"
   },
   "orderDetail": {
     "titleScreen": "Chi tiết đơn hàng",
@@ -214,6 +262,54 @@ static const Map<String,dynamic> vi = {
     "phone": "SĐT: ",
     "address": "Địa chỉ: ",
     "addAddressButton": "Thêm Địa Chỉ"
+  },
+  "setting": {
+    "updateInfo": "Cập nhật thông tin",
+    "phoneNumberTitle": "Số điện thoại",
+    "addressTitle": "Địa chỉ",
+    "discountTitle": "Khuyến mãi",
+    "languageTitle": "Ngôn ngữ",
+    "logoutTitle": "Đăng xuất",
+    "changePasswordTitle": "Đổi mật khẩu",
+    "currentLanguageSubtitle": "Tiếng Việt",
+    "languageSelectionTitle": "Chọn ngôn ngữ",
+    "discountSubtitle": "Bạn có {discount} mã khuyến mãi"
+  },
+  "login": {
+    "successTitle": "Thành công",
+    "emailNotExistTitle": "Email không tồn tại",
+    "emailOrPassNotMatchMess": "Email hoặc mật khẩu không đúng",
+    "errorDefaultMess": "Có lỗi đang xảy ra, vui lòng thử lại",
+    "youDonNotHaveAccountQuestion": "Bạn chưa có tài khoản",
+    "registerNowLabel": " đăng kí ngay",
+    "sloganHeadline": "Nhanh chóng, tiện lợi, an toàn",
+    "sloganSub": "Uy tín luôn là tôn chỉ hàng đầu",
+    "requestLoginMess": "Đang đang nhập...",
+    "loginLabel": "Đăng nhập",
+    "emailLabel": "Email",
+    "emailHinText": "muaho@email.com",
+    "passwordLabel": "Mật khẩu",
+    "passwordHintText": "Mật khẩu"
+  },
+  "register": {
+    "youDonHaveAccountQuestion": "Bạn đã có tài khoản",
+    "loginNowLabel": " đăng nhập ngay",
+    "sloganHeadline": "Khuyến mãi cực hấp dẫn.",
+    "sloganSub": "Đăng ký ngay!",
+    "registerLabel": "Đăng kí",
+    "emailNotInvalidMess": "Email không hợp lệ",
+    "emailEmptyInvalidMess": "Email không được để trống",
+    "emailLabel": "Email",
+    "emailHintText": "muaho@email.com",
+    "passwordTooSortMess": "Mật khẩu quá ngắn",
+    "passwordEmptyMess": "Mật khẩu không được để trống",
+    "passwordTooWeakMess": "Mật khẩu quá yếu",
+    "passwordLabel": "Password",
+    "passwordHintText": "password",
+    "confirmPasswordNotMatchMess": "Mật khẩu không trùng khớp",
+    "requestConfirmPasswordMess": "Vui lòng xác nhận lại mật khẩu",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "confirmPasswordHintText": "nhập lại mật khẩu"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "vi": vi};

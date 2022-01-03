@@ -306,9 +306,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
+        _titleCategory(),
         _productCategoriesBuild(homePageModel, ctx),
         SizedBox(
           height: 72,
