@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:muaho/generated/assets.gen.dart';
 
 class ImageNetworkBuilder extends StatelessWidget {
   final String imgUrl;
@@ -19,16 +20,16 @@ class ImageNetworkBuilder extends StatelessWidget {
     return CachedNetworkImage(
       errorWidget: (context, e, s) {
         return isSquare
-            ? Image.asset('assets/images/placeholder_square.png')
-            : Image.asset('assets/images/placeholder.png');
+            ? Assets.images.placeholderSquare.image()
+            : Assets.images.placeholder.image();
       },
       fadeOutDuration: Duration(milliseconds: 400),
       fadeInDuration: Duration(milliseconds: 400),
       width: size.width,
       height: size.height,
       placeholder: (context, url) => isSquare
-          ? Image.asset('assets/images/placeholder_square.png')
-          : Image.asset('assets/images/placeholder.png'),
+          ? Assets.images.placeholderSquare.image()
+          : Assets.images.placeholder.image(),
       imageUrl: imgUrl,
       fit: BoxFit.fill,
     );

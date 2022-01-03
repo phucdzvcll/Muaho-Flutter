@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
@@ -124,8 +125,7 @@ class _OrderScreenState extends State<OrderScreen>
             child: Swing(
               delay: Duration(milliseconds: 1400),
               duration: Duration(milliseconds: 1500),
-              child: SvgPicture.asset(
-                "assets/images/shopping_cart_checkout_black_24dp.svg",
+              child: Assets.images.shoppingCartCheckoutBlack24dp.svg(
                 width: 40,
                 height: 40,
                 color: Theme.of(ctx).primaryColorLight,

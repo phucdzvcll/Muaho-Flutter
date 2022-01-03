@@ -28,7 +28,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
       color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBarComponent.titleOnly(title: LocaleKeys.searchShop_chooseShop),
+          appBar: AppBarComponent.titleOnly(title: LocaleKeys.searchShop_chooseShop.translate()),
           body: Container(
             margin: EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
@@ -63,14 +63,14 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
     } else if (state is SearchShopSuccess) {
       if (state.shops.isEmpty) {
         return Center(
-          child: Text(LocaleKeys.searchShop_noDataMsg),
+          child: Text(LocaleKeys.searchShop_noDataMsg.translate()),
         );
       } else {
         return _requestSearchShopSuccessBuilder(state, ctx);
       }
     } else {
       return Center(
-        child: Text(LocaleKeys.searchShop_errorMsg),
+        child: Text(LocaleKeys.searchShop_errorMsg.translate()),
       );
     }
   }
@@ -89,7 +89,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      LocaleKeys.searchShop_allShop,
+                      LocaleKeys.searchShop_allShop.translate(),
                       textAlign: TextAlign.end,
                       style: Theme.of(context)
                           .textTheme
@@ -123,7 +123,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                                   )),
                           child: Row(
                             children: [
-                              Text(LocaleKeys.searchShop_filterButton,
+                              Text(LocaleKeys.searchShop_filterButton.translate(),
                                   style: Theme.of(context).textTheme.subtitle2),
                               Padding(
                                 padding: const EdgeInsets.only(left: 4.0),
