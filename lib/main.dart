@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CartUpdateBloc>(
-      create: (context) => getIt(),
+      create: (ctx) => getIt(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

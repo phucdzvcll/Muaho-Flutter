@@ -24,6 +24,10 @@ class $AssetsImagesGen {
   AssetGenImage get flashScreenHigtQuality =>
       const AssetGenImage('assets/images/flash_screen_higt_quality.png');
 
+  /// File path: assets/images/logo_square.png
+  AssetGenImage get logoSquare =>
+      const AssetGenImage('assets/images/logo_square.png');
+
   /// File path: assets/images/placeholder.png
   AssetGenImage get placeholder =>
       const AssetGenImage('assets/images/placeholder.png');

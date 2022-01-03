@@ -17,6 +17,7 @@ export 'models/search/search_shop/seach_shop.dart';
 export 'models/shop/shop_product_entity.dart';
 export 'models/sign_in/jwt_entity.dart';
 export 'models/sign_in/login_email_entity.dart';
+export 'models/sign_in/register_email_entity.dart';
 export 'models/sign_in/sign_in_model.dart';
 //repository
 export 'repository/address_infor_repository.dart';
@@ -39,3 +40,4 @@ export 'use_case/search/get_list_shop_by_search.dart';
 export 'use_case/shop/get_shop_product_use_case.dart';
 export 'use_case/sign_in/get_jwt_token_use_case.dart';
 export 'use_case/sign_in/login_email_use_case.dart';
+export 'use_case/sign_in/register_email_use_case.dart';

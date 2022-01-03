@@ -5,6 +5,7 @@ import 'package:muaho/presentation/address/create_address/bloc/create_address_bl
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/login/bloc/login_bloc.dart';
+import 'package:muaho/presentation/register/bloc/register_bloc.dart';
 
 import 'cart/bloc/cart_bloc.dart';
 import 'chat-support/bloc/chat_bloc.dart';
@@ -78,5 +79,10 @@ void presentationDiConfig(GetIt injector) {
 
   injector.registerFactory(
     () => LoginBloc(loginEmailUseCase: injector()),
+  );
+  injector.registerFactory(
+    () => RegisterBloc(
+      registerEmailUseCase: injector(),
+    ),
   );
 }

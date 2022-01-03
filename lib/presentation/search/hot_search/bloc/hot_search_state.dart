@@ -18,7 +18,6 @@ class HotSearchSuccessState extends HotSearchState {
 }
 
 class HotSearchErrorState extends HotSearchState {
-
   HotSearchErrorState();
 
   @override

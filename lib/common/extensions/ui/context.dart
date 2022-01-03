@@ -38,4 +38,15 @@ extension ContextExtension on BuildContext {
       ),
     );
   }
+
+  void pop() {
+    Navigator.pop(this);
+  }
+
+  void popUtil(String routerName) {
+    Navigator.popUntil(
+      this,
+      ModalRoute.withName(routerName),
+    );
+  }
 }

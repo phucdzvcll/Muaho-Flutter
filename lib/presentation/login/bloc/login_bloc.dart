@@ -20,16 +20,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         email = event.value;
         if (event.value.isEmpty) {
           emit(
-            ValidatedEmailState(emailValidated: ValidatedState.Empty),
+            ValidatedEmailState(emailValidated: EmailValidatedState.Empty),
           );
         } else {
           if (emailValid(event.value)) {
             emit(
-              ValidatedEmailState(emailValidated: ValidatedState.Invalid),
+              ValidatedEmailState(emailValidated: EmailValidatedState.Invalid),
             );
           } else {
             emit(
-              ValidatedEmailState(emailValidated: ValidatedState.Illegal),
+              ValidatedEmailState(emailValidated: EmailValidatedState.Illegal),
             );
           }
         }
@@ -98,17 +98,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (password.isEmpty) {
       emit(
         ValidatedPasswordState(
-            validatedState: ValidatedState.Empty, obscureText: obscureText),
+            validatedState: PasswordValidatedState.Empty,
+            obscureText: obscureText),
       );
     } else if (password.length < 6) {
       emit(
         ValidatedPasswordState(
-            validatedState: ValidatedState.Illegal, obscureText: obscureText),
+            validatedState: PasswordValidatedState.Illegal,
+            obscureText: obscureText),
       );
     } else {
       emit(
         ValidatedPasswordState(
-            validatedState: ValidatedState.Invalid, obscureText: obscureText),
+            validatedState: PasswordValidatedState.Invalid,
+            obscureText: obscureText),
       );
     }
   }

@@ -8,4 +8,7 @@ abstract class SignInRepository {
 
   Future<Either<Failure, LoginEmailEntity>> loginEmail(
       String email, String password);
+
+  Future<Either<Failure, RegisterEmailEntity>> registerEmail(
+      String email, String password);
 }

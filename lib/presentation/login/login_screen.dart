@@ -196,7 +196,8 @@ class LoginScreen extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
+            await getIt.get<AppLocalization>().setLocale(context, Locale("en"));
             if (!(state is RequestingLoginState)) {
               BlocProvider.of<LoginBloc>(ctx).add(
                 PressLoginBtnEvent(),
@@ -247,34 +248,34 @@ class LoginScreen extends StatelessWidget {
 
   Widget _iconEmailValidatedBuilder(ValidatedEmailState state) {
     switch (state.emailValidated) {
-      case ValidatedState.Invalid:
+      case EmailValidatedState.Invalid:
         return Icon(
           Icons.check_circle,
           color: Colors.green,
         );
-      case ValidatedState.Illegal:
+      case EmailValidatedState.Illegal:
         return Icon(
           Icons.do_not_disturb_on,
           color: Colors.red,
         );
-      case ValidatedState.Empty:
+      case EmailValidatedState.Empty:
         return SizedBox.shrink();
     }
   }
 
   Widget _iconPasswordValidatedBuilder(ValidatedPasswordState state) {
     switch (state.validatedState) {
-      case ValidatedState.Invalid:
+      case PasswordValidatedState.Invalid:
         return Icon(
           Icons.check_circle,
           color: Colors.green,
         );
-      case ValidatedState.Illegal:
+      case PasswordValidatedState.Illegal:
         return Icon(
           Icons.do_not_disturb_on,
           color: Colors.red,
         );
-      case ValidatedState.Empty:
+      case PasswordValidatedState.Empty:
         return SizedBox.shrink();
     }
   }
@@ -294,7 +295,7 @@ class LoginScreen extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: Visibility(
             visible: state is ValidatedEmailState &&
-                !(state.emailValidated == ValidatedState.Empty),
+                !(state.emailValidated == EmailValidatedState.Empty),
             child: GestureDetector(
               onTap: () {
                 _emailController.clear();
@@ -356,7 +357,7 @@ class LoginScreen extends StatelessWidget {
           decoration: InputDecoration(
             suffixIcon: Visibility(
               visible: state is ValidatedPasswordState &&
-                  !(state.validatedState == ValidatedState.Empty),
+                  !(state.validatedState == EmailValidatedState.Empty),
               child: GestureDetector(
                 onTap: () {
                   BlocProvider.of<LoginBloc>(ctx).add(

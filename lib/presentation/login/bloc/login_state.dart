@@ -10,7 +10,7 @@ class LoginInitial extends LoginState {
 }
 
 class ValidatedEmailState implements LoginState {
-  final ValidatedState emailValidated;
+  final EmailValidatedState emailValidated;
 
   const ValidatedEmailState({
     required this.emailValidated,
@@ -24,7 +24,7 @@ class ValidatedEmailState implements LoginState {
 }
 
 class ValidatedPasswordState implements LoginState {
-  final ValidatedState validatedState;
+  final PasswordValidatedState validatedState;
   final bool obscureText;
 
   const ValidatedPasswordState({
@@ -72,7 +72,13 @@ class RequestingLoginState extends LoginState {
   List<Object?> get props => [];
 }
 
-enum ValidatedState {
+enum PasswordValidatedState {
+  Invalid,
+  Illegal,
+  Empty,
+}
+
+enum EmailValidatedState {
   Invalid,
   Illegal,
   Empty,

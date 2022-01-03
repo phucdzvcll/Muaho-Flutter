@@ -1,9 +1,14 @@
-import 'dart:developer';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/common.dart';
+import 'package:muaho/domain/use_case/sign_in/register_email_use_case.dart';
+import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
+import 'package:muaho/presentation/home/home_screen.dart';
+
+import 'bloc/register_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -14,15 +19,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _emailAnimationController;
   late AnimationController _passwordAnimationController;
   late AnimationController _passwordConfirmAnimationController;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
 
-  bool obscureText = true;
-  bool _isShowVisibilityPasswordIcon = false;
-  bool _isShowVisibilityConfirmPasswordIcon = false;
-  bool _isShowRemoveEmailInputIcon = false;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _confirmPasswordController =
@@ -49,20 +52,65 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white,
-        child: SafeArea(
-          child: Scaffold(
-            appBar: AppBarComponent(
-              widget: SizedBox.shrink(),
+    return BlocProvider<RegisterBloc>(
+      create: (context) => getIt(),
+      child: Container(
+          color: Colors.white,
+          child: SafeArea(
+            child: Scaffold(
+              appBar: AppBarComponent(
+                widget: SizedBox.shrink(),
+              ),
+              backgroundColor: Colors.white,
+              body: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Builder(builder: (ctx) {
+                  return BlocListener<RegisterBloc, RegisterState>(
+                    listener: (ctx, state) {
+                      if (state is RegisterSubmitState) {
+                        switch (state.registerSubmit) {
+                          case RegisterSubmit.requestRegister:
+                            break;
+                          case RegisterSubmit.emailIllegal:
+                            _emailAnimationController.reset();
+                            _emailAnimationController.forward();
+                            break;
+                          case RegisterSubmit.passwordIllegal:
+                            _passwordAnimationController.reset();
+                            _passwordAnimationController.forward();
+                            break;
+                          case RegisterSubmit.confirmPasswordIllegal:
+                            _passwordConfirmAnimationController.reset();
+                            _passwordConfirmAnimationController.forward();
+                            break;
+                          case RegisterSubmit.success:
+                            context.popUtil(HomeScreen.routeName);
+                            break;
+                        }
+                      } else if (state is RegisterSubmitErrorState) {
+                        switch (state.registerError) {
+                          case RegisterError.weakPassword:
+                            context
+                                .showSnackBar(RegisterError.weakPassword.name);
+                            break;
+                          case RegisterError.emailAlreadyInUse:
+                            context.showSnackBar(
+                                RegisterError.emailAlreadyInUse.name);
+                            break;
+                          case RegisterError.defaultError:
+                            context
+                                .showSnackBar(RegisterError.defaultError.name);
+                            break;
+                        }
+                      }
+                    },
+                    child: _loginBuilder(ctx),
+                  );
+                }),
+              ),
             ),
-            backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: _loginBuilder(context),
-            ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget _loginBuilder(BuildContext ctx) {
@@ -86,18 +134,49 @@ class _RegisterScreenState extends State<RegisterScreen>
               manualTrigger: true,
               delay: Duration(milliseconds: 900),
               duration: Duration(milliseconds: 300),
-              child: _emailInput(theme),
+              child: BlocBuilder<RegisterBloc, RegisterState>(
+                buildWhen: (pre, curr) => curr is EmailValidatedState,
+                builder: (ctx, state) {
+                  return _emailInput(theme, state, ctx);
+                },
+              ),
             ),
             delay: Duration(milliseconds: 200),
             duration: Duration(milliseconds: 700),
           ),
           FadeInRight(
-            child: _passwordInput(theme),
+            child: Flash(
+              controller: (c) {
+                _passwordAnimationController = c;
+              },
+              manualTrigger: true,
+              delay: Duration(milliseconds: 900),
+              duration: Duration(milliseconds: 300),
+              child: BlocBuilder<RegisterBloc, RegisterState>(
+                buildWhen: (pre, curr) => curr is PasswordValidatedState,
+                builder: (ctx, state) {
+                  return _passwordInput(theme, state, ctx);
+                },
+              ),
+            ),
             delay: Duration(milliseconds: 200),
             duration: Duration(milliseconds: 700),
           ),
           FadeInLeft(
-            child: _confirmPasswordInput(theme),
+            child: Flash(
+              controller: (c) {
+                _passwordConfirmAnimationController = c;
+              },
+              manualTrigger: true,
+              delay: Duration(milliseconds: 900),
+              duration: Duration(milliseconds: 300),
+              child: BlocBuilder<RegisterBloc, RegisterState>(
+                buildWhen: (pre, curr) => curr is ConfirmPasswordValidatedState,
+                builder: (ctx, state) {
+                  return _confirmPasswordInput(theme, state, ctx);
+                },
+              ),
+            ),
             delay: Duration(milliseconds: 200),
             duration: Duration(milliseconds: 700),
           ),
@@ -106,7 +185,14 @@ class _RegisterScreenState extends State<RegisterScreen>
           ),
           FadeInUp(
             duration: Duration(milliseconds: 900),
-            child: _doneBtn(ctx),
+            child: BlocBuilder<RegisterBloc, RegisterState>(
+              buildWhen: (pre, curr) =>
+                  curr is RegisterSubmitState ||
+                  curr is RegisterSubmitErrorState,
+              builder: (context, state) {
+                return _doneBtn(context, state);
+              },
+            ),
           ),
           FadeInUp(
             duration: Duration(milliseconds: 900),
@@ -171,24 +257,35 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
   }
 
-  Widget _doneBtn(BuildContext ctx) {
+  Widget _doneBtn(BuildContext ctx, RegisterState state) {
     return GestureDetector(
       onTap: () {
-        _emailAnimationController.reset();
-        _emailAnimationController.forward();
+        if (!(state is RegisterSubmitState &&
+            state.registerSubmit == RegisterSubmit.requestRegister)) {
+          BlocProvider.of<RegisterBloc>(ctx).add(
+            PressSubmitRegisterEvent(),
+          );
+        }
       },
       child: Container(
         margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(16),
         width: double.infinity,
         child: Center(
-          child: Text(
-            "Đăng kí",
-            style: Theme.of(ctx)
-                .textTheme
-                .headline1
-                ?.copyWith(color: Colors.white),
-          ),
+          child: (state is RegisterSubmitState &&
+                  state.registerSubmit == RegisterSubmit.requestRegister)
+              ? SizedBox(
+                  width: 27,
+                  height: 27,
+                  child: CircularProgressIndicator(),
+                )
+              : Text(
+                  "Đăng kí",
+                  style: Theme.of(ctx)
+                      .textTheme
+                      .headline1
+                      ?.copyWith(color: Colors.white),
+                ),
         ),
         decoration: BoxDecoration(
           color: Theme.of(ctx).primaryColorLight,
@@ -198,7 +295,52 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
   }
 
-  Widget _emailInput(ThemeData theme) {
+  Color _colorsEmailBorderBuilder(RegisterState state) {
+    if (state is EmailValidatedState) {
+      switch (state.emailValidatedState) {
+        case EmailValidated.Invalid:
+          return Colors.green;
+        case EmailValidated.Illegal:
+          return Colors.red;
+        case EmailValidated.Empty:
+          return Colors.blue;
+      }
+    } else {
+      return Colors.blue;
+    }
+  }
+
+  Color _colorsEmailEnableBorderBuilder(RegisterState state) {
+    if (state is EmailValidatedState) {
+      switch (state.emailValidatedState) {
+        case EmailValidated.Invalid:
+          return Colors.green[200] ?? Colors.green;
+        case EmailValidated.Illegal:
+          return Colors.red[300] ?? Colors.red;
+        case EmailValidated.Empty:
+          return Theme.of(context).backgroundColor;
+      }
+    } else {
+      return Theme.of(context).backgroundColor;
+    }
+  }
+
+  String? _errorEmailWarning(RegisterState state) {
+    if (state is EmailValidatedState) {
+      switch (state.emailValidatedState) {
+        case EmailValidated.Invalid:
+          return null;
+        case EmailValidated.Illegal:
+          return "Email không hợp lệ";
+        case EmailValidated.Empty:
+          return "Email không được để trống";
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Widget _emailInput(ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -207,47 +349,113 @@ class _RegisterScreenState extends State<RegisterScreen>
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       width: double.infinity,
       child: TextFormField(
-        onTap: () {
-          log("Tab");
-        },
-        validator: (value) {
-          if (value != null) {
-            return 'Please enter some text';
-          } else {
-            return null;
-          }
+        controller: _emailController,
+        onChanged: (value) {
+          BlocProvider.of<RegisterBloc>(ctx).add(
+            TextingEmailEvent(email: value),
+          );
         },
         decoration: InputDecoration(
-            border: InputBorder.none,
-            label: Text("Email"),
-            hintText: "muaho@email.com",
-            labelStyle: theme.textTheme.headline3,
-            contentPadding:
-                const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black87,
-                width: 1,
+          errorText: _errorEmailWarning(state),
+          suffixIcon: Visibility(
+            visible: state is EmailValidatedState &&
+                !(state.emailValidatedState == EmailValidated.Empty),
+            child: GestureDetector(
+              onTap: () {
+                _emailController.clear();
+                BlocProvider.of<RegisterBloc>(ctx).add(
+                  TextingEmailEvent(email: ""),
+                );
+              },
+              child: Icon(
+                Icons.highlight_off_outlined,
+                color: Colors.grey[600] ?? Colors.grey,
               ),
             ),
-            focusColor: Colors.deepOrange,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.green,
-                width: 1.0,
-              ),
+          ),
+          border: InputBorder.none,
+          label: Text("Email"),
+          hintText: "muaho@email.com",
+          labelStyle: theme.textTheme.headline3,
+          contentPadding:
+              const EdgeInsets.only(right: 16, left: 8, top: 20, bottom: 20),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: _colorsEmailBorderBuilder(state)),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
             ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.red,
-                width: 1,
-              ),
-            )),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          focusColor: _colorsEmailBorderBuilder(state),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: _colorsEmailEnableBorderBuilder(state),
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _passwordInput(ThemeData theme) {
+  Color _colorsPasswordBorderBuilder(RegisterState state) {
+    if (state is PasswordValidatedState) {
+      switch (state.passwordValidated) {
+        case PasswordValidated.Invalid:
+          return Colors.green;
+        case PasswordValidated.Illegal:
+          return Colors.red;
+        case PasswordValidated.Empty:
+          return Colors.blue;
+        case PasswordValidated.Weak:
+          return Colors.red;
+      }
+    } else {
+      return Colors.blue;
+    }
+  }
+
+  Color _colorsPasswordEnableBorderBuilder(RegisterState state) {
+    if (state is PasswordValidatedState) {
+      switch (state.passwordValidated) {
+        case PasswordValidated.Invalid:
+          return Colors.green[200] ?? Colors.green;
+        case PasswordValidated.Illegal:
+          return Colors.red[300] ?? Colors.red;
+        case PasswordValidated.Empty:
+          return Theme.of(context).backgroundColor;
+        case PasswordValidated.Weak:
+          return Colors.red[300] ?? Colors.red;
+      }
+    } else {
+      return Theme.of(context).backgroundColor;
+    }
+  }
+
+  String? _errorPasswordWarning(RegisterState state) {
+    if (state is PasswordValidatedState) {
+      switch (state.passwordValidated) {
+        case PasswordValidated.Invalid:
+          return null;
+        case PasswordValidated.Illegal:
+          return "Mật khẩu quá ngắn";
+        case PasswordValidated.Empty:
+          return "Mật khẩu không được để trống";
+        case PasswordValidated.Weak:
+          return "Mật khẩu quá yếu";
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Widget _passwordInput(
+      ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
@@ -255,38 +463,28 @@ class _RegisterScreenState extends State<RegisterScreen>
       width: double.infinity,
       child: TextFormField(
         controller: _passwordController,
+        obscureText: _obscurePassword,
         onChanged: (value) {
-          if (value.isNotEmpty) {
-            if (!_isShowVisibilityPasswordIcon) {
-              setState(() {
-                _isShowVisibilityPasswordIcon = true;
-              });
-            }
-          } else {
-            setState(() {
-              _isShowVisibilityPasswordIcon = false;
-            });
-          }
+          BlocProvider.of<RegisterBloc>(ctx).add(
+            TextingPasswordEvent(password: value),
+          );
         },
-        textAlignVertical: TextAlignVertical.center,
-        keyboardType: TextInputType.visiblePassword,
-        obscureText: obscureText,
-        enableSuggestions: false,
-        autocorrect: false,
         decoration: InputDecoration(
+          errorText: _errorPasswordWarning(state),
           suffixIcon: Visibility(
-            visible: _isShowVisibilityPasswordIcon,
+            visible: state is PasswordValidatedState &&
+                state.passwordValidated != PasswordValidated.Empty,
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  obscureText = !obscureText;
+                  _obscurePassword = !(_obscurePassword);
                 });
               },
               child: Icon(
-                obscureText
-                    ? Icons.visibility_rounded
-                    : Icons.visibility_off_rounded,
-                color: Colors.grey,
+                _obscurePassword
+                    ? Icons.remove_red_eye_outlined
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey[600] ?? Colors.grey,
               ),
             ),
           ),
@@ -299,13 +497,23 @@ class _RegisterScreenState extends State<RegisterScreen>
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: theme.primaryColorLight,
+              color: _colorsPasswordBorderBuilder(state),
               width: 1,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: theme.backgroundColor,
+              color: _colorsPasswordEnableBorderBuilder(state),
               width: 1.0,
             ),
           ),
@@ -314,7 +522,53 @@ class _RegisterScreenState extends State<RegisterScreen>
     );
   }
 
-  Widget _confirmPasswordInput(ThemeData theme) {
+  Color _colorsConfirmPasswordBorderBuilder(RegisterState state) {
+    if (state is ConfirmPasswordValidatedState) {
+      switch (state.confirmPasswordValidated) {
+        case ConfirmPasswordValidated.Correct:
+          return Colors.green;
+        case ConfirmPasswordValidated.Illegal:
+          return Colors.red;
+        case ConfirmPasswordValidated.Empty:
+          return Colors.blue;
+      }
+    } else {
+      return Colors.blue;
+    }
+  }
+
+  Color _colorsConfirmPasswordEnableBorderBuilder(RegisterState state) {
+    if (state is ConfirmPasswordValidatedState) {
+      switch (state.confirmPasswordValidated) {
+        case ConfirmPasswordValidated.Correct:
+          return Colors.green[200] ?? Colors.green;
+        case ConfirmPasswordValidated.Illegal:
+          return Colors.red[300] ?? Colors.red;
+        case ConfirmPasswordValidated.Empty:
+          return Theme.of(context).backgroundColor;
+      }
+    } else {
+      return Theme.of(context).backgroundColor;
+    }
+  }
+
+  String? _errorConfirmPasswordWarning(RegisterState state) {
+    if (state is ConfirmPasswordValidatedState) {
+      switch (state.confirmPasswordValidated) {
+        case ConfirmPasswordValidated.Correct:
+          return null;
+        case ConfirmPasswordValidated.Illegal:
+          return "Mật khẩu không trùng khớp";
+        case ConfirmPasswordValidated.Empty:
+          return "Vui lòng xác nhận lại mật khẩu";
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Widget _confirmPasswordInput(
+      ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
@@ -323,37 +577,32 @@ class _RegisterScreenState extends State<RegisterScreen>
       child: TextFormField(
         controller: _confirmPasswordController,
         onChanged: (value) {
-          if (value.isNotEmpty) {
-            if (!_isShowVisibilityConfirmPasswordIcon) {
-              setState(() {
-                _isShowVisibilityConfirmPasswordIcon = true;
-              });
-            }
-          } else {
-            setState(() {
-              _isShowVisibilityConfirmPasswordIcon = false;
-            });
-          }
+          BlocProvider.of<RegisterBloc>(ctx).add(
+            TextingConfirmPasswordEvent(passwordConfirm: value),
+          );
         },
         textAlignVertical: TextAlignVertical.center,
         keyboardType: TextInputType.visiblePassword,
-        obscureText: obscureText,
+        obscureText: _obscureConfirmPassword,
         enableSuggestions: false,
         autocorrect: false,
         decoration: InputDecoration(
+          errorText: _errorConfirmPasswordWarning(state),
           suffixIcon: Visibility(
-            visible: _isShowVisibilityConfirmPasswordIcon,
+            visible: state is ConfirmPasswordValidatedState &&
+                state.confirmPasswordValidated !=
+                    ConfirmPasswordValidated.Empty,
             child: GestureDetector(
               onTap: () {
                 setState(() {
-                  obscureText = !obscureText;
+                  _obscureConfirmPassword = !(_obscureConfirmPassword);
                 });
               },
               child: Icon(
-                obscureText
-                    ? Icons.visibility_rounded
-                    : Icons.visibility_off_rounded,
-                color: Colors.grey,
+                _obscureConfirmPassword
+                    ? Icons.remove_red_eye_outlined
+                    : Icons.visibility_off_outlined,
+                color: Colors.grey[600] ?? Colors.grey,
               ),
             ),
           ),
@@ -366,13 +615,23 @@ class _RegisterScreenState extends State<RegisterScreen>
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: theme.primaryColorLight,
+              color: _colorsConfirmPasswordBorderBuilder(state),
               width: 1,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.red,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: theme.backgroundColor,
+              color: _colorsConfirmPasswordEnableBorderBuilder(state),
               width: 1.0,
             ),
           ),

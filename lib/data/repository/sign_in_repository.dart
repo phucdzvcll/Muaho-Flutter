@@ -119,4 +119,32 @@ class SignInRepositoryImpl implements SignInRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, RegisterEmailEntity>> registerEmail(
+      String email, String password) async {
+    try {
+      await firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return SuccessValue(RegisterEmailEntity());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "weak-password") {
+        return FailValue(
+          RegisterFailure(registerError: RegisterError.weakPassword),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        return FailValue(
+          RegisterFailure(registerError: RegisterError.emailAlreadyInUse),
+        );
+      } else {
+        return FailValue(
+          RegisterFailure(registerError: RegisterError.defaultError),
+        );
+      }
+    } on Exception catch (e) {
+      return FailValue(
+        UnCatchError(exception: e),
+      );
+    }
+  }
 }
