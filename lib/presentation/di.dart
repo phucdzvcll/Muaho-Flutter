@@ -29,17 +29,26 @@ void presentationDiConfig(GetIt injector) {
       .registerFactory(() => HotSearchBloc(getHotSearchUseCase: injector()));
 
   injector.registerFactoryParam<PaymentBloc, CartUpdateBloc, void>(
-      (cartUpdateBloc, _) => PaymentBloc(
-          cartUpdateBloc: cartUpdateBloc, createOrderUseCase: injector()));
+    (cartUpdateBloc, _) => PaymentBloc(
+      cartUpdateBloc: cartUpdateBloc,
+      createOrderUseCase: injector(),
+      appEventBus: injector(),
+    ),
+  );
 
   injector.registerFactoryParam<OrderBloc, CartUpdateBloc, void>(
       (cartUpdateBloc, _) => OrderBloc(
           getShopProductUseCase: injector(), cartUpdateBloc: cartUpdateBloc));
 
-  injector.registerFactory(() => HomePageBloc(
-        bannerUseCase: injector(),
-        useCaseProductCategories: injector(),
-      ));
+  injector.registerFactory(
+    () => HomePageBloc(
+      bannerUseCase: injector(),
+      useCaseProductCategories: injector(),
+      appEventBus: injector(),
+      userStore: injector(),
+      eventBus: injector(),
+    ),
+  );
 
   injector.registerFactory<CartUpdateBloc>(() => CartUpdateBloc(
         cartStore: injector(),
@@ -53,8 +62,10 @@ void presentationDiConfig(GetIt injector) {
   injector.registerFactory(
       () => OrderDetailBloc(getOrderDetailUseCase: injector()));
 
-  injector.registerFactory(() =>
-      OrderHistoryDeliveringBloc(getOrderHistoryDeliveryUseCase: injector()));
+  injector.registerFactory(
+    () => OrderHistoryDeliveringBloc(
+        getOrderHistoryDeliveryUseCase: injector(), appEventBus: injector()),
+  );
 
   injector.registerFactory(() =>
       OrderHistoryCompleteBloc(getOrderHistoryCompleteUseCase: injector()));
@@ -78,11 +89,15 @@ void presentationDiConfig(GetIt injector) {
       () => DeeplinkHandleBloc(appLinks: injector())..add(InitDeeplinkEvent()));
 
   injector.registerFactory(
-    () => LoginBloc(loginEmailUseCase: injector()),
+    () => LoginBloc(
+      loginEmailUseCase: injector(),
+      appEventBus: injector(),
+    ),
   );
   injector.registerFactory(
     () => RegisterBloc(
       registerEmailUseCase: injector(),
+      appEventBus: injector(),
     ),
   );
 }

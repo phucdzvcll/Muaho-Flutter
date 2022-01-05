@@ -26,3 +26,14 @@ class HomePageSuccessState extends HomePageState {
   @override
   List<Object?> get props => [homePageModel];
 }
+
+class UserNameState extends HomePageState {
+  final String userName;
+
+  @override
+  List<Object?> get props => [userName];
+
+  UserNameState({
+    required this.userName,
+  });
+}

@@ -3,16 +3,35 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/presentation/home/home_page/model/home_page_model.dart';
+import 'package:muaho/presentation/login/bloc/login_bloc.dart';
 
 part 'home_page_event.dart';
 part 'home_page_state.dart';
 
+class _GetUserNameEvent extends HomePageEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
+  final GetListProductCategoriesHomeUseCase useCaseProductCategories;
+  final GetListBannerUseCase bannerUseCase;
+  List<ProductCategoryHomeEntity> _productCategories = [];
+  List<SlideBannerEntity> _slideBannerEntity = [];
+  final AppEventBus appEventBus;
+  final UserStore userStore;
+  final AppEventBus eventBus;
+  StreamSubscription<LoginSuccessEventBus>? listen;
+
   HomePageBloc({
     required this.useCaseProductCategories,
     required this.bannerUseCase,
+    required this.appEventBus,
+    required this.userStore,
+    required this.eventBus,
   }) : super(HomePageInitial()) {
     on<HomePageRequestEvent>((event, emit) async {
       await _handleHomePageRequestEvent(emit);
@@ -27,13 +46,16 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
 
       emit(homePageSuccessState);
     });
+
+    on<_GetUserNameEvent>((event, emit) async {
+      var userName = await userStore.getUserName();
+      emit(UserNameState(userName: userName.defaultEmpty()));
+    });
+
+    listen = eventBus.on<LoginSuccessEventBus>().listen((event) async {
+      this.add(_GetUserNameEvent());
+    });
   }
-
-
-  final GetListProductCategoriesHomeUseCase useCaseProductCategories;
-  final GetListBannerUseCase bannerUseCase;
-  List<ProductCategoryHomeEntity> _productCategories = [];
-  List<SlideBannerEntity> _slideBannerEntity = [];
 
   Future _handleHomePageRequestEvent(Emitter<HomePageState> emit) async {
     emit(HomePageLoading());
@@ -61,5 +83,12 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     );
 
     emit(homePageSuccessState);
+    this.add(_GetUserNameEvent());
+  }
+
+  @override
+  Future<void> close() {
+    listen?.cancel();
+    return super.close();
   }
 }

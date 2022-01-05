@@ -20,6 +20,17 @@ class EmailValidatedState extends RegisterState {
   List<Object?> get props => [emailValidatedState];
 }
 
+class DisplayNameValidatedState extends RegisterState {
+  final DisplayNameValidated displayNameValidated;
+
+  const DisplayNameValidatedState({
+    required this.displayNameValidated,
+  });
+
+  @override
+  List<Object?> get props => [displayNameValidated];
+}
+
 class PasswordValidatedState extends RegisterState {
   final PasswordValidated passwordValidated;
 
@@ -53,24 +64,16 @@ class RegisterSubmitErrorState extends RegisterState {
   List<Object?> get props => [registerError];
 }
 
-class RegisterSubmitState extends RegisterState {
-  final RegisterSubmit registerSubmit;
+class RequestingCreateAccountState extends RegisterState {
   final int dateTime = DateTime.now().millisecondsSinceEpoch;
 
-  RegisterSubmitState({
-    required this.registerSubmit,
-  });
-
   @override
-  List<Object?> get props => [registerSubmit, dateTime];
+  List<Object?> get props => [dateTime];
 }
 
-enum RegisterSubmit {
-  requestRegister,
-  emailIllegal,
-  passwordIllegal,
-  confirmPasswordIllegal,
-  success,
+class CreateAccountSuccess extends RegisterState {
+  @override
+  List<Object?> get props => [];
 }
 
 enum ConfirmPasswordValidated {
@@ -89,5 +92,11 @@ enum PasswordValidated {
 enum EmailValidated {
   Invalid,
   Illegal,
+  Empty,
+}
+
+enum DisplayNameValidated {
+  Invalid,
+  TooLong,
   Empty,
 }

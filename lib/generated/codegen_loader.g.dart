@@ -124,7 +124,8 @@ class CodegenLoader extends AssetLoader{
     "changePasswordTitle": "Change password",
     "currentLanguageSubtitle": "English",
     "languageSelectionTitle": "Language Selection",
-    "discountSubtitle": "You have {discount} voucher"
+    "discountSubtitle": "You have {discount} voucher",
+    "emailTitle": "Email"
   },
   "login": {
     "successTitle": "Success",
@@ -160,7 +161,11 @@ class CodegenLoader extends AssetLoader{
     "confirmPasswordNotMatchMess": "Password does not match",
     "requestConfirmPasswordMess": "Please confirm the password again",
     "confirmPasswordLabel": "Confirm password",
-    "confirmPasswordHintText": "Enter the password"
+    "confirmPasswordHintText": "Enter the password",
+    "displayNameTooLongWarning": "Display name too long",
+    "displayNameEmptyWarning": "Display name cannot be blank",
+    "displayNameLabel": "Display name",
+    "displayNameHintText": "Display name"
   }
 };
 static const Map<String,dynamic> vi = {
@@ -273,7 +278,8 @@ static const Map<String,dynamic> vi = {
     "changePasswordTitle": "Đổi mật khẩu",
     "currentLanguageSubtitle": "Tiếng Việt",
     "languageSelectionTitle": "Chọn ngôn ngữ",
-    "discountSubtitle": "Bạn có {discount} mã khuyến mãi"
+    "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
+    "emailTitle": "Email"
   },
   "login": {
     "successTitle": "Thành công",
@@ -309,7 +315,11 @@ static const Map<String,dynamic> vi = {
     "confirmPasswordNotMatchMess": "Mật khẩu không trùng khớp",
     "requestConfirmPasswordMess": "Vui lòng xác nhận lại mật khẩu",
     "confirmPasswordLabel": "Xác nhận mật khẩu",
-    "confirmPasswordHintText": "nhập lại mật khẩu"
+    "confirmPasswordHintText": "nhập lại mật khẩu",
+    "displayNameTooLongWarning": "Tên hiển thị quá dài",
+    "displayNameEmptyWarning": "Tên hiển thị không được bỏ trống",
+    "displayNameLabel": "Tên hiển thị",
+    "displayNameHintText": "Tên hiển thị"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "vi": vi};

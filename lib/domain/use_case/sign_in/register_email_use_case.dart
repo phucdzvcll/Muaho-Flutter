@@ -8,7 +8,8 @@ class RegisterEmailUseCase
   @override
   Future<Either<Failure, RegisterEmailEntity>> executeInternal(
       RegisterParam input) async {
-    return await signInRepository.registerEmail(input.email, input.password);
+    return await signInRepository.registerEmail(
+        input.email, input.password, input.displayName);
   }
 
   RegisterEmailUseCase({
@@ -33,12 +34,13 @@ class RegisterFailure extends FeatureFailure {
 class RegisterParam extends Equatable {
   final String email;
   final String password;
-
+  final String displayName;
   const RegisterParam({
     required this.email,
     required this.password,
+    required this.displayName,
   });
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [email, password, displayName];
 }

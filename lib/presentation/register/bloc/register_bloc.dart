@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:muaho/common/even_bus/app_event_bus.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/presentation/login/bloc/login_bloc.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -11,12 +13,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String password = "";
   String passwordConfirm = "";
   String email = "";
+  String displayName = "";
   final RegisterEmailUseCase registerEmailUseCase;
-
+  final AppEventBus appEventBus;
   bool emailValid(String email) => EmailValidator.validate(email);
 
   RegisterBloc({
     required this.registerEmailUseCase,
+    required this.appEventBus,
   }) : super(RegisterInitial()) {
     on<TextingEmailEvent>((event, emit) {
       email = event.email;
@@ -35,44 +39,47 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       _handleConfirmPasswordEvent(emit);
     });
 
+    on<TextingDisplayNameEvent>((event, emit) {
+      displayName = event.displayName;
+
+      _handleDisplayNameEvent(emit);
+    });
+
     on<PressSubmitRegisterEvent>((event, emit) async {
       if (email.isEmpty ||
           !emailValid(email) ||
           password.length < 6 ||
           password.isEmpty ||
           passwordConfirm.isEmpty ||
-          passwordConfirm.length < 6) {
+          passwordConfirm.length < 6 ||
+          displayName.length > 50 ||
+          displayName.isEmpty) {
         if (email.isEmpty || !emailValid(email)) {
           _handleTextingEmailEvent(emit);
-          emit(
-            RegisterSubmitState(registerSubmit: RegisterSubmit.emailIllegal),
-          );
         }
         if (password.length < 6 || password.isEmpty) {
           _handleTextingPasswordEvent(emit);
-          emit(
-            RegisterSubmitState(registerSubmit: RegisterSubmit.passwordIllegal),
-          );
         }
         if (passwordConfirm.isEmpty || passwordConfirm.length < 6) {
           _handleConfirmPasswordEvent(emit);
-          emit(
-            RegisterSubmitState(
-                registerSubmit: RegisterSubmit.confirmPasswordIllegal),
-          );
+        }
+        if (displayName.length > 50 || displayName.isEmpty) {
+          _handleDisplayNameEvent(emit);
         }
       } else {
         emit(
-          RegisterSubmitState(registerSubmit: RegisterSubmit.requestRegister),
+          RequestingCreateAccountState(),
         );
         Either<Failure, RegisterEmailEntity> result =
             await registerEmailUseCase.execute(
-          RegisterParam(email: email, password: password),
+          RegisterParam(
+              email: email, password: password, displayName: displayName),
         );
         if (result.isSuccess) {
           emit(
-            RegisterSubmitState(registerSubmit: RegisterSubmit.success),
+            CreateAccountSuccess(),
           );
+          appEventBus.fireEvent(LoginSuccessEventBus());
         } else {
           var fail = result.fail;
           if (fail is RegisterFailure) {
@@ -88,6 +95,25 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         }
       }
     });
+  }
+
+  void _handleDisplayNameEvent(Emitter<RegisterState> emit) {
+    if (displayName.isEmpty) {
+      emit(
+        DisplayNameValidatedState(
+            displayNameValidated: DisplayNameValidated.Empty),
+      );
+    } else if (displayName.length > 50) {
+      emit(
+        DisplayNameValidatedState(
+            displayNameValidated: DisplayNameValidated.TooLong),
+      );
+    } else {
+      emit(
+        DisplayNameValidatedState(
+            displayNameValidated: DisplayNameValidated.Invalid),
+      );
+    }
   }
 
   void _handleTextingEmailEvent(Emitter<RegisterState> emit) {

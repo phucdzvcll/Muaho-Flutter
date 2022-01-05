@@ -10,5 +10,5 @@ abstract class SignInRepository {
       String email, String password);
 
   Future<Either<Failure, RegisterEmailEntity>> registerEmail(
-      String email, String password);
+      String email, String password, String displayName);
 }

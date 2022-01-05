@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 
@@ -57,15 +58,16 @@ class _SettingPageState extends State<SettingPage> {
                       child: Column(
                         children: [
                           _itemSettingBuilder(
-                            title: LocaleKeys.setting_updateInfo.translate(),
+                            title: LocaleKeys.setting_emailTitle.translate(),
                             leadingIcon: Icon(
-                              Icons.account_circle_sharp,
+                              Icons.email_outlined,
                               color: Theme.of(context).primaryColorLight,
                             ),
                             trailingIcon: Icon(
                               Icons.navigate_next_sharp,
                               color: Colors.grey[400] ?? Colors.grey,
                             ),
+                            subtitle: "Muaho@email.com",
                             onPress: () {},
                             underlineWidth: 0.5,
                           ),
@@ -84,20 +86,20 @@ class _SettingPageState extends State<SettingPage> {
                             onPress: () {},
                             underlineWidth: 0.5,
                           ),
-                          _itemSettingBuilder(
-                            title: LocaleKeys.setting_addressTitle.translate(),
-                            subtitle: '171/6ter Tôn Thất Thuyết',
-                            leadingIcon: Icon(
-                              Icons.home_sharp,
-                              color: Colors.amber,
-                            ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                            onPress: () {},
-                            underlineWidth: 0.5,
-                          ),
+                          // _itemSettingBuilder(
+                          //   title: LocaleKeys.setting_addressTitle.translate(),
+                          //   subtitle: '171/6ter Tôn Thất Thuyết',
+                          //   leadingIcon: Icon(
+                          //     Icons.home_sharp,
+                          //     color: Colors.amber,
+                          //   ),
+                          //   trailingIcon: Icon(
+                          //     Icons.navigate_next_sharp,
+                          //     color: Colors.grey[400] ?? Colors.grey,
+                          //   ),
+                          //   onPress: () {},
+                          //   underlineWidth: 0.5,
+                          // ),
                           _itemSettingBuilder(
                             title: LocaleKeys.setting_discountTitle.translate(),
                             subtitle: LocaleKeys.setting_discountSubtitle
@@ -373,8 +375,13 @@ class _SettingPageState extends State<SettingPage> {
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage('https://picsum.photos/200/300'),
                 radius: 40,
+                backgroundColor: Colors.amber,
+                child: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage('https://picsum.photos/200/300'),
+                  radius: 39,
+                ),
               ),
               SizedBox(
                 width: 20,
@@ -396,21 +403,36 @@ class _SettingPageState extends State<SettingPage> {
                         SizedBox(
                           height: 5,
                         ),
-                        Visibility(
+                        Padding(
+                          padding: const EdgeInsets.all(8),
                           child: Icon(
-                            Icons.check_circle_sharp,
-                            color: Colors.green,
+                            Icons.mode_edit,
+                            color: Colors.yellow,
                           ),
-                          visible: true,
                         ),
                       ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
-                    Text(
-                      "Muaho@email.com",
-                      style: Theme.of(context).textTheme.subtitle1,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Assets.images.crownSvgrepoCom.svg(
+                          width: 20,
+                          height: 20,
+                          color: Colors.amber,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "Thành viên vàng",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.subtitle1,
+                        ),
+                      ],
                     ),
                   ],
                 ),

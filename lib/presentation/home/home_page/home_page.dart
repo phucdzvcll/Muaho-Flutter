@@ -12,7 +12,6 @@ import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/home/home_page/bloc/home_page_bloc.dart';
 import 'package:muaho/presentation/login/login_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
-import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'model/home_page_model.dart';
@@ -33,8 +32,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    final SignInArguments arg =
-        ModalRoute.of(context)!.settings.arguments as SignInArguments;
+    super.build(context);
 
     return BlocProvider<HomePageBloc>(
       create: (ctx) => getIt()..add(HomePageRequestEvent()),
@@ -44,9 +42,11 @@ class _HomePageState extends State<HomePage>
           child: Scaffold(
               backgroundColor: Colors.white,
               body: BlocBuilder<HomePageBloc, HomePageState>(
+                buildWhen: (pre, curr) =>
+                    curr is HomePageSuccessState || curr is HomePageLoading,
                 builder: (ctx, state) {
                   return SingleChildScrollView(
-                      child: _handleBuilder(state, ctx, arg));
+                      child: _handleBuilder(state, ctx));
                 },
               )),
         ),
@@ -54,13 +54,11 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _handleBuilder(
-      HomePageState state, BuildContext ctx, SignInArguments arguments) {
+  Widget _handleBuilder(HomePageState state, BuildContext ctx) {
     if (state is HomePageSuccessState) {
       return _handleHomePageBuilder(
         state.homePageModel,
         ctx,
-        arguments,
       );
     } else {
       return Center(
@@ -69,7 +67,7 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-  Padding _userInfo(SignInArguments arg) {
+  Padding _userInfo() {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -101,11 +99,21 @@ class _HomePageState extends State<HomePage>
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(arg.userName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: MyTheme.primaryColor)),
+                      child: BlocBuilder<HomePageBloc, HomePageState>(
+                        buildWhen: (pre, curr) => curr is UserNameState,
+                        builder: (context, state) {
+                          return Text(
+                            (state is UserNameState &&
+                                    state.userName.isNotEmpty)
+                                ? state.userName
+                                : "Guest",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(color: MyTheme.primaryColor),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -271,12 +279,11 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  _handleHomePageBuilder(HomePageModel homePageModel, BuildContext ctx,
-      SignInArguments arguments) {
+  _handleHomePageBuilder(HomePageModel homePageModel, BuildContext ctx) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        _userInfo(arguments),
+        _userInfo(),
         Visibility(
           visible: homePageModel.slideBannerEntity.length > 0 ? true : false,
           child: Align(

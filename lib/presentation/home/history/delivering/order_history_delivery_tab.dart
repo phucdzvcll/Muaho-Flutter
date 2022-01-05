@@ -18,9 +18,11 @@ class OrderHistoryDeliveryTab extends StatefulWidget {
       _OrderHistoryDeliveryTabState();
 }
 
-class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab> {
+class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider<OrderHistoryDeliveringBloc>(
       create: (context) => getIt()..add(GetOrderHistoryDeliveringEvent()),
       child:
@@ -62,4 +64,7 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab> {
         },
         historyDelivering: historyDelivering);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

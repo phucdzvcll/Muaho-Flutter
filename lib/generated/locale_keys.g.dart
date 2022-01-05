@@ -96,6 +96,7 @@ abstract class  LocaleKeys {
   static const setting_currentLanguageSubtitle = 'setting.currentLanguageSubtitle';
   static const setting_languageSelectionTitle = 'setting.languageSelectionTitle';
   static const setting_discountSubtitle = 'setting.discountSubtitle';
+  static const setting_emailTitle = 'setting.emailTitle';
   static const setting = 'setting';
   static const login_successTitle = 'login.successTitle';
   static const login_emailNotExistTitle = 'login.emailNotExistTitle';
@@ -130,6 +131,10 @@ abstract class  LocaleKeys {
   static const register_requestConfirmPasswordMess = 'register.requestConfirmPasswordMess';
   static const register_confirmPasswordLabel = 'register.confirmPasswordLabel';
   static const register_confirmPasswordHintText = 'register.confirmPasswordHintText';
+  static const register_displayNameTooLongWarning = 'register.displayNameTooLongWarning';
+  static const register_displayNameEmptyWarning = 'register.displayNameEmptyWarning';
+  static const register_displayNameLabel = 'register.displayNameLabel';
+  static const register_displayNameHintText = 'register.displayNameHintText';
   static const register = 'register';
 
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 
@@ -21,9 +20,10 @@ class SignIn extends StatelessWidget {
             child: BlocListener<SignBloc, SignBlocState>(
               listener: (ctx, state) {
                 if (state is SignSuccess) {
-                  Navigator.pushReplacementNamed(ctx, HomeScreen.routeName,
-                      arguments:
-                          SignInArguments(userName: state.entity.userName));
+                  Navigator.pushReplacementNamed(
+                    ctx,
+                    HomeScreen.routeName,
+                  );
                 }
               },
               child: BlocBuilder<SignBloc, SignBlocState>(
@@ -49,10 +49,4 @@ class SignIn extends StatelessWidget {
       return SizedBox.shrink();
     }
   }
-}
-
-class SignInArguments {
-  final String userName;
-
-  SignInArguments({required this.userName});
 }

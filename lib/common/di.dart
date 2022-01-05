@@ -41,4 +41,8 @@ void commonDiConfig(GetIt injector) {
   //token expired handler
   injector.registerLazySingleton<TokenExpiredHandler>(
       () => TokenExpiredHandler(userStore: injector()));
+
+  injector.registerLazySingleton(
+    () => AppEventBus(),
+  );
 }

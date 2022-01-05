@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
+import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
+import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/register/register_screen.dart';
 
 import 'bloc/login_bloc.dart';
@@ -31,6 +33,7 @@ class LoginScreen extends StatelessWidget {
           listener: (context, state) async {
             if (state is LoginSuccess) {
               ctx.showSnackBar(LocaleKeys.login_successTitle.translate());
+              context.popUtil(HomeScreen.routeName);
             } else if (state is LoginFail) {
               if (state.errorMss == LoginError.emailNotExist) {
                 ctx.showSnackBar(
@@ -170,8 +173,7 @@ class LoginScreen extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topLeft,
-            child: Image.asset(
-              "assets/images/logo_square.png",
+            child: Assets.images.logoSquare.image(
               width: (MediaQuery.of(context).size.width / 6) * 4,
             ),
           ),

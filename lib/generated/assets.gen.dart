@@ -12,6 +12,10 @@ import 'package:flutter/services.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/crown-svgrepo-com.svg
+  SvgGenImage get crownSvgrepoCom =>
+      const SvgGenImage('assets/images/crown-svgrepo-com.svg');
+
   /// File path: assets/images/delivery_dining_black_24dp.svg
   SvgGenImage get deliveryDiningBlack24dp =>
       const SvgGenImage('assets/images/delivery_dining_black_24dp.svg');

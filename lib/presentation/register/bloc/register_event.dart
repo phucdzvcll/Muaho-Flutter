@@ -15,6 +15,17 @@ class TextingEmailEvent extends RegisterEvent {
   List<Object?> get props => [email];
 }
 
+class TextingDisplayNameEvent extends RegisterEvent {
+  final String displayName;
+
+  const TextingDisplayNameEvent({
+    required this.displayName,
+  });
+
+  @override
+  List<Object?> get props => [displayName];
+}
+
 class TextingPasswordEvent extends RegisterEvent {
   final String password;
 

@@ -108,7 +108,8 @@
     "changePasswordTitle": "Đổi mật khẩu",
     "currentLanguageSubtitle": "Tiếng Việt",
     "languageSelectionTitle": "Chọn ngôn ngữ",
-    "discountSubtitle": "Bạn có {discount} mã khuyến mãi"
+    "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
+    "emailTitle": "Email"
   },
   "login": {
     "successTitle": "Thành công",
@@ -144,6 +145,10 @@
     "confirmPasswordNotMatchMess": "Mật khẩu không trùng khớp",
     "requestConfirmPasswordMess": "Vui lòng xác nhận lại mật khẩu",
     "confirmPasswordLabel": "Xác nhận mật khẩu",
-    "confirmPasswordHintText": "nhập lại mật khẩu"
+    "confirmPasswordHintText": "nhập lại mật khẩu",
+    "displayNameTooLongWarning": "Tên hiển thị quá dài",
+    "displayNameEmptyWarning": "Tên hiển thị không được bỏ trống",
+    "displayNameLabel": "Tên hiển thị",
+    "displayNameHintText": "Tên hiển thị"
   }
 }

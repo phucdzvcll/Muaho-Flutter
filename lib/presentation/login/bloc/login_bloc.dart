@@ -1,20 +1,30 @@
 import 'package:bloc/bloc.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
+class LoginSuccessEventBus extends AppEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   bool obscureText = true;
   String password = "";
   String email = "";
+  final AppEventBus appEventBus;
 
   bool emailValid(String email) => EmailValidator.validate(email);
   final LoginEmailUseCase loginEmailUseCase;
 
-  LoginBloc({required this.loginEmailUseCase}) : super(LoginInitial()) {
+  LoginBloc({
+    required this.loginEmailUseCase,
+    required this.appEventBus,
+  }) : super(LoginInitial()) {
     on<TextingEmailEvent>(
       (event, emit) {
         email = event.value;
@@ -74,6 +84,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
         if (result.isSuccess) {
           emit(LoginSuccess());
+          appEventBus.fireEvent(LoginSuccessEventBus());
         } else {
           var fail = result.fail;
           if (fail is LoginFailure) {

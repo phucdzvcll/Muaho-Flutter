@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
@@ -18,9 +17,11 @@ class OrderHistoryCompleteTab extends StatefulWidget {
       _OrderHistoryCompleteTabState();
 }
 
-class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab> {
+class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocProvider<OrderHistoryCompleteBloc>(
       create: (context) => getIt()..add(GetOrderHistoryCompleteEvent()),
       child: BlocBuilder<OrderHistoryCompleteBloc, OrderHistoryCompleteState>(
@@ -136,4 +137,7 @@ class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

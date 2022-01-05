@@ -108,7 +108,8 @@
     "changePasswordTitle": "Change password",
     "currentLanguageSubtitle": "English",
     "languageSelectionTitle": "Language Selection",
-    "discountSubtitle": "You have {discount} voucher"
+    "discountSubtitle": "You have {discount} voucher",
+    "emailTitle": "Email"
   },
   "login": {
     "successTitle": "Success",
@@ -144,6 +145,10 @@
     "confirmPasswordNotMatchMess": "Password does not match",
     "requestConfirmPasswordMess": "Please confirm the password again",
     "confirmPasswordLabel": "Confirm password",
-    "confirmPasswordHintText": "Enter the password"
+    "confirmPasswordHintText": "Enter the password",
+    "displayNameTooLongWarning" : "Display name too long",
+    "displayNameEmptyWarning" : "Display name cannot be blank",
+    "displayNameLabel" : "Display name",
+    "displayNameHintText" : "Display name"
   }
 }
