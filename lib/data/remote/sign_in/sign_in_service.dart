@@ -37,8 +37,9 @@ class RefreshTokenBodyParam {
 class SignInBodyParam {
   @JsonKey(name: 'firebase_token')
   final String firebaseToken;
-
-  SignInBodyParam({required this.firebaseToken});
+  final String? displayName;
+  final String? email;
+  SignInBodyParam({required this.firebaseToken, this.displayName, this.email});
 
   factory SignInBodyParam.fromJson(Map<String, dynamic> json) =>
       _$SignInBodyParamFromJson(json);

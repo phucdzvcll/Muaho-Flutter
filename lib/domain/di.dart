@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/domain/use_case/address/create_address_use_case.dart';
 import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
@@ -5,6 +6,8 @@ import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
 import 'domain.dart';
 
 void domainDiConfig(GetIt injector) {
+  injector.registerLazySingleton(() => FirebaseAuth.instance);
+
   injector.registerFactory(
       () => GetListBannerUseCase(homePageRepository: injector()));
 

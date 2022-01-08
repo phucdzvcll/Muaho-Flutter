@@ -2,13 +2,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final String rJTW = "rJWT";
 final String userNameKey = "userName";
-final String email = "email";
+final String emailKey = "email";
+final String phoneKey = "phone";
 
 class UserStore {
   final FlutterSecureStorage storage;
   String? _token;
   String? _userName;
   String? _email;
+  String? _contactPhone;
 
   UserStore({required this.storage});
 
@@ -34,6 +36,12 @@ class UserStore {
     this._email = email;
   }
 
+  void setContactPhone(
+    String contactPhone,
+  ) {
+    this._contactPhone = contactPhone;
+  }
+
   Future<String?> getRefreshToken() async {
     try {
       return await storage.read(key: rJTW);
@@ -55,8 +63,18 @@ class UserStore {
 
   Future<String?> getEmail() async {
     try {
-      _email ??= await storage.read(key: email);
+      _email ??= await storage.read(key: emailKey);
       return _email;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<String?> getContactPhone() async {
+    try {
+      _contactPhone ??= await storage.read(key: phoneKey);
+      return _contactPhone;
     } catch (e) {
       print(e);
       return null;
@@ -67,13 +85,16 @@ class UserStore {
     required String userName,
     required String refreshToken,
     required String email,
+    required String contactPhone,
   }) async {
     try {
       await storage.write(key: rJTW, value: refreshToken);
-      await storage.write(key: userNameKey, value: _userName);
-      await storage.write(key: email, value: _email);
+      await storage.write(key: userNameKey, value: userName);
+      await storage.write(key: emailKey, value: email);
+      await storage.write(key: phoneKey, value: contactPhone);
       this._userName = userName;
       this._email = email;
+      this._contactPhone = contactPhone;
     } catch (e) {
       print(e);
     }

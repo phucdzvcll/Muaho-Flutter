@@ -4,6 +4,7 @@ import 'package:muaho/presentation/address/address_info/bloc/address_bloc.dart';
 import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
+import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
 import 'package:muaho/presentation/login/bloc/login_bloc.dart';
 import 'package:muaho/presentation/register/bloc/register_bloc.dart';
 
@@ -98,6 +99,14 @@ void presentationDiConfig(GetIt injector) {
     () => RegisterBloc(
       registerEmailUseCase: injector(),
       appEventBus: injector(),
+    ),
+  );
+
+  injector.registerFactory(
+    () => SettingBloc(
+      userStore: injector(),
+      appEventBus: injector(),
+      firebaseAuth: injector(),
     ),
   );
 }

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
@@ -22,7 +21,7 @@ void dataDiConfig(GetIt injector) {
   injector.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl(
         service: injector(),
         userStore: injector(),
-        firebaseAuth: FirebaseAuth.instance,
+        firebaseAuth: injector(),
       ));
   //shop
   injector.registerLazySingleton<ShopService>(() => ShopService(

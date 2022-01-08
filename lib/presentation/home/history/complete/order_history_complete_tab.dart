@@ -36,15 +36,19 @@ class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab>
     if (state is OrderHistoryCompleteError) {
       return Text(LocaleKeys.orderHistoryDone_error.translate());
     } else if (state is OrderHistoryCompleteSuccess) {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemBuilder: (ctx, index) {
-          return _orderHistoryItem(state.orderHistoryDeliveries[index]);
-        },
-        itemCount: state.orderHistoryDeliveries.length,
-        addAutomaticKeepAlives: true,
-        padding: const EdgeInsets.only(bottom: 70),
-      );
+      return state.orderHistoryDeliveries.isEmpty
+          ? Center(
+              child: Text("Chưa có đơn hàng nào được giao"),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (ctx, index) {
+                return _orderHistoryItem(state.orderHistoryDeliveries[index]);
+              },
+              itemCount: state.orderHistoryDeliveries.length,
+              addAutomaticKeepAlives: true,
+              padding: const EdgeInsets.only(bottom: 70),
+            );
     } else {
       return Center(
         child: CircularProgressIndicator(),

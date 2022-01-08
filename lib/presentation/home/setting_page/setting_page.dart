@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
+import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -11,166 +13,170 @@ class SettingPage extends StatefulWidget {
   _SettingPageState createState() => _SettingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingPageState extends State<SettingPage>
+    with AutomaticKeepAliveClientMixin {
   final AppLocalization appLocalization = getIt.get();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).backgroundColor,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
-          body: Stack(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                margin: EdgeInsets.only(top: 92),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(48),
-                    topRight: Radius.circular(48),
+    super.build(context);
+    return BlocProvider<SettingBloc>(
+      create: (context) => getIt()..add(GetUserInfoEvent()),
+      child: Container(
+        color: Theme.of(context).backgroundColor,
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  margin: EdgeInsets.only(top: 92),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(48),
+                      topRight: Radius.circular(48),
+                    ),
                   ),
                 ),
-              ),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    userInfoBuilder(context),
-                    Container(
-                      width: double.infinity,
-                      margin:
-                          const EdgeInsets.only(top: 35, left: 20, right: 20),
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 4.0,
-                            spreadRadius: 0.0,
-                            offset: Offset(2.0, 2.0),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          _itemSettingBuilder(
-                            title: LocaleKeys.setting_emailTitle.translate(),
-                            leadingIcon: Icon(
-                              Icons.email_outlined,
-                              color: Theme.of(context).primaryColorLight,
-                            ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                            subtitle: "Muaho@email.com",
-                            onPress: () {},
-                            underlineWidth: 0.5,
-                          ),
-                          _itemSettingBuilder(
-                            title:
-                                LocaleKeys.setting_phoneNumberTitle.translate(),
-                            subtitle: '0909909909',
-                            leadingIcon: Icon(
-                              Icons.phone_iphone_sharp,
-                              color: Colors.blue,
-                            ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                            onPress: () {},
-                            underlineWidth: 0.5,
-                          ),
-                          // _itemSettingBuilder(
-                          //   title: LocaleKeys.setting_addressTitle.translate(),
-                          //   subtitle: '171/6ter Tôn Thất Thuyết',
-                          //   leadingIcon: Icon(
-                          //     Icons.home_sharp,
-                          //     color: Colors.amber,
-                          //   ),
-                          //   trailingIcon: Icon(
-                          //     Icons.navigate_next_sharp,
-                          //     color: Colors.grey[400] ?? Colors.grey,
-                          //   ),
-                          //   onPress: () {},
-                          //   underlineWidth: 0.5,
-                          // ),
-                          _itemSettingBuilder(
-                            title: LocaleKeys.setting_discountTitle.translate(),
-                            subtitle: LocaleKeys.setting_discountSubtitle
-                                .translate(namedArgs: {
-                              "discount": "8",
-                            }),
-                            leadingIcon: Icon(
-                              Icons.local_offer,
-                              color: Colors.red,
-                            ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                            onPress: () {},
-                            underlineWidth: 0.5,
-                          ),
-                          _itemSettingBuilder(
-                            title: LocaleKeys.setting_languageTitle.translate(),
-                            subtitle: LocaleKeys.setting_currentLanguageSubtitle
-                                .translate(),
-                            leadingIcon: Icon(
-                              Icons.language,
-                              color: Colors.green,
-                            ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                            onPress: () {
-                              _showDialogResult(context);
-                            },
-                            underlineWidth: 0.5,
-                          ),
-                          _itemSettingBuilder(
-                            title: LocaleKeys.setting_changePasswordTitle
-                                .translate(),
-                            leadingIcon: Icon(
-                              Icons.change_circle,
-                              color: Colors.brown,
-                            ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
-                            ),
-                            onPress: () {},
-                            underlineWidth: 0.5,
-                          ),
-                          _itemSettingBuilder(
-                            title: LocaleKeys.setting_logoutTitle.translate(),
-                            leadingIcon: Icon(
-                              Icons.logout,
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      userInfoBuilder(context),
+                      Container(
+                        width: double.infinity,
+                        margin:
+                            const EdgeInsets.only(top: 35, left: 20, right: 20),
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
                               color: Colors.grey,
+                              blurRadius: 4.0,
+                              spreadRadius: 0.0,
+                              offset: Offset(2.0, 2.0),
                             ),
-                            trailingIcon: Icon(
-                              Icons.navigate_next_sharp,
-                              color: Colors.grey[400] ?? Colors.grey,
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            _settingEmailBuilder(context),
+                            _itemSettingBuilder(
+                              title: LocaleKeys.setting_phoneNumberTitle
+                                  .translate(),
+                              leadingIcon: Icon(
+                                Icons.phone_iphone_sharp,
+                                color: Colors.blue,
+                              ),
+                              trailingIcon: Icon(
+                                Icons.navigate_next_sharp,
+                                color: Colors.grey[400] ?? Colors.grey,
+                              ),
+                              onPress: () {},
+                              underlineWidth: 0.5,
                             ),
-                            onPress: () {},
-                            underlineWidth: 0,
-                          )
-                        ],
+                            _itemSettingBuilder(
+                              title:
+                                  LocaleKeys.setting_discountTitle.translate(),
+                              subtitle: LocaleKeys.setting_discountSubtitle
+                                  .translate(namedArgs: {
+                                "discount": "8",
+                              }),
+                              leadingIcon: Icon(
+                                Icons.local_offer,
+                                color: Colors.red,
+                              ),
+                              trailingIcon: Icon(
+                                Icons.navigate_next_sharp,
+                                color: Colors.grey[400] ?? Colors.grey,
+                              ),
+                              onPress: () {},
+                              underlineWidth: 0.5,
+                            ),
+                            _itemSettingBuilder(
+                              title:
+                                  LocaleKeys.setting_languageTitle.translate(),
+                              subtitle: LocaleKeys
+                                  .setting_currentLanguageSubtitle
+                                  .translate(),
+                              leadingIcon: Icon(
+                                Icons.language,
+                                color: Colors.green,
+                              ),
+                              trailingIcon: Icon(
+                                Icons.navigate_next_sharp,
+                                color: Colors.grey[400] ?? Colors.grey,
+                              ),
+                              onPress: () {
+                                _showDialogResult(context);
+                              },
+                              underlineWidth: 0.5,
+                            ),
+                            _itemSettingBuilder(
+                              title: LocaleKeys.setting_changePasswordTitle
+                                  .translate(),
+                              leadingIcon: Icon(
+                                Icons.change_circle,
+                                color: Colors.brown,
+                              ),
+                              trailingIcon: Icon(
+                                Icons.navigate_next_sharp,
+                                color: Colors.grey[400] ?? Colors.grey,
+                              ),
+                              onPress: () {},
+                              underlineWidth: 0.5,
+                            ),
+                            _itemSettingBuilder(
+                              title: LocaleKeys.setting_logoutTitle.translate(),
+                              leadingIcon: Icon(
+                                Icons.logout,
+                                color: Colors.grey,
+                              ),
+                              trailingIcon: Icon(
+                                Icons.navigate_next_sharp,
+                                color: Colors.grey[400] ?? Colors.grey,
+                              ),
+                              onPress: () {},
+                              underlineWidth: 0,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _settingEmailBuilder(BuildContext context) {
+    return BlocBuilder<SettingBloc, SettingState>(
+      buildWhen: (pre, curr) => curr is EmailState,
+      builder: (context, state) {
+        return _itemSettingBuilder(
+          title: LocaleKeys.setting_emailTitle.translate(),
+          leadingIcon: Icon(
+            Icons.email_outlined,
+            color: Theme.of(context).primaryColorLight,
+          ),
+          trailingIcon: Icon(
+            Icons.navigate_next_sharp,
+            color: Colors.grey[400] ?? Colors.grey,
+          ),
+          subtitle: (state is EmailState && state.email.isNotEmpty)
+              ? state.email
+              : null,
+          onPress: () {},
+          underlineWidth: 0.5,
+        );
+      },
     );
   }
 
@@ -369,78 +375,91 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
+      child: BlocBuilder<SettingBloc, SettingState>(
+        buildWhen: (pre, curr) => curr is UserNameState,
+        builder: (context, state) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundColor: Colors.amber,
-                child: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('https://picsum.photos/200/300'),
-                  radius: 39,
-                ),
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.amber,
+                    child: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage('https://picsum.photos/200/300'),
+                      radius: 39,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Tiny Flutter team",
-                          style:
-                              Theme.of(context).textTheme.headline1?.copyWith(
+                        Row(
+                          children: [
+                            Text(
+                              (state is UserNameState &&
+                                      state.displayName.isNotEmpty)
+                                  ? state.displayName
+                                  : "Guest",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1
+                                  ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                   ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Icon(
+                                Icons.mode_edit,
+                                color: Colors.amber,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: 5,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Icon(
-                            Icons.mode_edit,
-                            color: Colors.yellow,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Assets.images.crownSvgrepoCom.svg(
+                              width: 20,
+                              height: 20,
+                              color: Colors.amber,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Thành viên vàng",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Assets.images.crownSvgrepoCom.svg(
-                          width: 20,
-                          height: 20,
-                          color: Colors.amber,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Thành viên vàng",
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                ],
+              )
             ],
-          )
-        ],
+          );
+        },
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

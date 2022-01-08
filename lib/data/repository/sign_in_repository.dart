@@ -58,7 +58,10 @@ class SignInRepositoryImpl implements SignInRepository {
           ..setUseName(userName)
           ..setEmail(email);
         await userStore.save(
-            userName: userName, refreshToken: rJwt, email: email);
+            userName: userName,
+            refreshToken: rJwt,
+            email: email,
+            contactPhone: "");
       } else {
         throw result.fail;
       }
@@ -77,9 +80,11 @@ class SignInRepositoryImpl implements SignInRepository {
           await apiSignInService.refreshToken(
               RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
       String userName = (await userStore.getUserName()).defaultEmpty();
+      String email = (await userStore.getEmail()).defaultEmpty();
       userStore
         ..setToken(refreshTokenResponse.jwtToken.defaultEmpty())
-        ..setUseName(userName);
+        ..setUseName(userName)
+        ..setEmail(email);
       log(refreshTokenResponse.jwtToken.defaultEmpty());
       return SuccessValue(SignInEntity(userName: userName));
     } else {

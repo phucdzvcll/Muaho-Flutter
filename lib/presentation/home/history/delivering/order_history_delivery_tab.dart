@@ -39,15 +39,21 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab>
     if (state is OrderHistoryDeliveringError) {
       return Text(LocaleKeys.orderHistoryDelivering_error.translate());
     } else if (state is OrderHistoryDeliveringSuccess) {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemBuilder: (ctx, index) {
-          return _orderHistoryItem(state.orderHistoryDeliveries[index]);
-        },
-        itemCount: state.orderHistoryDeliveries.length,
-        addAutomaticKeepAlives: true,
-        padding: const EdgeInsets.only(bottom: 70),
-      );
+      return state.orderHistoryDeliveries.isEmpty
+          ? Center(
+              child: Text(
+                "Không có đơn hàng nào đang giao",
+              ),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (ctx, index) {
+                return _orderHistoryItem(state.orderHistoryDeliveries[index]);
+              },
+              itemCount: state.orderHistoryDeliveries.length,
+              addAutomaticKeepAlives: true,
+              padding: const EdgeInsets.only(bottom: 70),
+            );
     } else {
       return Center(
         child: CircularProgressIndicator(),
