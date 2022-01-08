@@ -1,6 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/data/remote/user/user_service.dart';
+import 'package:muaho/data/repository/user_repository.dart';
 import 'package:muaho/domain/domain.dart';
+import 'package:muaho/domain/repository/user_repository.dart';
 
 import 'data.dart';
 
@@ -46,4 +49,16 @@ void dataDiConfig(GetIt injector) {
   injector.registerFactory(() => RegisterEmailUseCase(
         signInRepository: injector(),
       ));
+
+  //User
+  injector.registerFactory(
+    () => UserService(
+      injector(instanceName: DioInstanceType.DioTokenHandler.name),
+    ),
+  );
+  injector.registerFactory<UserRepository>(
+    () => UserRepositoryImpl(
+      userService: injector(),
+    ),
+  );
 }

@@ -12,6 +12,9 @@ abstract class  LocaleKeys {
   static const hotSearch_hotItems = 'hotSearch.hotItems';
   static const hotSearch_searchHint = 'hotSearch.searchHint';
   static const hotSearch = 'hotSearch';
+  static const voucherList_errorMsg = 'voucherList.errorMsg';
+  static const voucherList_titleScreen = 'voucherList.titleScreen';
+  static const voucherList = 'voucherList';
   static const payment_total = 'payment.total';
   static const payment_editAddress = 'payment.editAddress';
   static const payment_deliveryAddress = 'payment.deliveryAddress';

@@ -25,8 +25,8 @@ class ShopRepositoryImpl implements ShopRepository {
       });
 
       (result.response?.groups).defaultEmpty().forEach((e) {
-        ProductGroupResponse groupResponse = e;
-        groupResponse.products.defaultEmpty().forEach((element) {
+        ProductGroupResponse? groupResponse = e;
+        groupResponse?.products.defaultEmpty().forEach((element) {
           mapProductEntity(element, products, groupResponse.groupId);
         });
       });

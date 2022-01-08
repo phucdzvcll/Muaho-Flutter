@@ -12,6 +12,10 @@
     "hotItems": "Commonly purchased items",
     "searchHint": "What do you want to buy?"
   },
+  "voucherList": {
+    "errorMsg": "Error",
+    "titleScreen": "Vouchers"
+  },
   "payment": {
     "total": "Total",
     "editAddress": "Edit",
@@ -102,12 +106,12 @@
     "updateInfo": "Update information",
     "phoneNumberTitle": "Phone number",
     "addressTitle": "Address",
-    "discountTitle": "Discount",
+    "discountTitle": "Vouchers",
     "languageTitle": "Language",
     "logoutTitle": "Logout",
     "changePasswordTitle": "Change password",
     "currentLanguageSubtitle": "English",
-    "languageSelectionTitle": "Language Selection",
+    "languageSelectionTitle": "Language",
     "discountSubtitle": "You have {discount} voucher",
     "emailTitle": "Email"
   },

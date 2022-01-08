@@ -26,6 +26,7 @@ import 'package:muaho/presentation/register/register_screen.dart';
 import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/presentation/sign_in/sign_in.dart';
+import 'package:muaho/presentation/voucher_list/ui/voucher_list_screen.dart';
 
 import 'presentation/chat-support/chat_support.dart';
 
@@ -120,6 +121,7 @@ class MyApp extends StatelessWidget {
           CreateAddressScreen.routeName: (context) => CreateAddressScreen(),
           LoginScreen.routeName: (context) => LoginScreen(),
           RegisterScreen.routeName: (context) => RegisterScreen(),
+          VoucherListScreen.routeName: (context) => VoucherListScreen(),
         },
         // ),
       ),

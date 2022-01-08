@@ -5,6 +5,7 @@ import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
+import 'package:muaho/presentation/voucher_list/ui/voucher_list_screen.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -93,7 +94,9 @@ class _SettingPageState extends State<SettingPage>
                                 Icons.navigate_next_sharp,
                                 color: Colors.grey[400] ?? Colors.grey,
                               ),
-                              onPress: () {},
+                              onPress: () {
+                                Navigator.of(context).pushNamed(VoucherListScreen.routeName);
+                              },
                               underlineWidth: 0.5,
                             ),
                             _itemSettingBuilder(
