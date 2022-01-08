@@ -24,8 +24,13 @@ class _ChatLostConnectionEvent extends ChatEvent {
 }
 
 class _ChatMsgListEvent extends ChatEvent {
+  final List<MessageModel> chatMss;
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [chatMss];
+
+  _ChatMsgListEvent({
+    required this.chatMss,
+  });
 }
 
 class _OpenChatSessionEvent extends ChatEvent {
@@ -76,7 +81,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
 
     on<_ChatMsgListEvent>((event, emit) {
-      emit(ChatMsgListState(msgs: _chatMss));
+      emit(ChatMsgListState(msgs: event.chatMss.toList()));
     });
 
     on<_InsertChatMsgEvent>((event, emit) {
@@ -90,7 +95,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   Future<void> close() {
     _timerPingSocket?.cancel();
-    _socket?.close();
+    _socket?.dispose();
     return super.close();
   }
 
@@ -101,7 +106,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         IO.OptionBuilder()
             .setTransports(['websocket']).setAuth({'token': token}).build());
 
-    _socket = _socket?.connect();
+    _socket = _socket?.open();
     _timerPingSocket?.cancel();
 
     _socket?.onConnect((_) async {
@@ -141,7 +146,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         _chatMss.insert(0, _mapChat(msg));
       });
 
-      add(_ChatMsgListEvent());
+      add(_ChatMsgListEvent(chatMss: _chatMss));
     });
 
     _socket?.on('new_chats', (data) {
@@ -154,7 +159,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           //add(_InsertChatMsgEvent(msg: msg));
         });
 
-        add(_ChatMsgListEvent());
+        add(_ChatMsgListEvent(chatMss: _chatMss));
       }
     });
   }

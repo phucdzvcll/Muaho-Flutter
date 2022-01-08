@@ -3,11 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:muaho/common/extensions/ui/inject.dart';
 import 'package:muaho/common/localization/app_localization.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/address/create_address/bloc/create_address_bloc.dart';
-
-import '../../../main.dart';
 
 class CreateAddressScreen extends StatelessWidget {
   CreateAddressScreen({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class CreateAddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     EdgeInsets safePadding = MediaQuery.of(context).padding;
     return BlocProvider<CreateAddressBloc>(
-      create: (context) => getIt()..add(RequestLocation()),
+      create: (context) => inject()..add(RequestLocation()),
       child: BlocListener<CreateAddressBloc, CreateAddressState>(
         listener: (context, state) async {
           if (state is LocationUpdateState) {

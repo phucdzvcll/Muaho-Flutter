@@ -4,12 +4,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/history/order_detail.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
@@ -42,7 +40,7 @@ class _OrderDetailState extends State<OrderDetail>
   Widget build(BuildContext context) {
     return BlocProvider<OrderDetailBloc>(
       create: (ctx) =>
-          getIt()..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
+        inject()..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

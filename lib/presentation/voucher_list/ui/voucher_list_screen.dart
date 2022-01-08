@@ -22,7 +22,7 @@ class _VoucherListScreenState extends State<VoucherListScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<VoucherListBloc>(
-      create: (_) => getIt()..add(RequestVoucherListEvent()),
+      create: (_) => inject()..add(RequestVoucherListEvent()),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(

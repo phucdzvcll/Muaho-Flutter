@@ -6,7 +6,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/adjustment_auantity_Button.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
@@ -38,7 +37,7 @@ class _CartScreenState extends State<CartScreen>
   Widget build(BuildContext context) {
     return BlocProvider<CartBloc>(
       create: (context) =>
-          getIt(param1: BlocProvider.of<CartUpdateBloc>(context)),
+          inject(param1: BlocProvider.of<CartUpdateBloc>(context)),
       child: Builder(builder: (context) {
         return _blocListener(context);
       }),

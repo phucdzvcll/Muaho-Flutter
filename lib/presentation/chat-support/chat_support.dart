@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/extensions/ui/inject.dart';
 import 'package:muaho/common/localization/app_localization.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 
 import 'bloc/chat_bloc.dart';
@@ -156,7 +156,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ChatBloc>(
-      create: (context) => getIt()..add(InitEvent()),
+      create: (context) => inject()..add(InitEvent()),
       child: BlocListener<ChatBloc, ChatState>(
         listenWhen: (pre, current) {
           return current is InsertChatMsgState;

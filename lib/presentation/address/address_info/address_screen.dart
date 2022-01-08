@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:muaho/common/extensions/ui/inject.dart';
 import 'package:muaho/common/localization/app_localization.dart';
 import 'package:muaho/domain/models/address/address_entity.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
@@ -8,7 +9,6 @@ import 'package:muaho/presentation/address/create_address/create_location_screen
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 
-import '../../../main.dart';
 import 'bloc/address_bloc.dart';
 
 class AddressScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class AddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AddressBloc>(
       create: (context) =>
-          getIt(param1: BlocProvider.of<CartUpdateBloc>(context))
+        inject(param1: BlocProvider.of<CartUpdateBloc>(context))
             ..add(
               RequestListAddressEvent(),
             ),

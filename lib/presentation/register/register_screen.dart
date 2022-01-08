@@ -3,10 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/common/extensions/ui/context.dart';
 import 'package:muaho/domain/use_case/sign_in/register_email_use_case.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 
@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RegisterBloc>(
-      create: (context) => getIt(),
+      create: (context) => inject(),
       child: Container(
           color: Colors.white,
           child: SafeArea(

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/common/di.dart';
+import 'package:muaho/common/extensions/ui/context.dart';
 import 'package:muaho/data/di.dart';
 import 'package:muaho/domain/di.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
@@ -29,16 +30,15 @@ import 'package:muaho/presentation/sign_in/sign_in.dart';
 import 'package:muaho/presentation/voucher_list/ui/voucher_list_screen.dart';
 
 import 'presentation/chat-support/chat_support.dart';
-
-final getIt = GetIt.instance;
 int startTime = 0;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   EquatableConfig.stringify = true;
-  _initDi();
+  var getIt = GetIt.instance;
+  _initDi(getIt);
   await Firebase.initializeApp();
-  await getIt<AppLocalization>().initializeApp();
+  await getIt.get<AppLocalization>().initializeApp();
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Color(0x00FFFFFF),
@@ -67,7 +67,7 @@ Future<void> main() async {
   );
 }
 
-void _initDi() {
+void _initDi(GetIt getIt) {
   commonDiConfig(getIt);
   domainDiConfig(getIt);
   dataDiConfig(getIt);
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CartUpdateBloc>(
-      create: (ctx) => getIt(),
+      create: (ctx) => inject(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: context.locale,

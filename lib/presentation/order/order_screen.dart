@@ -2,12 +2,10 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/cart/cart_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
@@ -41,7 +39,7 @@ class _OrderScreenState extends State<OrderScreen>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrderBloc>(
-      create: (ctx) => getIt(param1: BlocProvider.of<CartUpdateBloc>(context))
+      create: (ctx) => inject(param1: BlocProvider.of<CartUpdateBloc>(context))
         ..add(
           GetShopDetailEvent(shopID: widget.shopArgument.shopId),
         ),

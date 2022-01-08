@@ -24,7 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HotSearchBloc>(
-      create: (_) => getIt()..add(HotSearchRequestEvent()),
+      create: (_) => inject()..add(HotSearchRequestEvent()),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(
