@@ -70,8 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavigationBarItem(Icons.home, 0),
-              _buildNavigationBarItem(Icons.dynamic_feed_rounded, 1),
-              _buildNavigationBarItem(Icons.settings, 2),
+              _buildNavigationBarItem(Icons.dynamic_feed, 1),
+              _buildNavigationBarItem(Icons.account_circle, 2),
             ],
           ),
         ),

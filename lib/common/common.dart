@@ -7,6 +7,7 @@ export 'extensions/list.dart';
 export 'extensions/network.dart';
 export 'extensions/number.dart';
 export 'extensions/string.dart';
+export 'extensions/ui/inject.dart';
 export 'extensions/ui/context.dart';
 export 'localization/app_localization.dart';
 export 'model/cart_store.dart';

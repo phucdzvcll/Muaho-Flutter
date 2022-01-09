@@ -39,7 +39,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
               ),
             ),
             child: BlocProvider<SearchShopBloc>(
-              create: (_) => getIt()
+              create: (_) => inject()
                 ..add(
                   SearchEvent(keyword: widget.args.keyword),
                 ),

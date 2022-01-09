@@ -5,7 +5,6 @@ import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/domain.dart';
 import 'package:muaho/domain/models/payment/payment_entity.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/address/address_info/address_screen.dart';
 import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
@@ -23,7 +22,7 @@ class PaymentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<PaymentBloc>(
       create: (context) =>
-          getIt(param1: BlocProvider.of<CartUpdateBloc>(context)),
+          inject(param1: BlocProvider.of<CartUpdateBloc>(context)),
       child: BlocBuilder<CartUpdateBloc, CartUpdateState>(
         builder: (ctx, cartUpdateState) {
           return Builder(builder: (context) {

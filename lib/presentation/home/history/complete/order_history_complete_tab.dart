@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
 import 'package:muaho/presentation/home/history/models/order_history_complete_model.dart';
@@ -23,7 +22,7 @@ class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider<OrderHistoryCompleteBloc>(
-      create: (context) => getIt()..add(GetOrderHistoryCompleteEvent()),
+      create: (context) => inject()..add(GetOrderHistoryCompleteEvent()),
       child: BlocBuilder<OrderHistoryCompleteBloc, OrderHistoryCompleteState>(
         builder: (context, state) {
           return _handleBuilder(state, context);

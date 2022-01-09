@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/common/extensions/ui/context.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
+import 'package:muaho/presentation/voucher_list/ui/voucher_list_screen.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -15,13 +17,12 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage>
     with AutomaticKeepAliveClientMixin {
-  final AppLocalization appLocalization = getIt.get();
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider<SettingBloc>(
-      create: (context) => getIt()..add(GetUserInfoEvent()),
+      create: (context) => inject()..add(GetUserInfoEvent()),
       child: Container(
         color: Theme.of(context).backgroundColor,
         child: SafeArea(
@@ -93,7 +94,9 @@ class _SettingPageState extends State<SettingPage>
                                 Icons.navigate_next_sharp,
                                 color: Colors.grey[400] ?? Colors.grey,
                               ),
-                              onPress: () {},
+                              onPress: () {
+                                Navigator.of(context).pushNamed(VoucherListScreen.routeName);
+                              },
                               underlineWidth: 0.5,
                             ),
                             _itemSettingBuilder(
@@ -182,7 +185,7 @@ class _SettingPageState extends State<SettingPage>
 
   Future<dynamic> _showDialogResult(BuildContext context) async {
     int _value = 1;
-    if (appLocalization.getCurrentLocale(context).languageCode == 'vi') {
+    if (inject<AppLocalization>().getCurrentLocale(context).languageCode == 'vi') {
       _value = 1;
     } else {
       _value = 2;
@@ -221,7 +224,7 @@ class _SettingPageState extends State<SettingPage>
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () async {
-                await appLocalization.setLocale(
+                await inject<AppLocalization>().setLocale(
                   context,
                   Locale("vi"),
                 );
@@ -235,7 +238,7 @@ class _SettingPageState extends State<SettingPage>
                     groupValue: _value,
                     activeColor: Theme.of(context).primaryColorLight,
                     onChanged: (int? value) async {
-                      await appLocalization.setLocale(
+                      await inject<AppLocalization>().setLocale(
                         context,
                         Locale("vi"),
                       );
@@ -249,7 +252,7 @@ class _SettingPageState extends State<SettingPage>
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () async {
-                await appLocalization.setLocale(
+                await inject<AppLocalization>().setLocale(
                   context,
                   Locale("en"),
                 );
@@ -263,7 +266,7 @@ class _SettingPageState extends State<SettingPage>
                     activeColor: Theme.of(context).primaryColorLight,
                     groupValue: _value,
                     onChanged: (value) async {
-                      await appLocalization.setLocale(
+                      await inject<AppLocalization>().setLocale(
                         context,
                         Locale("en"),
                       );

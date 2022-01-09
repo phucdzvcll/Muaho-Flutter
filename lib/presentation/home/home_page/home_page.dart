@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage>
     super.build(context);
 
     return BlocProvider<HomePageBloc>(
-      create: (ctx) => getIt()..add(HomePageRequestEvent()),
+      create: (ctx) => inject()..add(HomePageRequestEvent()),
       child: Container(
         color: Colors.white,
         child: SafeArea(

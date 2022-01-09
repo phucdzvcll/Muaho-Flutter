@@ -12,6 +12,10 @@
     "hotItems": "Mặt hàng thường mua",
     "searchHint": "Bạn muốn mua gì?"
   },
+  "voucherList": {
+    "errorMsg": "Error",
+    "titleScreen": "Mã giảm giá"
+  },
   "payment": {
     "total": "Tổng cộng",
     "editAddress": "Chỉnh sửa",
@@ -102,12 +106,12 @@
     "updateInfo": "Cập nhật thông tin",
     "phoneNumberTitle": "Số điện thoại",
     "addressTitle": "Địa chỉ",
-    "discountTitle": "Khuyến mãi",
+    "discountTitle": "Mã giảm giá",
     "languageTitle": "Ngôn ngữ",
     "logoutTitle": "Đăng xuất",
     "changePasswordTitle": "Đổi mật khẩu",
     "currentLanguageSubtitle": "Tiếng Việt",
-    "languageSelectionTitle": "Chọn ngôn ngữ",
+    "languageSelectionTitle": "Ngôn ngữ",
     "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
     "emailTitle": "Email"
   },

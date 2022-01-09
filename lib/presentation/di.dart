@@ -7,6 +7,7 @@ import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
 import 'package:muaho/presentation/login/bloc/login_bloc.dart';
 import 'package:muaho/presentation/register/bloc/register_bloc.dart';
+import 'package:muaho/presentation/voucher_list/bloc/voucher_list_bloc.dart';
 
 import 'cart/bloc/cart_bloc.dart';
 import 'chat-support/bloc/chat_bloc.dart';
@@ -112,6 +113,12 @@ void presentationDiConfig(GetIt injector) {
       userStore: injector(),
       appEventBus: injector(),
       firebaseAuth: injector(),
+    ),
+  );
+  injector.registerFactory(
+    () => VoucherListBloc(
+      getVoucherListUseCase: injector(),
+
     ),
   );
 }

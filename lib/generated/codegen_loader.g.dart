@@ -28,6 +28,10 @@ class CodegenLoader extends AssetLoader{
     "hotItems": "Commonly purchased items",
     "searchHint": "What do you want to buy?"
   },
+  "voucherList": {
+    "errorMsg": "Error",
+    "titleScreen": "Vouchers"
+  },
   "payment": {
     "total": "Total",
     "editAddress": "Edit",
@@ -118,12 +122,12 @@ class CodegenLoader extends AssetLoader{
     "updateInfo": "Update information",
     "phoneNumberTitle": "Phone number",
     "addressTitle": "Address",
-    "discountTitle": "Discount",
+    "discountTitle": "Vouchers",
     "languageTitle": "Language",
     "logoutTitle": "Logout",
     "changePasswordTitle": "Change password",
     "currentLanguageSubtitle": "English",
-    "languageSelectionTitle": "Language Selection",
+    "languageSelectionTitle": "Language",
     "discountSubtitle": "You have {discount} voucher",
     "emailTitle": "Email"
   },
@@ -181,6 +185,10 @@ static const Map<String,dynamic> vi = {
     "hotShop": "Cửa hàng nổi bật",
     "hotItems": "Mặt hàng thường mua",
     "searchHint": "Bạn muốn mua gì?"
+  },
+  "voucherList": {
+    "errorMsg": "Error",
+    "titleScreen": "Mã giảm giá"
   },
   "payment": {
     "total": "Tổng cộng",
@@ -272,12 +280,12 @@ static const Map<String,dynamic> vi = {
     "updateInfo": "Cập nhật thông tin",
     "phoneNumberTitle": "Số điện thoại",
     "addressTitle": "Địa chỉ",
-    "discountTitle": "Khuyến mãi",
+    "discountTitle": "Mã giảm giá",
     "languageTitle": "Ngôn ngữ",
     "logoutTitle": "Đăng xuất",
     "changePasswordTitle": "Đổi mật khẩu",
     "currentLanguageSubtitle": "Tiếng Việt",
-    "languageSelectionTitle": "Chọn ngôn ngữ",
+    "languageSelectionTitle": "Ngôn ngữ",
     "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
     "emailTitle": "Email"
   },

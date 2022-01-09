@@ -3,10 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/common/extensions/ui/context.dart';
 import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
 import 'package:muaho/presentation/register/register_screen.dart';
@@ -23,7 +23,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
-      create: (context) => getIt(),
+      create: (context) => inject(),
       child: Builder(builder: (ctx) {
         return BlocListener<LoginBloc, LoginState>(
           listenWhen: (pre, curr) =>
@@ -203,7 +203,7 @@ class LoginScreen extends StatelessWidget {
       builder: (context, state) {
         return GestureDetector(
           onTap: () async {
-            await getIt.get<AppLocalization>().setLocale(context, Locale("en"));
+            await inject<AppLocalization>().setLocale(context, Locale("en"));
             if (!(state is RequestingLoginState)) {
               BlocProvider.of<LoginBloc>(ctx).add(
                 PressLoginBtnEvent(),
