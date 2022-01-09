@@ -45,10 +45,18 @@ class $AssetsImagesGen {
       const SvgGenImage('assets/images/shopping_cart_checkout_black_24dp.svg');
 }
 
+class $AssetsJsonGen {
+  const $AssetsJsonGen();
+
+  /// File path: assets/json/maintenance_background.json
+  String get maintenanceBackground => 'assets/json/maintenance_background.json';
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsJsonGen json = $AssetsJsonGen();
 }
 
 class AssetGenImage extends AssetImage {

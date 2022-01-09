@@ -16,6 +16,17 @@ class _GetUserNameEvent extends HomePageEvent {
   List<Object?> get props => [];
 }
 
+class _MaintenanceEvent extends HomePageEvent {
+  final int totalMinutes;
+
+  @override
+  List<Object?> get props => [totalMinutes];
+
+  _MaintenanceEvent({
+    required this.totalMinutes,
+  });
+}
+
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   final GetListProductCategoriesHomeUseCase useCaseProductCategories;
   final GetListBannerUseCase bannerUseCase;
@@ -25,6 +36,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   final UserStore userStore;
   final AppEventBus eventBus;
   StreamSubscription<LoginSuccessEventBus>? listen;
+  StreamSubscription<MaintenanceEvent>? maintenanceListen;
 
   HomePageBloc({
     required this.useCaseProductCategories,
@@ -50,6 +62,14 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     on<_GetUserNameEvent>((event, emit) async {
       var userName = await userStore.getUserName();
       emit(UserNameState(userName: userName.defaultEmpty()));
+    });
+
+    on<_MaintenanceEvent>((event, emit) {
+      emit(MaintenanceSate(totalMinutes: event.totalMinutes));
+    });
+
+    maintenanceListen = eventBus.on<MaintenanceEvent>().listen((event) {
+      this.add(_MaintenanceEvent(totalMinutes: event.totalMinutes));
     });
 
     listen = eventBus.on<LoginSuccessEventBus>().listen((event) async {
@@ -89,6 +109,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   @override
   Future<void> close() {
     listen?.cancel();
+    maintenanceListen?.cancel();
     return super.close();
   }
 }

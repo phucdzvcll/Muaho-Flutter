@@ -6,8 +6,8 @@ export 'remote/order/order_service.dart';
 export 'remote/search/search_service.dart';
 export 'remote/shop/shop_service.dart';
 export 'remote/sign_in/sign_in_service.dart';
-export 'repository/address_info_repository.dart';
 //repo
+export 'repository/address_info_repository.dart';
 export 'repository/history_repository.dart';
 export 'repository/home_repository.dart';
 export 'repository/order_repository.dart';
@@ -23,6 +23,7 @@ export 'response/history/order_history_detail_response.dart';
 //response
 export 'response/home/productCategories/product_categories_response.dart';
 export 'response/home/slide_banner/slide_banner_response.dart';
+export 'response/maintenance/maintenance_response.dart';
 export 'response/order/order_body.dart';
 export 'response/order/order_status.dart';
 export 'response/search/hot_search/hot_search_response.dart';

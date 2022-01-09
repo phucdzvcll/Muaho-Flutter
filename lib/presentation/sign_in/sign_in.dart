@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/home_screen.dart';
+import 'package:muaho/presentation/maintenance/maintenance.dart';
 
 import 'bloc/sign_bloc_bloc.dart';
 
@@ -23,6 +24,14 @@ class SignIn extends StatelessWidget {
                   Navigator.pushReplacementNamed(
                     ctx,
                     HomeScreen.routeName,
+                  );
+                } else if (state is MaintenanceSate) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MaintenanceScreen(totalMinute: state.totalMinutes),
+                    ),
                   );
                 }
               },

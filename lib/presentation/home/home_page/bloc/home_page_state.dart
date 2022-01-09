@@ -37,3 +37,14 @@ class UserNameState extends HomePageState {
     required this.userName,
   });
 }
+
+class MaintenanceSate extends HomePageState {
+  final int totalMinutes;
+
+  MaintenanceSate({
+    required this.totalMinutes,
+  });
+
+  @override
+  List<Object?> get props => [totalMinutes];
+}

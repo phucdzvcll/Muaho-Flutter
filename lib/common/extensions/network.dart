@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/data/data.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:synchronized/synchronized.dart' as sLock;
 
@@ -138,6 +140,7 @@ Future<NetworkResult<T>> handleNetworkResult<T>(
         networkResult = NetworkResult<T>(error: NetworkError.PROCESS_TIMEOUT);
         break;
       case DioErrorType.response:
+        _handleIfMaintenanceError(e);
         networkResult = NetworkResult<T>(error: NetworkError.SERVER_ERROR);
         break;
       case DioErrorType.cancel:
@@ -149,6 +152,31 @@ Future<NetworkResult<T>> handleNetworkResult<T>(
     }
     return networkResult;
   }
+}
+
+void _handleIfMaintenanceError(DioError e) {
+  Response? response = e.response;
+  if (response?.statusCode == 999) {
+    AppEventBus appEventBus = GetIt.instance.get();
+    if (response is Response<Map<String, dynamic>>) {
+      var result = MaintenanceResponse.fromJson(response.data ?? {});
+      appEventBus
+          .fireEvent(MaintenanceEvent(totalMinutes: result.totalMinutes ?? 0));
+    } else {
+      appEventBus.fireEvent(MaintenanceEvent(totalMinutes: 0));
+    }
+  }
+}
+
+class MaintenanceEvent extends AppEvent {
+  final int totalMinutes;
+
+  MaintenanceEvent({
+    required this.totalMinutes,
+  });
+
+  @override
+  List<Object?> get props => [totalMinutes];
 }
 
 enum NetworkError {

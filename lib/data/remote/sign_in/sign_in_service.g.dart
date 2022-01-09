@@ -21,11 +21,15 @@ Map<String, dynamic> _$RefreshTokenBodyParamToJson(
 SignInBodyParam _$SignInBodyParamFromJson(Map<String, dynamic> json) =>
     SignInBodyParam(
       firebaseToken: json['firebase_token'] as String,
+      displayName: json['displayName'] as String?,
+      email: json['email'] as String?,
     );
 
 Map<String, dynamic> _$SignInBodyParamToJson(SignInBodyParam instance) =>
     <String, dynamic>{
       'firebase_token': instance.firebaseToken,
+      'displayName': instance.displayName,
+      'email': instance.email,
     };
 
 // **************************************************************************

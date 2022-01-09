@@ -21,7 +21,12 @@ import 'search/search_shop/bloc/search_shop_bloc.dart';
 import 'sign_in/bloc/sign_bloc_bloc.dart';
 
 void presentationDiConfig(GetIt injector) {
-  injector.registerFactory(() => SignBloc(signInUseCase: injector()));
+  injector.registerFactory(
+    () => SignBloc(
+      signInUseCase: injector(),
+      eventBus: injector(),
+    ),
+  );
 
   injector.registerFactory(
       () => SearchShopBloc(getListShopBySearchUseCase: injector()));

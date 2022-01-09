@@ -21,8 +21,8 @@ class SignInRepositoryImpl implements SignInRepository {
   @override
   Future<Either<Failure, JwtEntity>> getJwtToken(
       {required String firebaseToken}) async {
-    var signInRequest =
-        service.signIn(SignInBodyParam(firebaseToken: firebaseToken));
+    var signInRequest = service.signIn(SignInBodyParam(
+        firebaseToken: firebaseToken, email: null, displayName: null));
     var result = await handleNetworkResult(signInRequest);
     if (result.isSuccess()) {
       JwtEntity entity = JwtEntity(
@@ -86,7 +86,9 @@ class SignInRepositoryImpl implements SignInRepository {
         ..setUseName(userName)
         ..setEmail(email);
       log(refreshTokenResponse.jwtToken.defaultEmpty());
-      return SuccessValue(SignInEntity(userName: userName));
+      return SuccessValue(SignInEntity(
+        userName: userName,
+      ));
     } else {
       try {
         await firebaseAuth.signInAnonymously();

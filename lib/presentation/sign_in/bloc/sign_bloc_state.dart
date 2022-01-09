@@ -30,3 +30,14 @@ class SignError extends SignBlocState {
   @override
   List<Object?> get props => [errorMss];
 }
+
+class MaintenanceSate extends SignBlocState {
+  final int totalMinutes;
+
+  MaintenanceSate({
+    required this.totalMinutes,
+  });
+
+  @override
+  List<Object?> get props => [totalMinutes];
+}
