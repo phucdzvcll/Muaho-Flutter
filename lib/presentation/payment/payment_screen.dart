@@ -10,7 +10,7 @@ import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
 import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
-import 'package:muaho/presentation/home/home_screen.dart';
+import 'package:muaho/presentation/main/main_sreen.dart';
 
 import 'bloc/payment_bloc.dart';
 
@@ -40,7 +40,7 @@ class PaymentScreen extends StatelessWidget {
                         listener: (_, state) {
                           if (state is CreateOrderSuccess) {
                             Navigator.popUntil(context,
-                                ModalRoute.withName(HomeScreen.routeName));
+                                ModalRoute.withName(MainScreen.routeName));
                             Navigator.pushNamed(
                               context,
                               OrderDetail.routeName,
@@ -101,7 +101,9 @@ class PaymentScreen extends StatelessWidget {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                LocaleKeys.payment_successOrderMsg.translate(),
+                                                LocaleKeys
+                                                    .payment_successOrderMsg
+                                                    .translate(),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline1!

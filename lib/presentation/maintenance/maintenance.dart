@@ -1,14 +1,20 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:muaho/common/localization/app_localization.dart';
 import 'package:muaho/generated/assets.gen.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
+import 'package:muaho/presentation/main/bloc/main_bloc.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 class MaintenanceScreen extends StatelessWidget {
-  final int totalMinute;
-  final DateTime alert;
+  final MaintenanceArgument maintenanceArgument;
+  final DateTime finishDateTime;
 
-  MaintenanceScreen({Key? key, required this.totalMinute})
-      : alert = DateTime.now().add(Duration(seconds: totalMinute * 60)),
+  MaintenanceScreen({Key? key, required this.maintenanceArgument})
+      : finishDateTime = DateTime.now()
+            .add(Duration(seconds: maintenanceArgument.totalMinutes * 60)),
         super(key: key);
 
   @override
@@ -29,7 +35,7 @@ class MaintenanceScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Chúng tôi hiện đang bảo trì",
+                  LocaleKeys.maintenance_label1.translate(),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
@@ -38,47 +44,75 @@ class MaintenanceScreen extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                TimerBuilder.scheduled([alert], builder: (context) {
-                  var now = DateTime.now();
-                  var reached = now.compareTo(alert) >= 0;
-                  return Center(
-                    child: TimerBuilder.periodic(
-                      Duration(
-                        seconds: 1,
-                      ),
-                      alignment: Duration.zero,
-                      builder: (context) {
-                        DateTime now = DateTime.now();
-                        Duration remaining = alert.difference(now);
-                        return Text(
-                          !reached
-                              ? _printDuration(remaining)
-                              : "Sắp xong rồi, bạn đới chút nhé",
-                          style:
-                              Theme.of(context).textTheme.headline1?.copyWith(
-                                    color: Theme.of(context).primaryColorLight,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        );
-                      },
-                    ),
-                  );
-                }),
+                Center(
+                  child: _buildCountDown(),
+                ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  "Bạn đừng lo lắng, chúng tôi sẽ xong sớm thôi!",
+                  LocaleKeys.maintenance_label2.translate(),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
                       ?.copyWith(fontSize: 16),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  margin: const EdgeInsets.all(16),
+                  width: double.infinity,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.green,
+                  ),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      BlocProvider.of<MainBloc>(context)
+                          .add(GoToHomeScreenEvent());
+                    },
+                    child: Center(
+                      child: Text(
+                        LocaleKeys.maintenance_checkButtonTitle.translate(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2
+                            ?.copyWith(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  TimerBuilder _buildCountDown() {
+    return TimerBuilder.periodic(
+      Duration(
+        seconds: 1,
+      ),
+      alignment: Duration.zero,
+      builder: (context) {
+        var now = DateTime.now();
+        var reached = now.compareTo(finishDateTime) >= 0;
+        Duration remaining = finishDateTime.difference(now);
+        return Text(
+          !reached
+              ? _printDuration(remaining)
+              : LocaleKeys.maintenance_messAfterCountDown.translate(),
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+                color: Theme.of(context).primaryColorLight,
+                fontWeight: FontWeight.bold,
+              ),
+        );
+      },
     );
   }
 
@@ -88,4 +122,15 @@ class MaintenanceScreen extends StatelessWidget {
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
+}
+
+class MaintenanceArgument extends Equatable {
+  final int totalMinutes;
+
+  const MaintenanceArgument({
+    required this.totalMinutes,
+  });
+
+  @override
+  List<Object?> get props => [totalMinutes];
 }

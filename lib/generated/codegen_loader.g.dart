@@ -170,6 +170,12 @@ class CodegenLoader extends AssetLoader{
     "displayNameEmptyWarning": "Display name cannot be blank",
     "displayNameLabel": "Display name",
     "displayNameHintText": "Display name"
+  },
+  "maintenance": {
+    "label1": "We are currently under maintenance",
+    "label2": "Don't worry, we'll be done soon!",
+    "checkButtonTitle": "Check system state",
+    "messAfterCountDown": "It's almost done, please wait a moment"
   }
 };
 static const Map<String,dynamic> vi = {
@@ -328,6 +334,12 @@ static const Map<String,dynamic> vi = {
     "displayNameEmptyWarning": "Tên hiển thị không được bỏ trống",
     "displayNameLabel": "Tên hiển thị",
     "displayNameHintText": "Tên hiển thị"
+  },
+  "maintenance": {
+    "label1": "Chúng tôi hiện tiếng hành đang bảo trì",
+    "label2": "Bạn đừng lo lắng, chúng tôi sẽ xong sớm thôi!",
+    "checkButtonTitle": "Kiểm tra trạng thái hệ thống",
+    "messAfterCountDown": "Sắp xong rồi, bạn đợi chút nhé"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "vi": vi};

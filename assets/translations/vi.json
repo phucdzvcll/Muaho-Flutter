@@ -154,5 +154,11 @@
     "displayNameEmptyWarning": "Tên hiển thị không được bỏ trống",
     "displayNameLabel": "Tên hiển thị",
     "displayNameHintText": "Tên hiển thị"
+  },
+  "maintenance": {
+    "label1": "Chúng tôi hiện tiếng hành đang bảo trì",
+    "label2": "Bạn đừng lo lắng, chúng tôi sẽ xong sớm thôi!",
+    "checkButtonTitle": "Kiểm tra trạng thái hệ thống",
+    "messAfterCountDown": "Sắp xong rồi, bạn đợi chút nhé"
   }
 }

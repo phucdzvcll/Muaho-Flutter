@@ -139,5 +139,10 @@ abstract class  LocaleKeys {
   static const register_displayNameLabel = 'register.displayNameLabel';
   static const register_displayNameHintText = 'register.displayNameHintText';
   static const register = 'register';
+  static const maintenance_label1 = 'maintenance.label1';
+  static const maintenance_label2 = 'maintenance.label2';
+  static const maintenance_checkButtonTitle = 'maintenance.checkButtonTitle';
+  static const maintenance_messAfterCountDown = 'maintenance.messAfterCountDown';
+  static const maintenance = 'maintenance';
 
 }

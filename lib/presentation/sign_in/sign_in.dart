@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/extensions/ui/inject.dart';
-import 'package:muaho/main.dart';
-import 'package:muaho/presentation/home/home_screen.dart';
-import 'package:muaho/presentation/maintenance/maintenance.dart';
+import 'package:muaho/presentation/main/bloc/main_bloc.dart';
 
 import 'bloc/sign_bloc_bloc.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,18 +19,7 @@ class SignIn extends StatelessWidget {
             child: BlocListener<SignBloc, SignBlocState>(
               listener: (ctx, state) {
                 if (state is SignSuccess) {
-                  Navigator.pushReplacementNamed(
-                    ctx,
-                    HomeScreen.routeName,
-                  );
-                } else if (state is MaintenanceSate) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          MaintenanceScreen(totalMinute: state.totalMinutes),
-                    ),
-                  );
+                  BlocProvider.of<MainBloc>(context).add(GoToHomeScreenEvent());
                 }
               },
               child: BlocBuilder<SignBloc, SignBlocState>(

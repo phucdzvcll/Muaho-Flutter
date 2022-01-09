@@ -10,8 +10,6 @@ import 'package:muaho/presentation/home/home_page/home_page.dart';
 import 'package:muaho/presentation/home/setting_page/setting_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const routeName = '/home_screen';
-
   const HomeScreen({Key? key}) : super(key: key);
 
   @override

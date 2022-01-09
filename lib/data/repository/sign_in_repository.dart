@@ -1,11 +1,8 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
 import 'package:muaho/data/response/sign_in/refresh_token_response.dart';
 import 'package:muaho/domain/domain.dart';
-import 'package:muaho/domain/models/sign_in/jwt_entity.dart';
 
 class SignInRepositoryImpl implements SignInRepository {
   final SignInService service;
@@ -76,19 +73,28 @@ class SignInRepositoryImpl implements SignInRepository {
     if (firebaseAuth.currentUser != null &&
         rToken != null &&
         rToken.isNotEmpty) {
-      RefreshTokenResponse refreshTokenResponse =
-          await apiSignInService.refreshToken(
-              RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
-      String userName = (await userStore.getUserName()).defaultEmpty();
-      String email = (await userStore.getEmail()).defaultEmpty();
-      userStore
-        ..setToken(refreshTokenResponse.jwtToken.defaultEmpty())
-        ..setUseName(userName)
-        ..setEmail(email);
-      log(refreshTokenResponse.jwtToken.defaultEmpty());
-      return SuccessValue(SignInEntity(
-        userName: userName,
-      ));
+      Future<RefreshTokenResponse> request;
+      request = apiSignInService.refreshToken(
+          RefreshTokenBodyParam(refreshToken: rToken.defaultEmpty()));
+      NetworkResult<RefreshTokenResponse> result =
+          await handleNetworkResult(request);
+
+      var response = result.response;
+      if (result.isSuccess() && response != null) {
+        String userName = (await userStore.getUserName()).defaultEmpty();
+        String email = (await userStore.getEmail()).defaultEmpty();
+        userStore
+          ..setToken(response.jwtToken.defaultEmpty())
+          ..setUseName(userName)
+          ..setEmail(email);
+        return SuccessValue(SignInEntity(
+          userName: userName,
+        ));
+      } else {
+        return FailValue(
+          ServerError(msg: result.error, errorCode: result.errorCode),
+        );
+      }
     } else {
       try {
         await firebaseAuth.signInAnonymously();

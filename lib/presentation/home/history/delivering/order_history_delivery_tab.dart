@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:muaho/common/extensions/ui/inject.dart';
 import 'package:muaho/common/localization/app_localization.dart';
+import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/components/order_product_builder.dart';
 import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
@@ -41,8 +43,14 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab>
     } else if (state is OrderHistoryDeliveringSuccess) {
       return state.orderHistoryDeliveries.isEmpty
           ? Center(
-              child: Text(
-                "Không có đơn hàng nào đang giao",
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Lottie.asset(
+                    Assets.json.pageEmpty,
+                  ),
+                ),
               ),
             )
           : ListView.builder(

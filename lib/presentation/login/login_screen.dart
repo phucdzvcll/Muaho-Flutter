@@ -8,7 +8,7 @@ import 'package:muaho/domain/use_case/sign_in/login_email_use_case.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
-import 'package:muaho/presentation/home/home_screen.dart';
+import 'package:muaho/presentation/main/bloc/main_bloc.dart';
 import 'package:muaho/presentation/register/register_screen.dart';
 
 import 'bloc/login_bloc.dart';
@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
           listener: (context, state) async {
             if (state is LoginSuccess) {
               ctx.showSnackBar(LocaleKeys.login_successTitle.translate());
-              context.popUtil(HomeScreen.routeName);
+              BlocProvider.of<MainBloc>(context).add(GoToHomeScreenEvent());
             } else if (state is LoginFail) {
               if (state.errorMss == LoginError.emailNotExist) {
                 ctx.showSnackBar(

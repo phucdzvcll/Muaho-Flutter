@@ -8,7 +8,7 @@ import 'package:muaho/domain/use_case/sign_in/register_email_use_case.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
-import 'package:muaho/presentation/home/home_screen.dart';
+import 'package:muaho/presentation/main/bloc/main_bloc.dart';
 
 import 'bloc/register_bloc.dart';
 
@@ -71,7 +71,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             break;
                         }
                       } else if (state is CreateAccountSuccess) {
-                        context.popUtil(HomeScreen.routeName);
+                        BlocProvider.of<MainBloc>(context)
+                            .add(GoToHomeScreenEvent());
                       }
                     },
                     child: _loginBuilder(ctx),

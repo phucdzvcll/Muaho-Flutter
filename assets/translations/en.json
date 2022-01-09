@@ -154,5 +154,11 @@
     "displayNameEmptyWarning" : "Display name cannot be blank",
     "displayNameLabel" : "Display name",
     "displayNameHintText" : "Display name"
+  },
+  "maintenance": {
+    "label1": "We are currently under maintenance",
+    "label2": "Don't worry, we'll be done soon!",
+    "checkButtonTitle": "Check system state",
+    "messAfterCountDown": "It's almost done, please wait a moment"
   }
 }

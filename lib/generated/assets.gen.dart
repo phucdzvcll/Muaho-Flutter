@@ -28,6 +28,9 @@ class $AssetsImagesGen {
   AssetGenImage get flashScreenHigtQuality =>
       const AssetGenImage('assets/images/flash_screen_higt_quality.png');
 
+  /// File path: assets/images/lf30_editor_fthawjry.json
+  String get lf30EditorFthawjry => 'assets/images/lf30_editor_fthawjry.json';
+
   /// File path: assets/images/logo_square.png
   AssetGenImage get logoSquare =>
       const AssetGenImage('assets/images/logo_square.png');
@@ -50,6 +53,9 @@ class $AssetsJsonGen {
 
   /// File path: assets/json/maintenance_background.json
   String get maintenanceBackground => 'assets/json/maintenance_background.json';
+
+  /// File path: assets/json/page_empty.json
+  String get pageEmpty => 'assets/json/page_empty.json';
 }
 
 class Assets {

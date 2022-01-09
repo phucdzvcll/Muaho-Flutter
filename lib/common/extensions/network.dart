@@ -158,20 +158,21 @@ void _handleIfMaintenanceError(DioError e) {
   Response? response = e.response;
   if (response?.statusCode == 999) {
     AppEventBus appEventBus = GetIt.instance.get();
-    if (response is Response<Map<String, dynamic>>) {
-      var result = MaintenanceResponse.fromJson(response.data ?? {});
-      appEventBus
-          .fireEvent(MaintenanceEvent(totalMinutes: result.totalMinutes ?? 0));
+    var data = response?.data;
+    if (data is Map<String, dynamic>) {
+      var result = MaintenanceResponse.fromJson(data);
+      appEventBus.fireEvent(
+          MaintenanceEventBus(totalMinutes: result.totalMinutes ?? 0));
     } else {
-      appEventBus.fireEvent(MaintenanceEvent(totalMinutes: 0));
+      appEventBus.fireEvent(MaintenanceEventBus(totalMinutes: 0));
     }
   }
 }
 
-class MaintenanceEvent extends AppEvent {
+class MaintenanceEventBus extends AppEvent {
   final int totalMinutes;
 
-  MaintenanceEvent({
+  MaintenanceEventBus({
     required this.totalMinutes,
   });
 

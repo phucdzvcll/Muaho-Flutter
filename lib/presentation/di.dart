@@ -15,6 +15,7 @@ import 'home/history/complete/bloc/order_history_complete_bloc.dart';
 import 'home/history/delivering/bloc/order_history_delivering_bloc.dart';
 import 'home/history/history_order_detail/bloc/order_detail_bloc.dart';
 import 'home/home_page/bloc/home_page_bloc.dart';
+import 'main/bloc/main_bloc.dart';
 import 'order/bloc/order_bloc.dart';
 import 'payment/bloc/payment_bloc.dart';
 import 'search/hot_search/bloc/hot_search_bloc.dart';
@@ -25,7 +26,6 @@ void presentationDiConfig(GetIt injector) {
   injector.registerFactory(
     () => SignBloc(
       signInUseCase: injector(),
-      eventBus: injector(),
     ),
   );
 
@@ -118,7 +118,12 @@ void presentationDiConfig(GetIt injector) {
   injector.registerFactory(
     () => VoucherListBloc(
       getVoucherListUseCase: injector(),
+    ),
+  );
 
+  injector.registerFactory(
+    () => MainBloc(
+      appEventBus: injector(),
     ),
   );
 }
