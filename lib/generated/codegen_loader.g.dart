@@ -129,7 +129,8 @@ class CodegenLoader extends AssetLoader{
     "currentLanguageSubtitle": "English",
     "languageSelectionTitle": "Language",
     "discountSubtitle": "You have {discount} voucher",
-    "emailTitle": "Email"
+    "emailTitle": "Email",
+    "darkModeTitle": "Dark mode"
   },
   "login": {
     "successTitle": "Success",
@@ -293,7 +294,8 @@ static const Map<String,dynamic> vi = {
     "currentLanguageSubtitle": "Tiếng Việt",
     "languageSelectionTitle": "Ngôn ngữ",
     "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
-    "emailTitle": "Email"
+    "emailTitle": "Email",
+    "darkModeTitle": "Chế độ tối"
   },
   "login": {
     "successTitle": "Thành công",

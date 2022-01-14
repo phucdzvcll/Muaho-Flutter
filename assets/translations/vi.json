@@ -113,7 +113,8 @@
     "currentLanguageSubtitle": "Tiếng Việt",
     "languageSelectionTitle": "Ngôn ngữ",
     "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
-    "emailTitle": "Email"
+    "emailTitle": "Email",
+    "darkModeTitle": "Chế độ tối"
   },
   "login": {
     "successTitle": "Thành công",

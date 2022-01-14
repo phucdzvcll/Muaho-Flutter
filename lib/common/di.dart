@@ -2,13 +2,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/geolocator/geolocator.dart';
+import 'package:muaho/common/model/mode_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common.dart';
 
-void commonDiConfig(GetIt injector) {
+Future<void> commonDiConfig(GetIt injector) async {
   injector.registerLazySingleton<AppLocalization>(() {
     return AppLocalization();
   });
+
+  injector.registerSingleton<SharedPreferences>(
+      await SharedPreferences.getInstance());
 
   injector.registerLazySingleton<AppGeoLocator>(() => AppGeoLocator());
 
@@ -45,4 +50,7 @@ void commonDiConfig(GetIt injector) {
   injector.registerLazySingleton(
     () => AppEventBus(),
   );
+
+  injector.registerLazySingleton<CurrentMode>(
+      () => CurrentMode(storage: injector()));
 }

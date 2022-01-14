@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:muaho/common/common.dart';
 import 'package:muaho/presentation/chat-support/chat_support.dart';
 import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
 import 'package:muaho/presentation/deeplink/deeplink_navigator.dart';
@@ -36,54 +35,70 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            ChatScreen.routeName,
-          );
-        },
-        child: Swing(
-          duration: Duration(milliseconds: 1200),
-          delay: Duration(milliseconds: 200),
-          child: ZoomIn(
-            duration: Duration(milliseconds: 1200),
-            child: Icon(
-              Icons.contact_support,
-              size: 32,
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Stack(
+        children: [
+          Center(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) => {_currentPage.value = index},
+              children: [
+                const HomePage(),
+                const HistoryPage(),
+                const SettingPage(),
+              ],
             ),
           ),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-        child: Container(
-          height: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: MyTheme.primaryButtonColor,
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Theme.of(context).primaryColorLight,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildNavigationBarItem(Icons.home, 0),
+                    _buildNavigationBarItem(Icons.dynamic_feed, 1),
+                    _buildNavigationBarItem(Icons.account_circle, 2),
+                  ],
+                ),
+              ),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavigationBarItem(Icons.home, 0),
-              _buildNavigationBarItem(Icons.dynamic_feed, 1),
-              _buildNavigationBarItem(Icons.account_circle, 2),
-            ],
-          ),
-        ),
-      ),
-      body: Center(
-        child: PageView(
-          controller: _pageController,
-          onPageChanged: (index) => {_currentPage.value = index},
-          children: [
-            const HomePage(),
-            const HistoryPage(),
-            const SettingPage(),
-          ],
-        ),
+          Positioned(
+            right: 16,
+            bottom: 86,
+            child: CircleAvatar(
+              radius: 32,
+              backgroundColor: Theme.of(context).cardColor,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    ChatScreen.routeName,
+                  );
+                },
+                child: Swing(
+                  duration: Duration(milliseconds: 1200),
+                  delay: Duration(milliseconds: 200),
+                  child: ZoomIn(
+                    duration: Duration(milliseconds: 1200),
+                    child: Icon(
+                      Icons.contact_support,
+                      size: 32,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -103,8 +118,12 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 40,
             decoration: BoxDecoration(
                 color: id == _currentPage.value
-                    ? MyTheme.activeButtonColor
-                    : MyTheme.primaryButtonColor,
+                    ? Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .selectedItemColor
+                    : Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .unselectedItemColor,
                 borderRadius: BorderRadius.circular(12)),
             child: Icon(
               icon,

@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/common/extensions/ui/context.dart';
 import 'package:muaho/domain/use_case/sign_in/register_email_use_case.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
@@ -43,13 +42,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocProvider<RegisterBloc>(
       create: (context) => inject(),
       child: Container(
-          color: Colors.white,
+          color: Theme.of(context).backgroundColor,
           child: SafeArea(
             child: Scaffold(
               appBar: AppBarComponent(
                 widget: SizedBox.shrink(),
               ),
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).backgroundColor,
               body: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Builder(builder: (ctx) {
@@ -88,7 +87,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ThemeData theme = Theme.of(ctx);
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: theme.backgroundColor,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -273,10 +274,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         case EmailValidated.Illegal:
           return Colors.red[100] ?? Colors.red;
         case EmailValidated.Empty:
-          return Theme.of(context).backgroundColor;
+          return Theme.of(context).cardColor;
       }
     } else {
-      return Theme.of(context).backgroundColor;
+      return Theme.of(context).cardColor;
     }
   }
 
@@ -333,10 +334,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         case DisplayNameValidated.TooLong:
           return Colors.red[100] ?? Colors.red;
         case DisplayNameValidated.Empty:
-          return Theme.of(context).backgroundColor;
+          return Theme.of(context).cardColor;
       }
     } else {
-      return Theme.of(context).backgroundColor;
+      return Theme.of(context).cardColor;
     }
   }
 
@@ -344,7 +345,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
@@ -408,7 +409,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _emailInput(ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
@@ -493,12 +494,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         case PasswordValidated.Illegal:
           return Colors.red[100] ?? Colors.red;
         case PasswordValidated.Empty:
-          return Theme.of(context).backgroundColor;
+          return Theme.of(context).cardColor;
         case PasswordValidated.Weak:
           return Colors.red[100] ?? Colors.red;
       }
     } else {
-      return Theme.of(context).backgroundColor;
+      return Theme.of(context).cardColor;
     }
   }
 
@@ -523,7 +524,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        color: theme.backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       width: double.infinity,
       child: TextFormField(
@@ -610,10 +613,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         case ConfirmPasswordValidated.Illegal:
           return Colors.red[100] ?? Colors.red;
         case ConfirmPasswordValidated.Empty:
-          return Theme.of(context).backgroundColor;
+          return Theme.of(context).cardColor;
       }
     } else {
-      return Theme.of(context).backgroundColor;
+      return Theme.of(context).cardColor;
     }
   }
 
@@ -636,7 +639,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ThemeData theme, RegisterState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        color: theme.backgroundColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       width: double.infinity,
       child: TextFormField(

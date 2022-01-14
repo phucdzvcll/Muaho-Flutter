@@ -60,9 +60,7 @@ class ChatMessageNoAnimation extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   text,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1,
+                  style: Theme.of(context).textTheme.subtitle1,
                   textAlign: TextAlign.end,
                 ),
               ),
@@ -114,9 +112,7 @@ class ChatMessageNoAnimation extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   text,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1,
+                  style: Theme.of(context).textTheme.subtitle1,
                   textAlign: TextAlign.end,
                 ),
               ),
@@ -198,7 +194,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
                 const Divider(height: 1.0),
                 Container(
-                  decoration: BoxDecoration(color: Theme.of(context).cardColor),
+                  decoration:
+                      BoxDecoration(color: Theme.of(context).backgroundColor),
                   child: _buildTextComposer(),
                 ),
               ],
@@ -234,7 +231,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           );
         } else if (state is ChatLostConnectionState) {
           return Center(
-            child: Text(LocaleKeys.chatWithSupport_lostConnectErrorMsg.translate()),
+            child: Text(
+                LocaleKeys.chatWithSupport_lostConnectErrorMsg.translate()),
           );
         } else {
           return Center(

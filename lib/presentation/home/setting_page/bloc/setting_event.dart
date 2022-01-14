@@ -4,7 +4,7 @@ abstract class SettingEvent extends Equatable {
   const SettingEvent();
 }
 
-class GetUserInfoEvent extends SettingEvent {
+class InitSettingEvent extends SettingEvent {
   @override
   List<Object?> get props => [];
 }

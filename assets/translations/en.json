@@ -113,7 +113,8 @@
     "currentLanguageSubtitle": "English",
     "languageSelectionTitle": "Language",
     "discountSubtitle": "You have {discount} voucher",
-    "emailTitle": "Email"
+    "emailTitle": "Email",
+    "darkModeTitle": "Dark mode"
   },
   "login": {
     "successTitle": "Success",

@@ -36,16 +36,17 @@ class _HomePageState extends State<HomePage>
     return BlocProvider<HomePageBloc>(
       create: (ctx) => inject()..add(HomePageRequestEvent()),
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).backgroundColor,
         child: SafeArea(
           child: Builder(builder: (ctx) {
             return Scaffold(
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).backgroundColor,
                 body: BlocBuilder<HomePageBloc, HomePageState>(
                   buildWhen: (pre, curr) =>
                       curr is HomePageSuccessState || curr is HomePageLoading,
                   builder: (ctx, state) {
                     return SingleChildScrollView(
+                        padding: const EdgeInsets.only(bottom: 78),
                         child: _handleBuilder(state, ctx));
                   },
                 ));
@@ -78,7 +79,7 @@ class _HomePageState extends State<HomePage>
               Navigator.pushNamed(context, LoginScreen.routeName);
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+              borderRadius: BorderRadius.circular(16),
               child: ImageNetworkBuilder(
                 imgUrl: "https://picsum.photos/50",
                 size: Size.square(50),
@@ -111,7 +112,8 @@ class _HomePageState extends State<HomePage>
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
-                                .copyWith(color: MyTheme.primaryColor),
+                                .copyWith(
+                                    color: Theme.of(context).primaryColor),
                           );
                         },
                       ),
@@ -125,8 +127,8 @@ class _HomePageState extends State<HomePage>
             padding: const EdgeInsets.only(right: 8),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                border: Border.all(color: MyTheme.borderLineColor),
-                borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+                border: Border.all(color: Theme.of(context).primaryColorLight),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: SizedBox(
                 width: 40,
@@ -158,8 +160,10 @@ class _HomePageState extends State<HomePage>
           ),
           DecoratedBox(
             decoration: BoxDecoration(
-              border: Border.all(color: MyTheme.borderLineColor),
-              borderRadius: BorderRadius.circular(MyTheme.radiusSize),
+              border: Border.all(
+                color: Theme.of(context).primaryColorLight,
+              ),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: SizedBox(
               width: 40,
@@ -290,13 +294,13 @@ class _HomePageState extends State<HomePage>
           child: Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: EdgeInsets.all(MyTheme.paddingSize),
+              padding: EdgeInsets.all(16),
               child: Text(
                 LocaleKeys.home_newsTitle.translate(),
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
-                    .copyWith(color: MyTheme.lessImportantTextColor),
+                    .copyWith(color: Theme.of(context).disabledColor),
               ),
             ),
           ),
@@ -310,7 +314,7 @@ class _HomePageState extends State<HomePage>
                 const EdgeInsets.only(left: 32, top: 16, bottom: 8, right: 32),
             child: Container(
               height: 1.5,
-              color: MyTheme.spacingColor,
+              color: Theme.of(context).backgroundColor,
             ),
           ),
         ),
@@ -440,8 +444,8 @@ class _HomePageState extends State<HomePage>
           effect: WormEffect(
             dotHeight: 4,
             dotWidth: 4,
-            activeDotColor: MyTheme.primaryButtonColor,
-            dotColor: MyTheme.lessImportantTextColor,
+            activeDotColor: Theme.of(context).primaryColorLight,
+            dotColor: Theme.of(context).disabledColor,
           ),
         ),
       ),
@@ -458,17 +462,17 @@ class _HomePageState extends State<HomePage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(MyTheme.paddingSize),
+                  padding: EdgeInsets.all(16),
                   child: Text(
                     LocaleKeys.home_shopCategory.translate(),
                     style: Theme.of(context)
                         .textTheme
                         .headline1!
-                        .copyWith(color: MyTheme.lessImportantTextColor),
+                        .copyWith(color: Theme.of(context).disabledColor),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(MyTheme.paddingSize),
+                  padding: EdgeInsets.all(16),
                   child: Text(
                     LocaleKeys.home_viewAllCategory.translate(),
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(

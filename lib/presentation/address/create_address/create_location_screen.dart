@@ -37,19 +37,23 @@ class CreateAddressScreen extends StatelessWidget {
           } else if (state is AddressUpdateState) {
             _addressTextEditingController.text = state.address;
           } else if (state is AddressEmpty) {
-            _snakeBarBuilder(context, LocaleKeys.createAddress_invalidAddress.translate());
+            _snakeBarBuilder(
+                context, LocaleKeys.createAddress_invalidAddress.translate());
           } else if (state is PhoneEmpty) {
-            _snakeBarBuilder(context, LocaleKeys.createAddress_invalidPhone.translate());
+            _snakeBarBuilder(
+                context, LocaleKeys.createAddress_invalidPhone.translate());
           } else if (state is CreatingAddress) {
             _showWaiting(context);
           } else if (state is CreateAddressSuccess) {
             Navigator.pop(context);
             Navigator.pop(context, true);
           } else if (state is CreateAddressFail) {
-            _snakeBarBuilder(context, LocaleKeys.createAddress_errorCreateFail.translate());
+            _snakeBarBuilder(
+                context, LocaleKeys.createAddress_errorCreateFail.translate());
           }
         },
         child: Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
           resizeToAvoidBottomInset: true,
           body: _bodyBuilder(safePadding),
         ),
@@ -74,7 +78,7 @@ class CreateAddressScreen extends StatelessWidget {
             children: [
               Icon(
                 Icons.error_outline_outlined,
-                color: Colors.white,
+                color: Theme.of(context).backgroundColor,
               ),
               SizedBox(
                 width: 10,
@@ -84,7 +88,7 @@ class CreateAddressScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1
-                    ?.copyWith(color: Colors.white),
+                    ?.copyWith(color: Theme.of(context).backgroundColor),
               ),
             ],
           ),
@@ -135,6 +139,7 @@ class CreateAddressScreen extends StatelessWidget {
 
   Widget _doneBtn(BuildContext ctx) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         BlocProvider.of<CreateAddressBloc>(ctx).add(SubmitCreateAddress());
       },
@@ -149,7 +154,7 @@ class CreateAddressScreen extends StatelessWidget {
             style: Theme.of(ctx)
                 .textTheme
                 .headline1
-                ?.copyWith(color: Colors.white),
+                ?.copyWith(color: Theme.of(ctx).cardColor),
           ),
         ),
         decoration: BoxDecoration(
@@ -220,7 +225,8 @@ class CreateAddressScreen extends StatelessWidget {
   Container _phoneInput(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.circular(8)),
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(8),
       width: double.infinity,
@@ -266,7 +272,8 @@ class CreateAddressScreen extends StatelessWidget {
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   contentPadding: const EdgeInsets.only(
                       right: 16, left: 8, top: 20, bottom: 20),
-                  label: Text(LocaleKeys.createAddress_inputPhoneTitle.translate()),
+                  label: Text(
+                      LocaleKeys.createAddress_inputPhoneTitle.translate()),
                   hintText: LocaleKeys.createAddress_inputPhoneHint.translate(),
                   labelStyle: Theme.of(context).textTheme.headline3,
                   focusedBorder: OutlineInputBorder(
@@ -277,7 +284,7 @@ class CreateAddressScreen extends StatelessWidget {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).cardColor,
                       width: 1.0,
                     ),
                   ),
@@ -316,7 +323,7 @@ class CreateAddressScreen extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     borderRadius: BorderRadius.circular(8)),
                 padding:
                     const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
@@ -348,8 +355,10 @@ class CreateAddressScreen extends StatelessWidget {
                           )
                         : null,
                     border: InputBorder.none,
-                    label: Text(LocaleKeys.createAddress_inputAddressTitle.translate()),
-                    hintText: LocaleKeys.createAddress_creatingAddressTitle.translate(),
+                    label: Text(
+                        LocaleKeys.createAddress_inputAddressTitle.translate()),
+                    hintText: LocaleKeys.createAddress_creatingAddressTitle
+                        .translate(),
                     labelStyle: Theme.of(context).textTheme.headline3,
                     contentPadding: const EdgeInsets.only(
                         right: 16, left: 8, top: 20, bottom: 20),
@@ -362,7 +371,7 @@ class CreateAddressScreen extends StatelessWidget {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).cardColor,
                         width: 1.0,
                       ),
                     ),

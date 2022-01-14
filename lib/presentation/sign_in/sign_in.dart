@@ -10,10 +10,10 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).backgroundColor,
           body: BlocProvider<SignBloc>(
             create: (ctx) => inject()..add(GetJwtTokenEvent()),
             child: BlocListener<SignBloc, SignBlocState>(

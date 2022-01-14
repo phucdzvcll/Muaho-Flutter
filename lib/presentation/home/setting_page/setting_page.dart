@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/common/extensions/ui/context.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
+import 'package:muaho/presentation/main/bloc/main_bloc.dart';
 import 'package:muaho/presentation/voucher_list/ui/voucher_list_screen.dart';
 
 class SettingPage extends StatefulWidget {
@@ -17,24 +17,25 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage>
     with AutomaticKeepAliveClientMixin {
+  bool status = false;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider<SettingBloc>(
-      create: (context) => inject()..add(GetUserInfoEvent()),
+      create: (context) => inject()..add(InitSettingEvent()),
       child: Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).cardColor,
         child: SafeArea(
           child: Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).cardColor,
             body: Stack(
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
                   margin: EdgeInsets.only(top: 92),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(48),
                       topRight: Radius.circular(48),
@@ -42,6 +43,7 @@ class _SettingPageState extends State<SettingPage>
                   ),
                 ),
                 SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 110),
                   child: Column(
                     children: [
                       userInfoBuilder(context),
@@ -51,7 +53,7 @@ class _SettingPageState extends State<SettingPage>
                             const EdgeInsets.only(top: 35, left: 20, right: 20),
                         clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Theme.of(context).backgroundColor,
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
@@ -95,10 +97,12 @@ class _SettingPageState extends State<SettingPage>
                                 color: Colors.grey[400] ?? Colors.grey,
                               ),
                               onPress: () {
-                                Navigator.of(context).pushNamed(VoucherListScreen.routeName);
+                                Navigator.of(context)
+                                    .pushNamed(VoucherListScreen.routeName);
                               },
                               underlineWidth: 0.5,
                             ),
+                            _buildSettingMode(context),
                             _itemSettingBuilder(
                               title:
                                   LocaleKeys.setting_languageTitle.translate(),
@@ -159,6 +163,47 @@ class _SettingPageState extends State<SettingPage>
     );
   }
 
+  Widget _buildSettingMode(BuildContext context) {
+    return BlocBuilder<SettingBloc, SettingState>(
+      buildWhen: (pre, curr) => curr is ThemeState,
+      builder: (context, state) {
+        return _itemSettingBuilder(
+          title: LocaleKeys.setting_darkModeTitle.translate(),
+          leadingIcon: Icon(
+            Icons.nightlight_round,
+            color: Colors.black,
+          ),
+          trailingIcon: FlutterSwitch(
+            value: status,
+            width: 40,
+            height: 20,
+            padding: 0,
+            borderRadius: 16,
+            activeColor: Theme.of(context).primaryColorLight,
+            toggleSize: 18,
+            onToggle: (val) {
+              setState(() {
+                status = val;
+                BlocProvider.of<MainBloc>(context).add(
+                  ChangeThemeEvent(),
+                );
+              });
+            },
+          ),
+          onPress: () {
+            setState(() {
+              status = !status;
+              BlocProvider.of<MainBloc>(context).add(
+                ChangeThemeEvent(),
+              );
+            });
+          },
+          underlineWidth: 0.5,
+        );
+      },
+    );
+  }
+
   Widget _settingEmailBuilder(BuildContext context) {
     return BlocBuilder<SettingBloc, SettingState>(
       buildWhen: (pre, curr) => curr is EmailState,
@@ -185,7 +230,8 @@ class _SettingPageState extends State<SettingPage>
 
   Future<dynamic> _showDialogResult(BuildContext context) async {
     int _value = 1;
-    if (inject<AppLocalization>().getCurrentLocale(context).languageCode == 'vi') {
+    if (inject<AppLocalization>().getCurrentLocale(context).languageCode ==
+        'vi') {
       _value = 1;
     } else {
       _value = 2;
@@ -194,7 +240,6 @@ class _SettingPageState extends State<SettingPage>
       context: context,
       builder: (ctx) => AlertDialog(
         titlePadding: const EdgeInsets.all(0),
-        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(16.0),
@@ -288,7 +333,7 @@ class _SettingPageState extends State<SettingPage>
     required String title,
     String? subtitle,
     Function()? onPress,
-    Icon? trailingIcon,
+    Widget? trailingIcon,
     double? underlineWidth,
   }) {
     return GestureDetector(
@@ -367,7 +412,7 @@ class _SettingPageState extends State<SettingPage>
       margin: const EdgeInsets.only(top: 35, left: 20, right: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).backgroundColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -422,9 +467,12 @@ class _SettingPageState extends State<SettingPage>
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.mode_edit,
-                                color: Colors.amber,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Icon(
+                                  Icons.mode_edit,
+                                  color: Colors.amber,
+                                ),
                               ),
                             ),
                           ],

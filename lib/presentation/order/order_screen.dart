@@ -11,7 +11,6 @@ import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/cart_over_view.dart';
 import 'package:muaho/presentation/components/product_card.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'bloc/order_bloc.dart';
 import 'model/order_detail_model.dart';
@@ -52,17 +51,17 @@ class _OrderScreenState extends State<OrderScreen>
           }
         },
         child: Container(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).cardColor,
           child: SafeArea(
             child: Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).cardColor,
               appBar: AppBarComponent.titleOnly(
                 title: LocaleKeys.order_titleScreen.translate(),
               ),
               body: Container(
                 margin: EdgeInsets.only(top: 32),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(48),
                     topRight: Radius.circular(48),
@@ -137,7 +136,7 @@ class _OrderScreenState extends State<OrderScreen>
 
   Widget _shopDetailBuilder(OrderSuccess state, BuildContext ctx) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _shopDetail(state.shopDetailModel.shopName,
@@ -152,46 +151,42 @@ class _OrderScreenState extends State<OrderScreen>
   }
 
   Widget _productGroupBuilder(OrderSuccess state, BuildContext blocContext) {
-    ItemScrollController _controller = ItemScrollController();
     if (state.shopDetailModel.groups.length > 0) {
-      return Container(
-        width: double.infinity,
-        height: 32,
-        child: ScrollablePositionedList.separated(
-          itemScrollController: _controller,
+      return Expanded(
+        flex: 1,
+        child: ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          scrollDirection: Axis.horizontal,
           shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
           itemCount: state.shopDetailModel.groups.length,
           itemBuilder: (ctx, index) {
             var productGroupEntity = state.shopDetailModel.groups[index];
-            return ElevatedButton(
-              onPressed: () {
-                _controller.scrollTo(
-                    index: index, duration: Duration(milliseconds: 750));
+            return GestureDetector(
+              onTap: () {
                 BlocProvider.of<OrderBloc>(blocContext).add(
                     FilterProductEvent(groupID: productGroupEntity.groupId));
               },
-              child: Text(
-                productGroupEntity.groupName,
-                style: Theme.of(ctx).textTheme.subtitle1!.copyWith(
-                    color: productGroupEntity.groupId ==
-                            state.shopDetailModel.currentGroupId
-                        ? Colors.white
-                        : Colors.black),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(left: 4),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                      color: Theme.of(context).primaryColorLight, width: 0.5),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    productGroupEntity.groupName,
+                    style: Theme.of(ctx).textTheme.subtitle1!.copyWith(
+                        color: productGroupEntity.groupId ==
+                                state.shopDetailModel.currentGroupId
+                            ? Theme.of(context).primaryColorLight
+                            : Theme.of(context).unselectedWidgetColor),
+                  ),
+                ),
               ),
-              style: MyTheme.buttonStyleDisableLessImportant.copyWith(
-                backgroundColor: productGroupEntity.groupId ==
-                        state.shopDetailModel.currentGroupId
-                    ? MaterialStateProperty.all<Color>(
-                        Theme.of(ctx).primaryColorLight)
-                    : MaterialStateProperty.all<Color>(Colors.white),
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              width: 5,
             );
           },
         ),
@@ -203,6 +198,7 @@ class _OrderScreenState extends State<OrderScreen>
 
   Widget _productBuilder(OrderDetailModel orderDetailModel) {
     return Expanded(
+      flex: 17,
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           print(notification);
@@ -266,7 +262,7 @@ class _OrderScreenState extends State<OrderScreen>
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: MyTheme.backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
@@ -304,7 +300,7 @@ Future<dynamic> showDialogWarningRemoveProduct(
   return showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
-      backgroundColor: MyTheme.backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0))),
       title: Text(

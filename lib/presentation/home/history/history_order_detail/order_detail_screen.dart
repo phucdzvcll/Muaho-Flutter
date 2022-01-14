@@ -40,21 +40,22 @@ class _OrderDetailState extends State<OrderDetail>
   Widget build(BuildContext context) {
     return BlocProvider<OrderDetailBloc>(
       create: (ctx) =>
-        inject()..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
+          inject()..add(GetOrderDetailEvent(orderID: widget.argument.orderID)),
       child: Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).cardColor,
         child: SafeArea(
           child: BlocBuilder<OrderDetailBloc, OrderDetailState>(
             builder: (context, state) {
               return Scaffold(
+                backgroundColor: Theme.of(context).cardColor,
                 appBar: AppBarComponent.titleOnly(
-                    title: LocaleKeys.orderDetail_titleScreen.translate(),
+                  title: LocaleKeys.orderDetail_titleScreen.translate(),
                 ),
                 body: Container(
                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
                   margin: EdgeInsets.only(top: 32),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(48),
                       topRight: Radius.circular(48),
@@ -99,7 +100,8 @@ class _OrderDetailState extends State<OrderDetail>
                         )
                       : SliverToBoxAdapter(
                           child: Center(
-                            child: Text(LocaleKeys.orderDetail_error.translate()),
+                            child:
+                                Text(LocaleKeys.orderDetail_error.translate()),
                           ),
                         )),
             ],
@@ -191,7 +193,9 @@ class _OrderDetailState extends State<OrderDetail>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      (product.price * product.quantity).format() + " " + LocaleKeys.orderDetail_vndCurrency.translate(),
+                      (product.price * product.quantity).format() +
+                          " " +
+                          LocaleKeys.orderDetail_vndCurrency.translate(),
                       style: Theme.of(context)
                           .textTheme
                           .headline1!
@@ -233,7 +237,7 @@ class _OrderDetailState extends State<OrderDetail>
 
   Widget _appbarHeaderBuilder(OrderDetailSuccess state) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       padding: EdgeInsets.only(bottom: 16),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -244,9 +248,10 @@ class _OrderDetailState extends State<OrderDetail>
             child: Text(
               state.orderDetailSuccessModel.entity.shopName,
               textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.headline1!.copyWith(
-                  color: Theme.of(context).primaryColorLight,
-                  fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline1!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           Align(
@@ -301,14 +306,9 @@ class _OrderDetailState extends State<OrderDetail>
         _upDownButton(isIncrease: false, context: context),
         Padding(
           padding: EdgeInsets.only(bottom: 6, left: 8, right: 8),
-          child: Text(
-            product.quantity.toString(),
-            textAlign: TextAlign.end,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(color: Colors.black),
-          ),
+          child: Text(product.quantity.toString(),
+              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.subtitle1),
         ),
         _upDownButton(isIncrease: true, context: context),
       ],

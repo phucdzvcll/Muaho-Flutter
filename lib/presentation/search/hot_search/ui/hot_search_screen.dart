@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
@@ -8,8 +7,6 @@ import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
 import 'package:muaho/presentation/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
-
-import '../../../../main.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
@@ -26,13 +23,14 @@ class _SearchScreenState extends State<SearchScreen> {
     return BlocProvider<HotSearchBloc>(
       create: (_) => inject()..add(HotSearchRequestEvent()),
       child: Container(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).cardColor,
         child: SafeArea(
           child: Scaffold(
+            backgroundColor: Theme.of(context).cardColor,
             appBar: AppBar(
-              backgroundColor: Theme.of(context).backgroundColor,
               automaticallyImplyLeading: false,
               elevation: 0,
+              backgroundColor: Theme.of(context).cardColor,
               title: _appBar(context),
             ),
             body: BlocBuilder<HotSearchBloc, HotSearchState>(
@@ -125,16 +123,23 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _itemHotKeyword(HotKeyword hotKeyword) {
-    return ElevatedButton(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         Navigator.pushNamed(context, SearchShopScreen.routeName,
             arguments: SearchShopArgument(keyword: hotKeyword.name));
       },
-      child: Text(
-        hotKeyword.name,
-        style: Theme.of(context).textTheme.subtitle1,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          border: Border.all(color: Theme.of(context).focusColor),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          hotKeyword.name,
+          style: Theme.of(context).textTheme.subtitle1,
+        ),
       ),
-      style: MyTheme.buttonStyleDisableLessImportant,
     );
   }
 
@@ -228,13 +233,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(8)),
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
                       Icons.navigate_before,
-                      color: Colors.black,
+                      color: Theme.of(context).textTheme.subtitle2?.color,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -249,7 +254,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Container(
                   height: 32,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
@@ -262,14 +267,15 @@ class _SearchScreenState extends State<SearchScreen> {
                           icon: Icon(Icons.search),
                           onPressed: () {
                             if (_controller.text.isNotEmpty) {
-                              Navigator.pushNamed(context, SearchShopScreen.routeName,
+                              Navigator.pushNamed(
+                                  context, SearchShopScreen.routeName,
                                   arguments: SearchShopArgument(
                                       keyword: _controller.text));
                             }
                           },
                         ),
                         hintText: LocaleKeys.hotSearch_searchHint.translate(),
-                        hintStyle: TextStyle(),
+                        hintStyle: Theme.of(context).textTheme.subtitle2,
                         border: InputBorder.none),
                   ),
                 ),

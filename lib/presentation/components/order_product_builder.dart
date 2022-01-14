@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:muaho/common/my_theme.dart';
 import 'package:muaho/presentation/home/history/models/order_history_delivering_model.dart';
 
 class OrderProductBuilder extends StatelessWidget {
   final Function onClick;
   final OrderHistoryDeliveringModel historyDelivering;
+
   const OrderProductBuilder(
       {Key? key, required this.onClick, required this.historyDelivering})
       : super(key: key);
@@ -15,10 +15,11 @@ class OrderProductBuilder extends StatelessWidget {
       onTap: () => onClick(),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: MyTheme.backgroundCardColor,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Theme.of(context).primaryColor, width: 0.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -19,7 +19,7 @@ class AddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AddressBloc>(
       create: (context) =>
-        inject(param1: BlocProvider.of<CartUpdateBloc>(context))
+          inject(param1: BlocProvider.of<CartUpdateBloc>(context))
             ..add(
               RequestListAddressEvent(),
             ),
@@ -34,10 +34,10 @@ class AddressScreen extends StatelessWidget {
                 }
               },
               child: Container(
-                color: Colors.white,
+                color: Theme.of(context).backgroundColor,
                 child: SafeArea(
                   child: Scaffold(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).backgroundColor,
                     appBar: AppBarComponent.titleOnly(
                       title: LocaleKeys.addressList_titleScreen.translate(),
                     ),
@@ -58,6 +58,7 @@ class AddressScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(16),
                                   color: Theme.of(context).primaryColorLight),
                               child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
                                 onTap: () async {
                                   var result = await Navigator.pushNamed(
                                       context, CreateAddressScreen.routeName);
@@ -70,11 +71,14 @@ class AddressScreen extends StatelessWidget {
                                 },
                                 child: Center(
                                   child: Text(
-                                    LocaleKeys.addressList_addAddressButton.translate(),
+                                    LocaleKeys.addressList_addAddressButton
+                                        .translate(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
-                                        ?.copyWith(color: Colors.white),
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .backgroundColor),
                                   ),
                                 ),
                               ),
@@ -127,7 +131,7 @@ class AddressScreen extends StatelessWidget {
             ),
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                   color: Theme.of(context).primaryColorLight, width: 0.5),

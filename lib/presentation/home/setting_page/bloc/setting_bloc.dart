@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/presentation/login/bloc/login_bloc.dart';
 
@@ -22,12 +24,12 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     required this.firebaseAuth,
   }) : super(SettingInitial()) {
     listen = appEventBus.on<LoginSuccessEventBus>().listen((event) {
-      this.add(GetUserInfoEvent());
+      this.add(InitSettingEvent());
     });
 
     isSigned = (firebaseAuth.currentUser != null) &&
         (firebaseAuth.currentUser?.isAnonymous).defaultFalse();
-    on<GetUserInfoEvent>((event, emit) async {
+    on<InitSettingEvent>((event, emit) async {
       await _handleGetUserInfoEvent(emit);
     });
   }
@@ -48,6 +50,9 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
         contactPhone: (await userStore.getContactPhone()).defaultEmpty(),
       ),
     );
+    var brightness = SchedulerBinding.instance!.window.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    emit(ThemeState(isDark: isDarkMode));
   }
 
   @override

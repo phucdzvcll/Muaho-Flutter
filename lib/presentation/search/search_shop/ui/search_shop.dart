@@ -5,7 +5,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/main.dart';
 import 'package:muaho/presentation/components/app_bar_component.dart';
 import 'package:muaho/presentation/components/image_network_builder.dart';
 import 'package:muaho/presentation/order/order_screen.dart';
@@ -25,14 +24,16 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).cardColor,
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBarComponent.titleOnly(title: LocaleKeys.searchShop_chooseShop.translate()),
+          backgroundColor: Theme.of(context).cardColor,
+          appBar: AppBarComponent.titleOnly(
+              title: LocaleKeys.searchShop_chooseShop.translate()),
           body: Container(
             margin: EdgeInsets.only(top: 16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).backgroundColor,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(48),
                 topRight: Radius.circular(48),
@@ -84,62 +85,21 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
           Container(
             height: 60,
             child: Padding(
-                padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      LocaleKeys.searchShop_allShop.translate(),
-                      textAlign: TextAlign.end,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(fontSize: 20),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 8, bottom: 16),
-                      child: Container(
-                        height: 28,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                                context: ctx,
-                                builder: (BuildContext ctx) {
-                                  return Center(
-                                    child: Container(
-                                        width: 200,
-                                        height: 200,
-                                        color: Colors.white),
-                                  );
-                                });
-                          },
-                          style: MyTheme.buttonStyleDisableLessImportant
-                              .copyWith(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.white),
-                                  padding: MaterialStateProperty.all(
-                                    EdgeInsets.only(left: 16, right: 16),
-                                  )),
-                          child: Row(
-                            children: [
-                              Text(LocaleKeys.searchShop_filterButton.translate(),
-                                  style: Theme.of(context).textTheme.subtitle2),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4.0),
-                                child: Icon(
-                                  Icons.tune,
-                                  color: Theme.of(context).primaryColorLight,
-                                  size: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+              padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    LocaleKeys.searchShop_allShop.translate(),
+                    textAlign: TextAlign.end,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline3!
+                        .copyWith(fontSize: 20),
+                  ),
+                ],
+              ),
+            ),
           ),
           Expanded(
             child: ListView.builder(

@@ -19,6 +19,7 @@ class MainScreen extends StatelessWidget {
         context.popUtil(routeName);
       },
       child: BlocBuilder<MainBloc, MainState>(
+        buildWhen: (pre, curr) => !(curr is ChangeThemeState),
         builder: (context, state) {
           return _buildMainBody(state);
         },

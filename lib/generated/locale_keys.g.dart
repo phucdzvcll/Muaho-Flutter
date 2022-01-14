@@ -100,6 +100,7 @@ abstract class  LocaleKeys {
   static const setting_languageSelectionTitle = 'setting.languageSelectionTitle';
   static const setting_discountSubtitle = 'setting.discountSubtitle';
   static const setting_emailTitle = 'setting.emailTitle';
+  static const setting_darkModeTitle = 'setting.darkModeTitle';
   static const setting = 'setting';
   static const login_successTitle = 'login.successTitle';
   static const login_emailNotExistTitle = 'login.emailNotExistTitle';

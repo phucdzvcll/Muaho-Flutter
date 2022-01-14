@@ -61,7 +61,8 @@ dependencies:
   event_bus: ^2.0.0
   lottie: ^1.2.1
   timer_builder: ^2.0.0
-
+  flutter_switch: ^0.3.2
+  shared_preferences: ^2.0.12
   # socket.io
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
 

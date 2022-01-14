@@ -57,9 +57,10 @@ class _CartScreenState extends State<CartScreen>
 
   Widget _bodyBuilder(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor,
+      color: Theme.of(context).cardColor,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Theme.of(context).cardColor,
           appBar: AppBarComponent.titleOnly(
             title: LocaleKeys.cart_titleScreen.translate(),
           ),
@@ -76,7 +77,7 @@ class _CartScreenState extends State<CartScreen>
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
           margin: EdgeInsets.only(top: 32),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).backgroundColor,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(48),
               topRight: Radius.circular(48),
@@ -112,7 +113,7 @@ class _CartScreenState extends State<CartScreen>
       builder: (context, state) {
         return state is CartUpdatedState
             ? Container(
-                color: Colors.white,
+                color: Theme.of(context).backgroundColor,
                 padding: EdgeInsets.only(bottom: 16),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -178,7 +179,7 @@ class _CartScreenState extends State<CartScreen>
               showWarningRemoveProductDialog(blocContext, product.productId);
             },
             backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
+            foregroundColor: Theme.of(context).cardColor,
             icon: Icons.delete_forever,
             label: 'Xóa',
           ),
@@ -221,11 +222,10 @@ class _CartScreenState extends State<CartScreen>
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        LocaleKeys.cart_totalAmountLabel.translate(
-                          namedArgs: {
-                            "totalAmount" : (product.productPrice * product.quantity).format()
-                          }
-                        ),
+                        LocaleKeys.cart_totalAmountLabel.translate(namedArgs: {
+                          "totalAmount":
+                              (product.productPrice * product.quantity).format()
+                        }),
                         style: Theme.of(blocContext)
                             .textTheme
                             .headline1!
@@ -350,8 +350,8 @@ class _CartScreenState extends State<CartScreen>
                 size: 16,
               ),
               color: productEntity.quantity > 0
-                  ? Theme.of(context).backgroundColor
-                  : Colors.white),
+                  ? Theme.of(context).cardColor
+                  : Theme.of(context).backgroundColor),
           SizedBox(
             width: 15,
           ),
@@ -362,8 +362,7 @@ class _CartScreenState extends State<CartScreen>
               textAlign: TextAlign.end,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle1!
-                  .copyWith(color: Colors.black),
+                  .subtitle1
             ),
           ),
           SizedBox(
@@ -376,8 +375,8 @@ class _CartScreenState extends State<CartScreen>
               size: 16,
             ),
             color: productEntity.quantity > 0
-                ? Theme.of(context).backgroundColor
-                : Colors.white,
+                ? Theme.of(context).cardColor
+                : Theme.of(context).backgroundColor,
             context: context,
             onSelectedProduct: () {
               BlocProvider.of<CartBloc>(context)
@@ -394,7 +393,7 @@ class _CartScreenState extends State<CartScreen>
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: MyTheme.backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(

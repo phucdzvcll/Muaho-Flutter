@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
@@ -40,6 +42,7 @@ class SignInRepositoryImpl implements SignInRepository {
     String? firebaseToken = token?.token;
 
     if (firebaseToken != null) {
+      log(firebaseToken);
       Either<Failure, JwtEntity> result =
           await getJwtToken(firebaseToken: firebaseToken);
       if (result.isSuccess) {

@@ -27,10 +27,10 @@ class PaymentScreen extends StatelessWidget {
         builder: (ctx, cartUpdateState) {
           return Builder(builder: (context) {
             return Container(
-              color: Theme.of(context).backgroundColor,
+              color: Theme.of(context).cardColor,
               child: SafeArea(
                 child: Scaffold(
-                  backgroundColor: Theme.of(context).backgroundColor,
+                  backgroundColor: Theme.of(context).cardColor,
                   appBar: AppBarComponent.titleOnly(
                     title: LocaleKeys.payment_screenTitle.translate(),
                   ),
@@ -57,7 +57,7 @@ class PaymentScreen extends StatelessWidget {
                           margin: EdgeInsets.only(top: 32),
                           padding: EdgeInsets.only(top: 32),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).backgroundColor,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(48),
                               topRight: Radius.circular(48),
@@ -176,7 +176,7 @@ class PaymentScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: MyTheme.backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(
@@ -206,7 +206,7 @@ class PaymentScreen extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: MyTheme.backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         title: Text(

@@ -13,12 +13,12 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).backgroundColor,
       child: DefaultTabController(
         length: 2,
         child: SafeArea(
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).backgroundColor,
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -30,23 +30,11 @@ class HistoryPage extends StatelessWidget {
                     color: Colors.transparent,
                     height: 40,
                     child: TabBar(
-                      indicatorWeight: 0,
-                      unselectedLabelColor: Colors.grey,
-                      unselectedLabelStyle: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      labelStyle: Theme.of(context)
-                          .textTheme
-                          .subtitle1!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      indicator: BoxDecoration(
-                        color: Theme.of(context).primaryColorLight,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
                       tabs: [
-                        Text(LocaleKeys.orderHistory_deliveringTitle.translate()),
-                        Text(LocaleKeys.orderHistory_deliveredTitle.translate()),
+                        Text(LocaleKeys.orderHistory_deliveringTitle
+                            .translate()),
+                        Text(
+                            LocaleKeys.orderHistory_deliveredTitle.translate()),
                       ],
                     ),
                   ),

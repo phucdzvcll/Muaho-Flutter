@@ -37,7 +37,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                          color: Theme.of(context).backgroundColor, width: 1)),
+                          color: Theme.of(context).cardColor, width: 1)),
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(

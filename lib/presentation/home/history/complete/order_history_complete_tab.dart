@@ -75,7 +75,7 @@ class _OrderHistoryCompleteTabState extends State<OrderHistoryCompleteTab>
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: MyTheme.backgroundCardColor,
+          color: Theme.of(context).backgroundColor,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(

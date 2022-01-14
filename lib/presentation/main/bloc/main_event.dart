@@ -13,3 +13,13 @@ class GoToHomeScreenEvent extends MainEvent {
   @override
   List<Object?> get props => [];
 }
+
+class InitThemeEvent extends MainEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class ChangeThemeEvent extends MainEvent {
+  @override
+  List<Object?> get props => [];
+}

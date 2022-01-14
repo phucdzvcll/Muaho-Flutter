@@ -27,8 +27,8 @@ class ProductCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: product.quantity > 0
-              ? Theme.of(context).backgroundColor
-              : Colors.white,
+              ? Theme.of(context).cardColor
+              : Theme.of(context).backgroundColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey, width: 0.5),
         ),
@@ -115,7 +115,7 @@ class ProductCard extends StatelessWidget {
                 border: Border.all(color: Theme.of(context).backgroundColor),
                 color: product.quantity > 0
                     ? Colors.white
-                    : Theme.of(context).backgroundColor),
+                    : Theme.of(context).cardColor),
             width: 24,
             height: 24,
             child: isIncrease
@@ -146,14 +146,9 @@ class ProductCard extends StatelessWidget {
               onClick: this.onSelectedReducedBtn),
           Padding(
             padding: EdgeInsets.only(bottom: 6),
-            child: Text(
-              product.quantity.toString(),
-              textAlign: TextAlign.end,
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle1!
-                  .copyWith(color: Colors.black),
-            ),
+            child: Text(product.quantity.toString(),
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.subtitle1),
           ),
           _upDownButton(
               isIncrease: true,

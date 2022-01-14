@@ -39,17 +39,6 @@ Future<void> main() async {
   _initDi(getIt);
   await Firebase.initializeApp();
   await getIt.get<AppLocalization>().initializeApp();
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Color(0x00FFFFFF),
-      systemNavigationBarColor: Colors.black,
-      systemNavigationBarDividerColor: Colors.black,
-      systemNavigationBarContrastEnforced: true,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.dark,
-    ),
-  );
 
   runApp(
     EasyLocalization(
@@ -82,13 +71,42 @@ class MyApp extends StatelessWidget {
     return BlocProvider<CartUpdateBloc>(
       create: (ctx) => inject(),
       child: BlocProvider<MainBloc>(
-        create: (context) => inject(),
-        child: _buildMaterialApp(context, MainScreen.routeName),
+        create: (context) => inject()..add(InitThemeEvent()),
+        child: BlocBuilder<MainBloc, MainState>(
+          buildWhen: (pre, curr) => curr is ChangeThemeState,
+          builder: (context, state) {
+            return _buildMaterialApp(
+                context,
+                MainScreen.routeName,
+                state is ChangeThemeState && state.isDark
+                    ? MyTheme.darkTheme
+                    : MyTheme.lightTheme);
+          },
+        ),
       ),
     );
   }
 
-  MaterialApp _buildMaterialApp(BuildContext context, String initRoute) {
+  MaterialApp _buildMaterialApp(
+      BuildContext context, String initRoute, ThemeData themeData) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color(0x00FFFFFF),
+        systemNavigationBarColor: themeData.unselectedWidgetColor,
+        systemNavigationBarDividerColor: themeData.unselectedWidgetColor,
+        systemNavigationBarContrastEnforced: true,
+        systemNavigationBarIconBrightness:
+            themeData.brightness == Brightness.dark
+                ? Brightness.light
+                : Brightness.dark,
+        statusBarIconBrightness: themeData.brightness == Brightness.dark
+            ? Brightness.light
+            : Brightness.dark,
+        statusBarBrightness: themeData.brightness == Brightness.dark
+            ? Brightness.light
+            : Brightness.dark,
+      ),
+    );
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: context.locale,
@@ -96,7 +114,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       title: 'Mua Ho',
       initialRoute: initRoute,
-      theme: MyTheme.lightTheme,
+      theme: themeData,
       onGenerateRoute: (settings) {
         if (settings.name == SearchShopScreen.routeName) {
           final args = settings.arguments as SearchShopArgument;

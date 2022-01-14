@@ -122,8 +122,11 @@ void presentationDiConfig(GetIt injector) {
   );
 
   injector.registerFactory(
-    () => MainBloc(
-      appEventBus: injector(),
-    ),
+    () {
+      return MainBloc(
+        appEventBus: injector(),
+        currentMode: injector(),
+      );
+    },
   );
 }

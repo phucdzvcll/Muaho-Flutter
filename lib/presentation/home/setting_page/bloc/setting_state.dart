@@ -41,3 +41,14 @@ class ContactPhoneState extends SettingState {
   @override
   List<Object?> get props => [contactPhone];
 }
+
+class ThemeState extends SettingState {
+  final bool isDark;
+
+  const ThemeState({
+    required this.isDark,
+  });
+
+  @override
+  List<Object?> get props => [isDark];
+}

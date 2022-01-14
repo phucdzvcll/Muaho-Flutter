@@ -49,13 +49,13 @@ class LoginScreen extends StatelessWidget {
             }
           },
           child: Container(
-              color: Colors.white,
+              color: Theme.of(context).backgroundColor,
               child: SafeArea(
                 child: Scaffold(
                   appBar: AppBarComponent(
                     widget: SizedBox.shrink(),
                   ),
-                  backgroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).backgroundColor,
                   body: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     scrollDirection: Axis.vertical,
@@ -71,7 +71,9 @@ class LoginScreen extends StatelessWidget {
   Widget _loginBuilder(BuildContext ctx) {
     ThemeData theme = Theme.of(ctx);
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(
+        color: Theme.of(ctx).backgroundColor,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -289,7 +291,8 @@ class LoginScreen extends StatelessWidget {
   Widget _emailInput(ThemeData theme, LoginState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          color: Theme.of(ctx).backgroundColor,
+          borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       width: double.infinity,
       child: TextFormField(
@@ -333,7 +336,7 @@ class LoginScreen extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: theme.backgroundColor,
+              color: theme.cardColor,
               width: 1.0,
             ),
           ),
@@ -345,7 +348,8 @@ class LoginScreen extends StatelessWidget {
   Widget _passwordInput(ThemeData theme, LoginState state, BuildContext ctx) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          color: Theme.of(ctx).backgroundColor,
+          borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
       width: double.infinity,
       child: TextFormField(
@@ -396,7 +400,7 @@ class LoginScreen extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: theme.backgroundColor,
+                color: theme.cardColor,
                 width: 1.0,
               ),
             ),
