@@ -60,7 +60,7 @@ class _OrderHistoryDeliveryTabState extends State<OrderHistoryDeliveryTab>
               },
               itemCount: state.orderHistoryDeliveries.length,
               addAutomaticKeepAlives: true,
-              padding: const EdgeInsets.only(bottom: 70),
+              padding: const EdgeInsets.only(bottom: 170),
             );
     } else {
       return Center(

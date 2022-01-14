@@ -1,26 +1,27 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'refresh_token_response.g.dart';
-
-@JsonSerializable()
-class RefreshTokenResponse {
+class RefreshTokenResponse extends Equatable {
   final String? jwtToken;
 
-  factory RefreshTokenResponse.fromJson(Map<String, dynamic> json) =>
-      _$RefreshTokenResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RefreshTokenResponseToJson(this);
-
-//<editor-fold desc="Data Methods">
-
-  const RefreshTokenResponse({
+  RefreshTokenResponse({
     this.jwtToken,
   });
 
-  @override
-  String toString() {
-    return 'RefreshTokenResponse{' + ' jwtToken: $jwtToken,' + '}';
+  factory RefreshTokenResponse.fromJson(Map<String, dynamic> json) {
+    return RefreshTokenResponse(
+      jwtToken: json.parseString('jwtToken'),
+    );
   }
 
-//</editor-fold>
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['jwtToken'] = jwtToken;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [
+        jwtToken,
+      ];
 }

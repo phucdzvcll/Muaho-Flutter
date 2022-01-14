@@ -1,28 +1,42 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'create_address_body.g.dart';
-
-@JsonSerializable()
 class CreateAddressBody extends Equatable {
-  final String address;
-  @JsonKey(name: "contact_phone_number")
-  final String phoneNumber;
-  final double lat;
-  final double lng;
+  final String? address;
+  final String? contactPhoneNumber;
+  final double? lat;
+  final double? lng;
 
-  const CreateAddressBody({
-    required this.address,
-    required this.phoneNumber,
-    required this.lat,
-    required this.lng,
+  CreateAddressBody({
+    this.address,
+    this.contactPhoneNumber,
+    this.lat,
+    this.lng,
   });
 
-  factory CreateAddressBody.fromJson(Map<String, dynamic> json) =>
-      _$CreateAddressBodyFromJson(json);
+  factory CreateAddressBody.fromJson(Map<String, dynamic> json) {
+    return CreateAddressBody(
+      address: json.parseString('address'),
+      contactPhoneNumber: json.parseString('contact_phone_number'),
+      lat: json.parseDouble('lat'),
+      lng: json.parseDouble('lng'),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$CreateAddressBodyToJson(this);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['address'] = address;
+    data['contact_phone_number'] = contactPhoneNumber;
+    data['lat'] = lat;
+    data['lng'] = lng;
+    return data;
+  }
 
   @override
-  List<Object?> get props => [address, phoneNumber, lat, lng];
+  List<Object?> get props => [
+        address,
+        contactPhoneNumber,
+        lat,
+        lng,
+      ];
 }

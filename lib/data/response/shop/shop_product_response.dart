@@ -1,28 +1,44 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'shop_product_response.g.dart';
-
-@JsonSerializable()
 class ShopProductResponse extends Equatable {
-  final int shopId;
-  final String shopName;
+  final int? shopId;
+  final String? shopName;
   final String? shopAddress;
-  final List<ProductGroupResponse?>? groups;
-  final List<ShopVoucherResponse>? vouchers;
+  final List<Group>? groups;
+  final List<Voucher>? vouchers;
 
-  factory ShopProductResponse.fromJson(Map<String, dynamic> json) =>
-      _$ShopProductResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ShopProductResponseToJson(this);
-
-  const ShopProductResponse({
-    required this.shopId,
-    required this.shopName,
+  ShopProductResponse({
+    this.shopId,
+    this.shopName,
     this.shopAddress,
     this.groups,
     this.vouchers,
   });
+
+  factory ShopProductResponse.fromJson(Map<String, dynamic> json) {
+    return ShopProductResponse(
+      shopId: json.parseInt('shopId'),
+      shopName: json.parseString('shopName'),
+      shopAddress: json.parseString('shopAddress'),
+      groups: json.parseListObject('groups', Group.fromJson),
+      vouchers: json.parseListObject('vouchers', Voucher.fromJson),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['shopId'] = shopId;
+    data['shopName'] = shopName;
+    data['shopAddress'] = shopAddress;
+    if (groups != null) {
+      data['groups'] = groups?.map((v) => v.toJson()).toList();
+    }
+    if (vouchers != null) {
+      data['vouchers'] = vouchers?.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 
   @override
   List<Object?> get props => [
@@ -34,22 +50,34 @@ class ShopProductResponse extends Equatable {
       ];
 }
 
-@JsonSerializable()
-class ProductGroupResponse extends Equatable {
-  final int groupId;
-  final String groupName;
-  final List<ProductResponse?>? products;
+class Group extends Equatable {
+  final int? groupId;
+  final String? groupName;
+  final List<ShopProduct>? products;
 
-  factory ProductGroupResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProductGroupResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ProductGroupResponseToJson(this);
-
-  const ProductGroupResponse({
-    required this.groupId,
-    required this.groupName,
+  Group({
+    this.groupId,
+    this.groupName,
     this.products,
   });
+
+  factory Group.fromJson(Map<String, dynamic> json) {
+    return Group(
+      groupId: json.parseInt('groupId'),
+      groupName: json.parseString('groupName'),
+      products: json.parseListObject('products', ShopProduct.fromJson),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['groupId'] = groupId;
+    data['groupName'] = groupName;
+    if (products != null) {
+      data['products'] = products?.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 
   @override
   List<Object?> get props => [
@@ -59,54 +87,77 @@ class ProductGroupResponse extends Equatable {
       ];
 }
 
-@JsonSerializable()
-class ProductResponse extends Equatable {
-  final int productId;
-  final String productName;
-  @JsonKey(name: "produtPrice")
-  final double? productPrice;
+class ShopProduct extends Equatable {
+  final int? productId;
+  final String? productName;
+  final double? produtPrice;
   final String? unit;
   final String? thumbUrl;
 
-  factory ProductResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProductResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ProductResponseToJson(this);
-
-  const ProductResponse({
-    required this.productId,
-    required this.productName,
-    this.productPrice,
+  ShopProduct({
+    this.productId,
+    this.productName,
+    this.produtPrice,
     this.unit,
     this.thumbUrl,
   });
+
+  factory ShopProduct.fromJson(Map<String, dynamic> json) {
+    return ShopProduct(
+      productId: json.parseInt('productId'),
+      productName: json.parseString('productName'),
+      produtPrice: json.parseDouble('produtPrice'),
+      unit: json.parseString('unit'),
+      thumbUrl: json.parseString('thumbUrl'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['productId'] = productId;
+    data['productName'] = productName;
+    data['produtPrice'] = produtPrice;
+    data['unit'] = unit;
+    data['thumbUrl'] = thumbUrl;
+    return data;
+  }
 
   @override
   List<Object?> get props => [
         productId,
         productName,
-        productPrice,
+        produtPrice,
         unit,
         thumbUrl,
       ];
 }
 
-@JsonSerializable()
-class ShopVoucherResponse extends Equatable {
-  final int id;
-  final String code;
+class Voucher extends Equatable {
+  final int? id;
+  final String? code;
   final String? description;
 
-  factory ShopVoucherResponse.fromJson(Map<String, dynamic> json) =>
-      _$ShopVoucherResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ShopVoucherResponseToJson(this);
-
-  ShopVoucherResponse({
-    required this.id,
-    required this.code,
-    this.description = "",
+  Voucher({
+    this.id,
+    this.code,
+    this.description,
   });
+
+  factory Voucher.fromJson(Map<String, dynamic> json) {
+    return Voucher(
+      id: json.parseInt('id'),
+      code: json.parseString('code'),
+      description: json.parseString('description'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['code'] = code;
+    data['description'] = description;
+    return data;
+  }
 
   @override
   List<Object?> get props => [

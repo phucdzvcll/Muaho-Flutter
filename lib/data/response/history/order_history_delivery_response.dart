@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'order_history_delivery_response.g.dart';
-
-@JsonSerializable()
 class OrderHistoryDeliveringResponse extends Equatable {
   final int? orderId;
   final String? orderCode;
@@ -13,20 +10,39 @@ class OrderHistoryDeliveringResponse extends Equatable {
   final String? status;
   final String? thumbUrl;
 
-  factory OrderHistoryDeliveringResponse.fromJson(Map<String, dynamic> json) =>
-      _$OrderHistoryDeliveringResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$OrderHistoryDeliveringResponseToJson(this);
-
-  const OrderHistoryDeliveringResponse({
-    required this.orderId,
-    required this.orderCode,
-    required this.shopName,
-    required this.itemCount,
-    required this.total,
-    required this.status,
-    required this.thumbUrl,
+  OrderHistoryDeliveringResponse({
+    this.orderId,
+    this.orderCode,
+    this.shopName,
+    this.itemCount,
+    this.total,
+    this.status,
+    this.thumbUrl,
   });
+
+  factory OrderHistoryDeliveringResponse.fromJson(Map<String, dynamic> json) {
+    return OrderHistoryDeliveringResponse(
+      orderId: json.parseInt('orderId'),
+      orderCode: json.parseString('orderCode'),
+      shopName: json.parseString('shopName'),
+      itemCount: json.parseInt('itemCount'),
+      total: json.parseDouble('total'),
+      status: json.parseString('status'),
+      thumbUrl: json.parseString('thumbUrl'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['orderId'] = orderId;
+    data['orderCode'] = orderCode;
+    data['shopName'] = shopName;
+    data['itemCount'] = itemCount;
+    data['total'] = total;
+    data['status'] = status;
+    data['thumbUrl'] = thumbUrl;
+    return data;
+  }
 
   @override
   List<Object?> get props => [

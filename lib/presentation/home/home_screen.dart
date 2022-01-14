@@ -74,24 +74,27 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 16,
             bottom: 86,
             child: CircleAvatar(
-              radius: 32,
-              backgroundColor: Theme.of(context).cardColor,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    ChatScreen.routeName,
-                  );
-                },
-                child: Swing(
-                  duration: Duration(milliseconds: 1200),
-                  delay: Duration(milliseconds: 200),
-                  child: ZoomIn(
+              radius: 33,
+              child: CircleAvatar(
+                radius: 32,
+                backgroundColor: Theme.of(context).cardColor,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      ChatScreen.routeName,
+                    );
+                  },
+                  child: Swing(
                     duration: Duration(milliseconds: 1200),
-                    child: Icon(
-                      Icons.contact_support,
-                      size: 32,
-                      color: Theme.of(context).primaryColor,
+                    delay: Duration(milliseconds: 200),
+                    child: ZoomIn(
+                      duration: Duration(milliseconds: 1200),
+                      child: Icon(
+                        Icons.contact_support,
+                        size: 32,
+                        color: Theme.of(context).primaryColorLight,
+                      ),
                     ),
                   ),
                 ),

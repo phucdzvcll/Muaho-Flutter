@@ -25,9 +25,10 @@ class ShopRepositoryImpl implements ShopRepository {
       });
 
       (result.response?.groups).defaultEmpty().forEach((e) {
-        ProductGroupResponse? groupResponse = e;
-        groupResponse?.products.defaultEmpty().forEach((element) {
-          mapProductEntity(element, products, groupResponse.groupId);
+        Group? groupResponse = e;
+        groupResponse.products?.forEach((element) {
+          mapProductEntity(
+              element, products, groupResponse.groupId.defaultZero());
         });
       });
       return SuccessValue(ShopProductEntity(
@@ -44,27 +45,27 @@ class ShopRepositoryImpl implements ShopRepository {
     }
   }
 
-  ProductGroupEntity mapProductGroupEntity(ProductGroupResponse? productGroup) {
+  ProductGroupEntity mapProductGroupEntity(Group? productGroup) {
     return ProductGroupEntity(
         groupId: (productGroup?.groupId).defaultZero(),
         groupName: (productGroup?.groupName).defaultEmpty());
   }
 
   ProductEntity mapProductEntity(
-      ProductResponse? product, List<ProductEntity> products, int groupId) {
+      ShopProduct? product, List<ProductEntity> products, int groupId) {
     var productEntity = ProductEntity(
         quantity: 0,
         groupId: groupId,
         productId: (product?.productId).defaultZero(),
         productName: (product?.productName).defaultEmpty(),
-        productPrice: (product?.productPrice).defaultZero(),
+        productPrice: (product?.produtPrice).defaultZero(),
         unit: (product?.unit).defaultEmpty(),
         thumbUrl: (product?.thumbUrl).defaultEmpty());
     products.add(productEntity);
     return productEntity;
   }
 
-  VoucherEntity mapVoucher(ShopVoucherResponse? element) {
+  VoucherEntity mapVoucher(Voucher? element) {
     VoucherEntity voucherEntity = VoucherEntity(
         id: (element?.id).defaultZero(),
         code: (element?.code).defaultEmpty(),

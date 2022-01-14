@@ -171,7 +171,7 @@ class _SettingPageState extends State<SettingPage>
           title: LocaleKeys.setting_darkModeTitle.translate(),
           leadingIcon: Icon(
             Icons.nightlight_round,
-            color: Colors.black,
+            color: Theme.of(context).primaryColorLight,
           ),
           trailingIcon: FlutterSwitch(
             value: status,
@@ -212,7 +212,7 @@ class _SettingPageState extends State<SettingPage>
           title: LocaleKeys.setting_emailTitle.translate(),
           leadingIcon: Icon(
             Icons.email_outlined,
-            color: Theme.of(context).primaryColorLight,
+            color: Colors.deepOrange,
           ),
           trailingIcon: Icon(
             Icons.navigate_next_sharp,

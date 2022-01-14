@@ -48,7 +48,7 @@ class SearchRepositoryImpl implements SearchRepository {
             id: element.id.defaultZero(),
             name: element.name.defaultEmpty(),
             address: element.address.defaultEmpty(),
-            thumbUrl: element.thumbUrl.defaultEmpty(),
+            thumbUrl: element.thumb_url.defaultEmpty(),
             star: element.star.defaultZero());
         shops.add(shop);
       });

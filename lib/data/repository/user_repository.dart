@@ -1,4 +1,3 @@
-import 'package:muaho/common/extensions/bool.dart';
 import 'package:muaho/common/extensions/list.dart';
 import 'package:muaho/common/extensions/network.dart';
 import 'package:muaho/common/extensions/number.dart';
@@ -24,8 +23,8 @@ class UserRepositoryImpl extends UserRepository {
                     description: e.description.defaultEmpty(),
                     value: e.value.defaultZero(),
                     type: _mapType(e.type),
-                    minOrderTotal: e.minOrderTotal.defaultZero(),
-                    isApplyForAllShop: e.isApplyForAllShop.defaultFalse(),
+                    minOrderTotal: e.min_order_total.defaultZero(),
+                    isApplyForAllShop: e.is_apply_for_all_shop ?? false,
                     shops: e.shops.defaultEmpty(),
                     numSecondRemain: _mapNumSecondRemain(e.lastDate),
                   ))

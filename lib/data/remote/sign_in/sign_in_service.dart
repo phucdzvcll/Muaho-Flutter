@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/data/data.dart';
 import 'package:retrofit/http.dart';
@@ -20,29 +20,62 @@ abstract class SignInService {
       @Body() RefreshTokenBodyParam bodyParam);
 }
 
-@JsonSerializable()
-class RefreshTokenBodyParam {
-  @JsonKey(name: 'refresh_token')
-  final String refreshToken;
+class RefreshTokenBodyParam extends Equatable {
+  final String? refreshToken;
 
-  RefreshTokenBodyParam({required this.refreshToken});
+  RefreshTokenBodyParam({
+    this.refreshToken,
+  });
 
-  factory RefreshTokenBodyParam.fromJson(Map<String, dynamic> json) =>
-      _$RefreshTokenBodyParamFromJson(json);
+  factory RefreshTokenBodyParam.fromJson(Map<String, dynamic> json) {
+    return RefreshTokenBodyParam(
+      refreshToken: json.parseString('refresh_token'),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$RefreshTokenBodyParamToJson(this);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['refresh_token'] = refreshToken;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [
+        refreshToken,
+      ];
 }
 
-@JsonSerializable()
-class SignInBodyParam {
-  @JsonKey(name: 'firebase_token')
-  final String firebaseToken;
+class SignInBodyParam extends Equatable {
+  final String? firebaseToken;
   final String? displayName;
   final String? email;
-  SignInBodyParam({required this.firebaseToken, this.displayName, this.email});
 
-  factory SignInBodyParam.fromJson(Map<String, dynamic> json) =>
-      _$SignInBodyParamFromJson(json);
+  SignInBodyParam({
+    this.firebaseToken,
+    this.displayName,
+    this.email,
+  });
 
-  Map<String, dynamic> toJson() => _$SignInBodyParamToJson(this);
+  factory SignInBodyParam.fromJson(Map<String, dynamic> json) {
+    return SignInBodyParam(
+      firebaseToken: json.parseString('firebase_token'),
+      displayName: json.parseString('displayName'),
+      email: json.parseString('email'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['firebase_token'] = firebaseToken;
+    data['displayName'] = displayName;
+    data['email'] = email;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [
+        firebaseToken,
+        displayName,
+        email,
+      ];
 }

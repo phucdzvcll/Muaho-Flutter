@@ -38,7 +38,7 @@ class AddressInfoRepositoryImpl implements AddressRepository {
           address: addressEntity.address,
           lng: addressEntity.lng,
           lat: addressEntity.lat,
-          phoneNumber: addressEntity.contactPhoneNumber,
+          contactPhoneNumber: addressEntity.contactPhoneNumber,
         ),
       ),
     );

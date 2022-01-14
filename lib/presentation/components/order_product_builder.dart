@@ -69,23 +69,23 @@ class OrderProductBuilder extends StatelessWidget {
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Container(
-                      width: 45,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Icon(
-                        Icons.location_searching_outlined,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8),
+                //     child: Container(
+                //       width: 45,
+                //       height: 45,
+                //       decoration: BoxDecoration(
+                //           color: Theme.of(context).primaryColorLight,
+                //           borderRadius: BorderRadius.circular(8)),
+                //       child: Icon(
+                //         Icons.location_searching_outlined,
+                //         color: Colors.white,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             )
           ],

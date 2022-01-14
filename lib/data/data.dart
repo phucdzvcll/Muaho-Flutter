@@ -20,6 +20,7 @@ export 'response/address/create_address_body.dart';
 export 'response/history/order_history_complete_response.dart';
 export 'response/history/order_history_delivery_response.dart';
 export 'response/history/order_history_detail_response.dart';
+export 'response/history/order_history_detail_response.dart';
 //response
 export 'response/home/productCategories/product_categories_response.dart';
 export 'response/home/slide_banner/slide_banner_response.dart';

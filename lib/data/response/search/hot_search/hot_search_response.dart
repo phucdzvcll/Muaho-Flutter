@@ -1,59 +1,95 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'hot_search_response.g.dart';
-
-@JsonSerializable()
 class HotSearchResponse extends Equatable {
   final List<HotKeywordResponse>? keywords;
   final List<HotShopResponse>? shops;
 
-  factory HotSearchResponse.fromJson(Map<String, dynamic> json) =>
-      _$HotSearchResponseFromJson(json);
+  HotSearchResponse({
+    this.keywords,
+    this.shops,
+  });
 
-  HotSearchResponse({this.keywords, this.shops});
+  factory HotSearchResponse.fromJson(Map<String, dynamic> json) {
+    return HotSearchResponse(
+      keywords: json.parseListObject('keywords', HotKeywordResponse.fromJson),
+      shops: json.parseListObject('shops', HotShopResponse.fromJson),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$HotSearchResponseToJson(this);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    if (keywords != null) {
+      data['keywords'] = keywords?.map((v) => v.toJson()).toList();
+    }
+    if (shops != null) {
+      data['shops'] = shops?.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 
   @override
-  List<Object?> get props => [keywords, shops];
+  List<Object?> get props => [
+        keywords,
+        shops,
+      ];
 }
 
-@JsonSerializable()
 class HotKeywordResponse extends Equatable {
   final String? name;
 
-  factory HotKeywordResponse.fromJson(Map<String, dynamic> json) =>
-      _$HotKeywordResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$HotKeywordResponseToJson(this);
-
-  const HotKeywordResponse({
+  HotKeywordResponse({
     this.name,
   });
 
+  factory HotKeywordResponse.fromJson(Map<String, dynamic> json) {
+    return HotKeywordResponse(
+      name: json.parseString('name'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['name'] = name;
+    return data;
+  }
+
   @override
-  List<Object?> get props => [name];
+  List<Object?> get props => [
+        name,
+      ];
 }
 
-@JsonSerializable()
 class HotShopResponse extends Equatable {
   final int? id;
   final String? name;
   final String? address;
   final String? thumbUrl;
 
-  factory HotShopResponse.fromJson(Map<String, dynamic> json) =>
-      _$HotShopResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$HotShopResponseToJson(this);
-
-  const HotShopResponse({
+  HotShopResponse({
     this.id,
     this.name,
     this.address,
     this.thumbUrl,
   });
+
+  factory HotShopResponse.fromJson(Map<String, dynamic> json) {
+    return HotShopResponse(
+      id: json.parseInt('id'),
+      name: json.parseString('name'),
+      address: json.parseString('address'),
+      thumbUrl: json.parseString('thumbUrl'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['name'] = name;
+    data['address'] = address;
+    data['thumbUrl'] = thumbUrl;
+    return data;
+  }
 
   @override
   List<Object?> get props => [

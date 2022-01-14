@@ -1,18 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'address_info_response.g.dart';
-
-@JsonSerializable()
 class AddressInfoResponse extends Equatable {
   final int? id;
-  @JsonKey(name: "contact_phone_number")
   final String? contactPhoneNumber;
   final String? address;
   final double? lat;
   final double? lng;
-  @JsonKey(name: "create_date")
-  final DateTime? createDate;
+  final String? createDate;
 
   AddressInfoResponse({
     this.id,
@@ -23,6 +18,28 @@ class AddressInfoResponse extends Equatable {
     this.createDate,
   });
 
+  factory AddressInfoResponse.fromJson(Map<String, dynamic> json) {
+    return AddressInfoResponse(
+      id: json.parseInt('id'),
+      contactPhoneNumber: json.parseString('contact_phone_number'),
+      address: json.parseString('address'),
+      lat: json.parseDouble('lat'),
+      lng: json.parseDouble('lng'),
+      createDate: json.parseString('create_date'),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['contact_phone_number'] = contactPhoneNumber;
+    data['address'] = address;
+    data['lat'] = lat;
+    data['lng'] = lng;
+    data['create_date'] = createDate;
+    return data;
+  }
+
   @override
   List<Object?> get props => [
         id,
@@ -32,9 +49,4 @@ class AddressInfoResponse extends Equatable {
         lng,
         createDate,
       ];
-
-  factory AddressInfoResponse.fromJson(Map<String, dynamic> json) =>
-      _$AddressInfoResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AddressInfoResponseToJson(this);
 }

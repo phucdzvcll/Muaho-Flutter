@@ -41,8 +41,11 @@ class OrderRepositoryImpl implements CreateOrderRepository {
 
   List<OrderProduct> mapOrderProduct(List<ProductEntity> products) {
     return products
-        .map((e) => OrderProduct(e.productId, e.productPrice, e.quantity,
-            e.quantity * e.productPrice))
+        .map((e) => OrderProduct(
+            productId: e.productId,
+            price: e.productPrice,
+            quantity: e.quantity,
+            total: e.quantity * e.productPrice))
         .toList();
   }
 }

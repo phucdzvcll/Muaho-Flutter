@@ -63,11 +63,12 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
   @override
   Future<Either<Failure, OrderDetailEntity>> getOrderDetail(int orderID) async {
     var request = service.getOrderHistoryDetail(orderID);
-    var result = await handleNetworkResult(request);
+    NetworkResult<OrderHistoryDetailResponse> result =
+        await handleNetworkResult(request);
     if (result.isSuccess()) {
       List<Product> products =
           (result.response?.products).defaultEmpty().map((e) {
-        ProductDetailResponse response = e as ProductDetailResponse;
+        OrderProductDetailResponse response = e;
         return Product(
             productId: response.productId.defaultZero(),
             price: response.price.defaultZero(),
@@ -76,6 +77,7 @@ class HistoryRepositoryImpl implements HistoryPageRepository {
             productName: (response.productName).defaultEmpty(),
             thumbUrl: (response.productThumbUrl).defaultEmpty());
       }).toList();
+
       OrderDetailEntity orderDetailEntity = OrderDetailEntity(
           orderId: (result.response?.orderId).defaultZero(),
           voucherCode: (result.response?.voucherCode).defaultEmpty(),

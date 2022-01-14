@@ -1,32 +1,47 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'slide_banner_response.g.dart';
-
-@JsonSerializable()
-class SlideBannerResponse {
+class SlideBannerResponse extends Equatable {
   final int? id;
   final String? subject;
   final String? description;
   final String? thumbUrl;
   final String? deeplink;
 
-//<editor-fold desc="Data Methods">
-  @override
-  String toString() {
-    return 'Data{id: $id, subject: $subject, description: $description, thumbUrl: $thumbUrl}';
-  }
-
-  const SlideBannerResponse({
-    required this.id,
-    required this.subject,
-    required this.description,
-    required this.thumbUrl,
-    required this.deeplink,
+  SlideBannerResponse({
+    this.id,
+    this.subject,
+    this.description,
+    this.thumbUrl,
+    this.deeplink,
   });
 
-  factory SlideBannerResponse.fromJson(Map<String, dynamic> json) =>
-      _$SlideBannerResponseFromJson(json);
+  factory SlideBannerResponse.fromJson(Map<String, dynamic> json) {
+    return SlideBannerResponse(
+      id: json.parseInt('id'),
+      subject: json.parseString('subject'),
+      description: json.parseString('description'),
+      thumbUrl: json.parseString('thumbUrl'),
+      deeplink: json.parseString('deeplink'),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$SlideBannerResponseToJson(this);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['subject'] = subject;
+    data['description'] = description;
+    data['thumbUrl'] = thumbUrl;
+    data['deeplink'] = deeplink;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        subject,
+        description,
+        thumbUrl,
+        deeplink,
+      ];
 }
-//</editor-fold>

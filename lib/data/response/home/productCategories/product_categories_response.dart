@@ -1,34 +1,37 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:equatable/equatable.dart';
+import 'package:muaho/common/object_parse_ext.dart';
 
-part 'product_categories_response.g.dart';
-
-@JsonSerializable()
-class ProductCategoryHomeResponse {
+class ProductCategoryHomeResponse extends Equatable {
   final int? id;
   final String? name;
   final String? thumbUrl;
 
-  factory ProductCategoryHomeResponse.fromJson(Map<String, dynamic> json) =>
-      _$ProductCategoryHomeResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ProductCategoryHomeResponseToJson(this);
-
-//<editor-fold desc="Data Methods">
-
-  const ProductCategoryHomeResponse({
+  ProductCategoryHomeResponse({
     this.id,
     this.name,
     this.thumbUrl,
   });
 
-  @override
-  String toString() {
-    return 'ProductCategoryHomeResponse{' +
-        ' id: $id,' +
-        ' name: $name,' +
-        ' thumbUrl: $thumbUrl,' +
-        '}';
+  factory ProductCategoryHomeResponse.fromJson(Map<String, dynamic> json) {
+    return ProductCategoryHomeResponse(
+      id: json.parseInt('id'),
+      name: json.parseString('name'),
+      thumbUrl: json.parseString('thumbUrl'),
+    );
   }
 
-//</editor-fold>
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['name'] = name;
+    data['thumbUrl'] = thumbUrl;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        thumbUrl,
+      ];
 }

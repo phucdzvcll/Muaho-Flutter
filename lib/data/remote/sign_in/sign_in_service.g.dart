@@ -3,36 +3,6 @@
 part of 'sign_in_service.dart';
 
 // **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
-RefreshTokenBodyParam _$RefreshTokenBodyParamFromJson(
-        Map<String, dynamic> json) =>
-    RefreshTokenBodyParam(
-      refreshToken: json['refresh_token'] as String,
-    );
-
-Map<String, dynamic> _$RefreshTokenBodyParamToJson(
-        RefreshTokenBodyParam instance) =>
-    <String, dynamic>{
-      'refresh_token': instance.refreshToken,
-    };
-
-SignInBodyParam _$SignInBodyParamFromJson(Map<String, dynamic> json) =>
-    SignInBodyParam(
-      firebaseToken: json['firebase_token'] as String,
-      displayName: json['displayName'] as String?,
-      email: json['email'] as String?,
-    );
-
-Map<String, dynamic> _$SignInBodyParamToJson(SignInBodyParam instance) =>
-    <String, dynamic>{
-      'firebase_token': instance.firebaseToken,
-      'displayName': instance.displayName,
-      'email': instance.email,
-    };
-
-// **************************************************************************
 // RetrofitGenerator
 // **************************************************************************
 
