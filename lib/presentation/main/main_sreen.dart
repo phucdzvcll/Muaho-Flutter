@@ -15,11 +15,12 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<MainBloc, MainState>(
+      listenWhen: (pre, curr) => curr is MainNavigateState,
       listener: (context, state) {
         context.popUtil(routeName);
       },
       child: BlocBuilder<MainBloc, MainState>(
-        buildWhen: (pre, curr) => !(curr is ChangeThemeState),
+        buildWhen: (pre, curr) => curr is MainNavigateState,
         builder: (context, state) {
           return _buildMainBody(state);
         },

@@ -17,8 +17,6 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage>
     with AutomaticKeepAliveClientMixin {
-  bool status = false;
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -136,19 +134,25 @@ class _SettingPageState extends State<SettingPage>
                               onPress: () {},
                               underlineWidth: 0.5,
                             ),
-                            _itemSettingBuilder(
-                              title: LocaleKeys.setting_logoutTitle.translate(),
-                              leadingIcon: Icon(
-                                Icons.logout,
-                                color: Colors.grey,
-                              ),
-                              trailingIcon: Icon(
-                                Icons.navigate_next_sharp,
-                                color: Colors.grey[400] ?? Colors.grey,
-                              ),
-                              onPress: () {},
-                              underlineWidth: 0,
-                            )
+                            Builder(builder: (ctx) {
+                              return _itemSettingBuilder(
+                                title:
+                                    LocaleKeys.setting_logoutTitle.translate(),
+                                leadingIcon: Icon(
+                                  Icons.logout,
+                                  color: Colors.grey,
+                                ),
+                                trailingIcon: Icon(
+                                  Icons.navigate_next_sharp,
+                                  color: Colors.grey[400] ?? Colors.grey,
+                                ),
+                                onPress: () async {
+                                  BlocProvider.of<SettingBloc>(ctx)
+                                      .add(LogoutEvent());
+                                },
+                                underlineWidth: 0,
+                              );
+                            })
                           ],
                         ),
                       ),
@@ -167,6 +171,10 @@ class _SettingPageState extends State<SettingPage>
     return BlocBuilder<SettingBloc, SettingState>(
       buildWhen: (pre, curr) => curr is ThemeState,
       builder: (context, state) {
+        bool status = false;
+        if (state is ThemeState) {
+          status = state.isDark;
+        }
         return _itemSettingBuilder(
           title: LocaleKeys.setting_darkModeTitle.translate(),
           leadingIcon: Icon(
@@ -182,21 +190,21 @@ class _SettingPageState extends State<SettingPage>
             activeColor: Theme.of(context).primaryColorLight,
             toggleSize: 18,
             onToggle: (val) {
-              setState(() {
-                status = val;
-                BlocProvider.of<MainBloc>(context).add(
-                  ChangeThemeEvent(),
-                );
-              });
-            },
-          ),
-          onPress: () {
-            setState(() {
-              status = !status;
               BlocProvider.of<MainBloc>(context).add(
                 ChangeThemeEvent(),
               );
-            });
+              BlocProvider.of<SettingBloc>(context).add(
+                ChangeSettingThemeEvent(),
+              );
+            },
+          ),
+          onPress: () {
+            BlocProvider.of<MainBloc>(context).add(
+              ChangeThemeEvent(),
+            );
+            BlocProvider.of<SettingBloc>(context).add(
+              ChangeSettingThemeEvent(),
+            );
           },
           underlineWidth: 0.5,
         );

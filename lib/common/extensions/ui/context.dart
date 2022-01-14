@@ -43,6 +43,10 @@ extension ContextExtension on BuildContext {
     Navigator.pop(this);
   }
 
+  void popUtilRootScreen() {
+    Navigator.popUntil(this, (route) => route.isFirst);
+  }
+
   void popUtil(String routerName) {
     Navigator.popUntil(
       this,
@@ -50,4 +54,3 @@ extension ContextExtension on BuildContext {
     );
   }
 }
-

@@ -113,6 +113,7 @@ void presentationDiConfig(GetIt injector) {
       userStore: injector(),
       appEventBus: injector(),
       firebaseAuth: injector(),
+      currentMode: injector(),
     ),
   );
   injector.registerFactory(

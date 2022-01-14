@@ -1,36 +1,56 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:muaho/common/common.dart';
+import 'package:muaho/common/model/mode_store.dart';
 import 'package:muaho/presentation/login/bloc/login_bloc.dart';
 
 part 'setting_event.dart';
 part 'setting_state.dart';
 
+class LogoutEvenBusEvent extends AppEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class SettingBloc extends Bloc<SettingEvent, SettingState> {
   final UserStore userStore;
   final AppEventBus appEventBus;
   final FirebaseAuth firebaseAuth;
-  bool isSigned = false;
+  bool isSignedWithAnonymous = false;
+  bool isDark = false;
+  final CurrentMode currentMode;
   StreamSubscription<AppEvent>? listen;
 
   SettingBloc({
     required this.userStore,
     required this.appEventBus,
     required this.firebaseAuth,
+    required this.currentMode,
   }) : super(SettingInitial()) {
     listen = appEventBus.on<LoginSuccessEventBus>().listen((event) {
       this.add(InitSettingEvent());
     });
 
-    isSigned = (firebaseAuth.currentUser != null) &&
-        (firebaseAuth.currentUser?.isAnonymous).defaultFalse();
     on<InitSettingEvent>((event, emit) async {
       await _handleGetUserInfoEvent(emit);
+    });
+
+    on<ChangeSettingThemeEvent>((event, emit) async {
+      emit(ThemeState(isDark: await currentMode.getCurrentMode() ?? false));
+    });
+
+    on<LogoutEvent>((event, emit) async {
+      isSignedWithAnonymous = (firebaseAuth.currentUser != null) &&
+          (firebaseAuth.currentUser?.isAnonymous).defaultFalse();
+      if (!isSignedWithAnonymous) {
+        await firebaseAuth.signOut();
+        appEventBus.fireEvent(LogoutEvenBusEvent());
+      } else {
+        //todo emit state to notification not logged in
+      }
     });
   }
 
@@ -50,9 +70,7 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
         contactPhone: (await userStore.getContactPhone()).defaultEmpty(),
       ),
     );
-    var brightness = SchedulerBinding.instance!.window.platformBrightness;
-    bool isDarkMode = brightness == Brightness.dark;
-    emit(ThemeState(isDark: isDarkMode));
+    emit(ThemeState(isDark: await currentMode.getCurrentMode() ?? false));
   }
 
   @override

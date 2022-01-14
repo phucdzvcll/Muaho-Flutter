@@ -8,3 +8,13 @@ class InitSettingEvent extends SettingEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ChangeSettingThemeEvent extends SettingEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class LogoutEvent extends SettingEvent {
+  @override
+  List<Object?> get props => [];
+}

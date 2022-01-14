@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/common/model/mode_store.dart';
+import 'package:muaho/presentation/home/setting_page/bloc/setting_bloc.dart';
 
 part 'main_event.dart';
 part 'main_state.dart';
@@ -22,6 +24,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   final AppEventBus appEventBus;
   bool _isDark = false;
   StreamSubscription<MaintenanceEventBus>? maintenanceListen;
+  StreamSubscription<LogoutEvenBusEvent>? logoutListen;
 
   MainBloc({
     required this.appEventBus,
@@ -29,6 +32,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }) : super(SignInScreenState()) {
     maintenanceListen = appEventBus.on<MaintenanceEventBus>().listen((event) {
       this.add(_MainEvent(totalMinutes: event.totalMinutes));
+    });
+
+    logoutListen = appEventBus.on<LogoutEvenBusEvent>().listen((event) {
+      this.add(GoToSignInScreenEvent());
     });
 
     on<_MainEvent>((event, emit) {
@@ -56,8 +63,15 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   }
 
   @override
+  void onChange(Change<MainState> change) {
+    log(change.toString());
+    super.onChange(change);
+  }
+
+  @override
   Future<void> close() {
     maintenanceListen?.cancel();
+    logoutListen?.cancel();
     return super.close();
   }
 }

@@ -2,30 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyTheme {
-  /*
-    App Color:
-    - Background: F2985A
-    - Primary Color: DF5A00
-    - Text Color:
-      + FFFFFF
-      + 4E4E4E
-      + 7E7E7E
-      + 929292
-    - Other:
-      + FA7921
-      + F2985A
-  */
-  // static final primaryColorDark = Color(0xff322bb3);
-  // static final primaryButtonColorDark = Color(0xff4a8cd5);
-  // static final activeButtonColorDark = Color(0x4d9c4d4d);
-  // static final backgroundColorDark = Color(0xffa17342);
-  // static final borderLineColorDark = Color(0xff5db33d);
-  // static final lessImportantTextColorDark = Color(0xffee9999);
-  // static final backgroundCardColorDark = Color(0xfff3f3f3);
-  // static final spacingColorDark = Color(0xff8840bb);
-  // static final double radiusSizeDark = 16;
-  // static final double paddingSizeDark = 16;
-
   static final primaryColorLight = Color(0xfffa7921);
   static final primaryLight = Color(0xffDF5A00);
   static final primaryBackgroundLight = Color(0xffffffff);

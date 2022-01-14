@@ -4,15 +4,17 @@ abstract class MainState extends Equatable {
   const MainState();
 }
 
-class SignInScreenState extends MainState {
+abstract class MainNavigateState extends MainState {}
+
+class SignInScreenState extends MainNavigateState {
   @override
   List<Object> get props => [];
 }
 
-class MaintainingScreenState extends MainState {
+class MaintainingScreenState extends MainNavigateState {
   final int totalMinutes;
 
-  const MaintainingScreenState({
+  MaintainingScreenState({
     required this.totalMinutes,
   });
 
@@ -20,7 +22,7 @@ class MaintainingScreenState extends MainState {
   List<Object?> get props => [totalMinutes];
 }
 
-class HomeScreenState extends MainState {
+class HomeScreenState extends MainNavigateState {
   @override
   List<Object?> get props => [];
 }
