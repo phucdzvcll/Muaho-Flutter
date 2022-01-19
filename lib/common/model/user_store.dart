@@ -24,10 +24,13 @@ class UserStore {
     return this._token;
   }
 
-  void setUseName(
+  Future<void> setUseName(
     String userName,
-  ) {
-    this._userName = userName;
+  ) async {
+    try {
+      await storage.write(key: userNameKey, value: userName);
+      this._userName = userName;
+    } catch (e) {}
   }
 
   void setEmail(
@@ -92,11 +95,10 @@ class UserStore {
       await storage.write(key: userNameKey, value: userName);
       await storage.write(key: emailKey, value: email);
       await storage.write(key: phoneKey, value: contactPhone);
+      this._token = refreshToken;
       this._userName = userName;
       this._email = email;
       this._contactPhone = contactPhone;
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }

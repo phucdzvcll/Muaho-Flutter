@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/geolocator/geolocator.dart';
@@ -8,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'common.dart';
 
 Future<void> commonDiConfig(GetIt injector) async {
+  injector.registerLazySingleton(() => FirebaseAuth.instance);
+
   injector.registerLazySingleton<AppLocalization>(() {
     return AppLocalization();
   });

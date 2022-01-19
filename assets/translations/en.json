@@ -28,7 +28,11 @@
     "requestingCreateOrderTitle": "Create order....",
     "missingDeliveryAddressMsg": "You don't have a shipping address yet",
     "successOrderMsg": "Complete your order",
-    "screenTitle": "Payment"
+    "screenTitle": "Payment",
+    "dialogLoginTitle" : "You are not logged in",
+    "dialogLoginContent" : "Login now!",
+    "noLoginBtn" : "Login",
+    "yesLoginBtn" : "Exit"
   },
   "order": {
     "titleScreen": "Select product",
@@ -109,6 +113,7 @@
     "discountTitle": "Vouchers",
     "languageTitle": "Language",
     "logoutTitle": "Logout",
+    "loginTitle": "Login",
     "changePasswordTitle": "Change password",
     "currentLanguageSubtitle": "English",
     "languageSelectionTitle": "Language",

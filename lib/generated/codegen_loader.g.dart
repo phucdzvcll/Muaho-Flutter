@@ -44,7 +44,11 @@ class CodegenLoader extends AssetLoader{
     "requestingCreateOrderTitle": "Create order....",
     "missingDeliveryAddressMsg": "You don't have a shipping address yet",
     "successOrderMsg": "Complete your order",
-    "screenTitle": "Payment"
+    "screenTitle": "Payment",
+    "dialogLoginTitle": "You are not logged in",
+    "dialogLoginContent": "Login now!",
+    "noLoginBtn": "Login",
+    "yesLoginBtn": "Exit"
   },
   "order": {
     "titleScreen": "Select product",
@@ -125,6 +129,7 @@ class CodegenLoader extends AssetLoader{
     "discountTitle": "Vouchers",
     "languageTitle": "Language",
     "logoutTitle": "Logout",
+    "loginTitle": "Login",
     "changePasswordTitle": "Change password",
     "currentLanguageSubtitle": "English",
     "languageSelectionTitle": "Language",
@@ -209,7 +214,11 @@ static const Map<String,dynamic> vi = {
     "requestingCreateOrderTitle": "Tạo đơn hàng....",
     "missingDeliveryAddressMsg": "Bạn chưa có địa chỉ giao hàng",
     "successOrderMsg": "Hoàn tất đặt hàng",
-    "screenTitle": "Thanh Toán"
+    "screenTitle": "Thanh Toán",
+    "dialogLoginTitle": "Bạn chưa đăng nhập",
+    "dialogLoginContent": "Đăng nhập ngay!",
+    "noLoginBtn": "Đăng nhập",
+    "yesLoginBtn": "Thoát"
   },
   "order": {
     "titleScreen": "Chọn Sản Phẩm",
@@ -290,6 +299,7 @@ static const Map<String,dynamic> vi = {
     "discountTitle": "Mã giảm giá",
     "languageTitle": "Ngôn ngữ",
     "logoutTitle": "Đăng xuất",
+    "loginTitle": "Đăng nhập",
     "changePasswordTitle": "Đổi mật khẩu",
     "currentLanguageSubtitle": "Tiếng Việt",
     "languageSelectionTitle": "Ngôn ngữ",

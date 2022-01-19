@@ -6,29 +6,27 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/data/di.dart';
-import 'package:muaho/domain/di.dart';
+import 'package:muaho/features/cart/presentation/cart_screen.dart';
+import 'package:muaho/features/cart_update_bloc/cart_update_bloc.dart';
+import 'package:muaho/features/chat-support/chat_support.dart';
+import 'package:muaho/features/deeplink/deeplink_handle_bloc.dart';
+import 'package:muaho/features/di.dart';
+import 'package:muaho/features/home/presentation/history/models/order_detail_argument.dart';
+import 'package:muaho/features/main/bloc/main_bloc.dart';
+import 'package:muaho/features/main/main_sreen.dart';
+import 'package:muaho/features/order/presentation/order_screen.dart';
+import 'package:muaho/features/payment/presentation/payment_screen.dart';
+import 'package:muaho/features/register/register_screen.dart';
+import 'package:muaho/features/search/hot_search/ui/hot_search_screen.dart';
+import 'package:muaho/features/search/search_shop/ui/search_shop.dart';
 import 'package:muaho/generated/codegen_loader.g.dart';
-import 'package:muaho/presentation/address/address_info/address_screen.dart';
-import 'package:muaho/presentation/address/create_address/create_location_screen.dart';
-import 'package:muaho/presentation/cart/cart_screen.dart';
-import 'package:muaho/presentation/cart_update_bloc/cart_update_bloc.dart';
-import 'package:muaho/presentation/deeplink/deeplink_handle_bloc.dart';
-import 'package:muaho/presentation/di.dart';
-import 'package:muaho/presentation/home/history/history_order_detail/order_detail_screen.dart';
-import 'package:muaho/presentation/home/history/models/order_detail_argument.dart';
-import 'package:muaho/presentation/login/login_screen.dart';
-import 'package:muaho/presentation/main/bloc/main_bloc.dart';
-import 'package:muaho/presentation/main/main_sreen.dart';
-import 'package:muaho/presentation/order/order_screen.dart';
-import 'package:muaho/presentation/payment/payment_screen.dart';
-import 'package:muaho/presentation/register/register_screen.dart';
-import 'package:muaho/presentation/search/hot_search/ui/hot_search_screen.dart';
-import 'package:muaho/presentation/search/search_shop/ui/search_shop.dart';
-import 'package:muaho/presentation/voucher_list/ui/voucher_list_screen.dart';
 
 import 'common/di.dart';
-import 'presentation/chat-support/chat_support.dart';
+import 'features/address_info/presentation/address_screen.dart';
+import 'features/create_address/presentation/create_location_screen.dart';
+import 'features/home/presentation/history/history_order_detail/order_detail_screen.dart';
+import 'features/login/presentation/login_screen.dart';
+import 'features/voucher_list/presentaition/voucher_list_screen.dart';
 
 int startTime = 0;
 
@@ -58,9 +56,7 @@ Future<void> main() async {
 
 void _initDi(GetIt getIt) {
   commonDiConfig(getIt);
-  domainDiConfig(getIt);
-  dataDiConfig(getIt);
-  presentationDiConfig(getIt);
+  featuresDiConfig(getIt);
 }
 
 class MyApp extends StatelessWidget {
