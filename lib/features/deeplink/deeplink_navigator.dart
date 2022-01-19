@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:muaho/features/deeplink/model/deep_link_destination.dart';
-import 'package:muaho/features/home/history/history_order_detail/order_detail_screen.dart';
-import 'package:muaho/features/home/history/models/order_detail_argument.dart';
-import 'package:muaho/features/order/order_screen.dart';
+import 'package:muaho/features/home/presentation/history/history_order_detail/order_detail_screen.dart';
+import 'package:muaho/features/home/presentation/history/models/order_detail_argument.dart';
+import 'package:muaho/features/order/presentation/order_screen.dart';
 import 'package:muaho/features/search/search_shop/ui/search_shop.dart';
 
 class DeepLinkNavigator {
@@ -17,7 +17,13 @@ class DeepLinkNavigator {
         arguments: ShopArgument(shopId: deepLinkDestination.shopId),
       );
     } else if (deepLinkDestination is ShopCategoryDeepLinkDestination) {
-      //todo handle ShopCategoryDeepLinkDestination
+      return Navigator.pushNamed(
+        context,
+        SearchShopScreen.routeName,
+        arguments: SearchShopByCategory(
+          categoryId: deepLinkDestination.shopCategory,
+        ),
+      );
     } else if (deepLinkDestination is OrderDetailDeepLinkDestination) {
       return Navigator.pushNamed(
         context,
@@ -28,7 +34,9 @@ class DeepLinkNavigator {
       return Navigator.pushNamed(
         context,
         SearchShopScreen.routeName,
-        arguments: SearchShopArgument(keyword: deepLinkDestination.keyword),
+        arguments: SearchShopByKeyword(
+          keyword: deepLinkDestination.keyword,
+        ),
       );
     }
   }

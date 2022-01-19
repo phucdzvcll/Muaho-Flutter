@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/models/search/search_shop/seach_shop.dart';
-import 'package:muaho/generated/locale_keys.g.dart';
 import 'package:muaho/features/components/app_bar_component.dart';
 import 'package:muaho/features/components/image_network_builder.dart';
-import 'package:muaho/features/order/order_screen.dart';
+import 'package:muaho/features/order/presentation/order_screen.dart';
+import 'package:muaho/features/search/domain/models/search_shop/seach_shop_by_keyword.dart';
 import 'package:muaho/features/search/search_shop/bloc/search_shop_bloc.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 
 class SearchShopScreen extends StatefulWidget {
   static const routeName = '/search_shop';
@@ -40,10 +40,22 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
               ),
             ),
             child: BlocProvider<SearchShopBloc>(
-              create: (_) => inject()
-                ..add(
-                  SearchEvent(keyword: widget.args.keyword),
-                ),
+              create: (_) {
+                var args = widget.args;
+                if (args is SearchShopByKeyword) {
+                  return inject()
+                    ..add(
+                      SearchByKeywordEvent(keyword: args.keyword),
+                    );
+                } else if (args is SearchShopByCategory) {
+                  return inject()
+                    ..add(
+                      SearchByCategoryEvent(categoryID: args.categoryId),
+                    );
+                } else {
+                  return inject();
+                }
+              },
               child: BlocBuilder<SearchShopBloc, SearchShopState>(
                 builder: (ctx, state) {
                   return _handleRequestSearch(state, ctx);
@@ -62,13 +74,14 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
         child: CircularProgressIndicator(),
       );
     } else if (state is SearchShopSuccess) {
-      if (state.shops.isEmpty) {
-        return Center(
-          child: Text(LocaleKeys.searchShop_noDataMsg.translate()),
-        );
-      } else {
-        return _requestSearchShopSuccessBuilder(state, ctx);
-      }
+      return _requestSearchShopSuccessBuilder(state, ctx);
+      // if (state.shops.isEmpty) {
+      //   return Center(
+      //     child: Text(LocaleKeys.searchShop_noDataMsg.translate()),
+      //   );
+      // } else {
+      //
+      // }
     } else {
       return Center(
         child: Text(LocaleKeys.searchShop_errorMsg.translate()),
@@ -90,7 +103,9 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    LocaleKeys.searchShop_allShop.translate(),
+                    state is SearchShopByCategorySuccess
+                        ? state.category
+                        : LocaleKeys.searchShop_allShop.translate(),
                     textAlign: TextAlign.end,
                     style: Theme.of(context)
                         .textTheme
@@ -102,21 +117,29 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (ctx, index) {
-                return _shopItems(state.shops[index]);
-              },
-              itemCount: state.shops.length,
-              addAutomaticKeepAlives: true,
-            ),
+            child: state.shops.isEmpty
+                ? Center(
+                    child: Text(LocaleKeys.searchShop_noDataMsg.translate()),
+                  )
+                : _buildListShop(state.shops),
           ),
         ],
       ),
     );
   }
 
-  Widget _shopItems(SearchShop shop) {
+  ListView _buildListShop(List<SearchShopByKeywordEntity> shops) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemBuilder: (ctx, index) {
+        return _shopItems(shops[index]);
+      },
+      itemCount: shops.length,
+      addAutomaticKeepAlives: true,
+    );
+  }
+
+  Widget _shopItems(SearchShopByKeywordEntity shop) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, OrderScreen.routeName,
@@ -128,22 +151,25 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
           children: [
             Expanded(
               flex: 3,
-              child: Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
-                  child: ImageNetworkBuilder(
-                    imgUrl: shop.thumbUrl,
-                    size: Size.square(130),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: ImageNetworkBuilder(
+                      imgUrl: shop.thumbUrl,
+                      size: Size.square(130),
+                    ),
                   ),
                 ),
               ),
             ),
             Expanded(
               flex: 5,
-              child: Container(
+              child: Padding(
                 padding: EdgeInsets.only(left: 16),
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -188,8 +214,27 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
   }
 }
 
-class SearchShopArgument {
+abstract class SearchShopArgument extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class SearchShopByKeyword extends SearchShopArgument {
   final String keyword;
 
-  SearchShopArgument({required this.keyword});
+  SearchShopByKeyword({required this.keyword});
+
+  @override
+  List<Object?> get props => [keyword];
+}
+
+class SearchShopByCategory extends SearchShopArgument {
+  final int categoryId;
+
+  SearchShopByCategory({
+    required this.categoryId,
+  });
+
+  @override
+  List<Object?> get props => [categoryId];
 }

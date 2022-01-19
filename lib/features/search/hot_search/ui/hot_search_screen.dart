@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/domain.dart';
-import 'package:muaho/generated/locale_keys.g.dart';
+import 'package:muaho/features/components/app_bar_component.dart';
 import 'package:muaho/features/components/image_network_builder.dart';
-import 'package:muaho/features/order/order_screen.dart';
+import 'package:muaho/features/order/presentation/order_screen.dart';
+import 'package:muaho/features/search/domain/models/hot_search/hot_keyword.dart';
+import 'package:muaho/features/search/domain/models/hot_search/hot_shop.dart';
 import 'package:muaho/features/search/hot_search/bloc/hot_search_bloc.dart';
 import 'package:muaho/features/search/search_shop/ui/search_shop.dart';
+import 'package:muaho/generated/assets.gen.dart';
+import 'package:muaho/generated/locale_keys.g.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
@@ -22,25 +26,25 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<HotSearchBloc>(
       create: (_) => inject()..add(HotSearchRequestEvent()),
-      child: Container(
-        color: Theme.of(context).cardColor,
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: Theme.of(context).cardColor,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              backgroundColor: Theme.of(context).cardColor,
-              title: _appBar(context),
-            ),
-            body: BlocBuilder<HotSearchBloc, HotSearchState>(
-              builder: (ctx, state) {
-                if (state is HotSearchLoadingState) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is HotSearchSuccessState) {
-                  return SingleChildScrollView(
+      child: BlocBuilder<HotSearchBloc, HotSearchState>(
+        builder: (ctx, state) {
+          if (state is HotSearchLoadingState) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is HotSearchSuccessState) {
+            return Container(
+              color: Theme.of(context).cardColor,
+              child: SafeArea(
+                child: Scaffold(
+                  backgroundColor: Theme.of(context).cardColor,
+                  appBar: AppBar(
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                    backgroundColor: Theme.of(context).cardColor,
+                    title: _appBar(context),
+                  ),
+                  body: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,16 +112,25 @@ class _SearchScreenState extends State<SearchScreen> {
                         )
                       ],
                     ),
-                  );
-                } else {
-                  return Center(
-                    child: Text(LocaleKeys.hotSearch_errorMsg.translate()),
-                  );
-                }
-              },
-            ),
-          ),
-        ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Container(
+              color: Theme.of(context).backgroundColor,
+              child: SafeArea(
+                child: Scaffold(
+                  appBar:
+                      AppBarComponent.titleOnly(title: LocaleKeys.searchShop),
+                  body: Center(
+                    child: Lottie.asset(Assets.json.pageError),
+                  ),
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -126,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, SearchShopScreen.routeName,
-            arguments: SearchShopArgument(keyword: hotKeyword.name));
+            arguments: SearchShopByKeyword(keyword: hotKeyword.name));
       },
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -198,19 +211,6 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
-          //   child: Text(
-          //     hotShop.address,
-          //     maxLines: 2,
-          //     textAlign: TextAlign.center,
-          //     overflow: TextOverflow.ellipsis,
-          //     style: Theme.of(context)
-          //         .textTheme
-          //         .subtitle2!
-          //         .copyWith(fontSize: 12),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -269,7 +269,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             if (_controller.text.isNotEmpty) {
                               Navigator.pushNamed(
                                   context, SearchShopScreen.routeName,
-                                  arguments: SearchShopArgument(
+                                  arguments: SearchShopByKeyword(
                                       keyword: _controller.text));
                             }
                           },

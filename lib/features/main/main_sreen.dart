@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/features/home/home_screen.dart';
+import 'package:muaho/features/home/presentation/home_screen.dart';
 import 'package:muaho/features/maintenance/maintenance.dart';
 import 'package:muaho/features/sign_in/sign_in.dart';
 

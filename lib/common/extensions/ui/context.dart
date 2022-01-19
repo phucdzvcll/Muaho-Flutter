@@ -53,4 +53,8 @@ extension ContextExtension on BuildContext {
       ModalRoute.withName(routerName),
     );
   }
+
+  void navigatorWithRouteName(String routeName) {
+    Navigator.pushNamed(this, routeName);
+  }
 }

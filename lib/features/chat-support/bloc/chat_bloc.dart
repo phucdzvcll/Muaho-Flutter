@@ -5,9 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/data/remote/chat/list_msg.dart';
-import 'package:muaho/data/remote/chat/msg_list.dart';
-import 'package:muaho/data/remote/chat/news.dart';
+import 'package:muaho/features/chat-support/data/service/list_msg.dart';
+import 'package:muaho/features/chat-support/data/service/msg_list.dart';
+import 'package:muaho/features/chat-support/data/service/news.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 part 'chat_event.dart';
@@ -25,6 +25,7 @@ class _ChatLostConnectionEvent extends ChatEvent {
 
 class _ChatMsgListEvent extends ChatEvent {
   final List<MessageModel> chatMss;
+
   @override
   List<Object?> get props => [chatMss];
 
@@ -92,6 +93,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(ChatNeedCreateTicketState());
     });
   }
+
   @override
   Future<void> close() {
     _timerPingSocket?.cancel();

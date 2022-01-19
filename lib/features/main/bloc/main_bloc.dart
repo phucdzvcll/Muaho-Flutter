@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:muaho/common/common.dart';
 import 'package:muaho/common/model/mode_store.dart';
-import 'package:muaho/features/home/setting_page/bloc/setting_bloc.dart';
+import 'package:muaho/features/home/presentation/setting_page/bloc/setting_bloc.dart';
 
 part 'main_event.dart';
 part 'main_state.dart';

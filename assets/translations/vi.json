@@ -28,7 +28,11 @@
     "requestingCreateOrderTitle": "Tạo đơn hàng....",
     "missingDeliveryAddressMsg": "Bạn chưa có địa chỉ giao hàng",
     "successOrderMsg": "Hoàn tất đặt hàng",
-    "screenTitle": "Thanh Toán"
+    "screenTitle": "Thanh Toán",
+    "dialogLoginTitle" : "Bạn chưa đăng nhập",
+    "dialogLoginContent" : "Đăng nhập ngay!",
+    "noLoginBtn" : "Đăng nhập",
+    "yesLoginBtn" : "Thoát"
   },
   "order": {
     "titleScreen": "Chọn Sản Phẩm",
@@ -109,6 +113,7 @@
     "discountTitle": "Mã giảm giá",
     "languageTitle": "Ngôn ngữ",
     "logoutTitle": "Đăng xuất",
+    "loginTitle": "Đăng nhập",
     "changePasswordTitle": "Đổi mật khẩu",
     "currentLanguageSubtitle": "Tiếng Việt",
     "languageSelectionTitle": "Ngôn ngữ",

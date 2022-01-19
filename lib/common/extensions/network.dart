@@ -1,10 +1,8 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/data/data.dart';
-import 'package:muaho/data/remote/sign_in/sign_in_service.dart';
+import 'package:muaho/features/maintenance/model/maintenance_response.dart';
+import 'package:muaho/features/sign_in/data/services/sign_in_service.dart';
 import 'package:synchronized/synchronized.dart' as sLock;
 
 final BaseOptions baseOptions =
@@ -95,7 +93,6 @@ class TokenExpiredHandler {
           _currentJwt = jwt.jwtToken.defaultEmpty();
         }
       });
-      log(_currentJwt);
       return await _retry(error, _currentJwt);
     } on Exception catch (_) {
       return null;

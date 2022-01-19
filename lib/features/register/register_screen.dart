@@ -3,11 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/use_case/sign_in/register_email_use_case.dart';
+import 'package:muaho/features/components/app_bar_component.dart';
+import 'package:muaho/features/register/domain/use_case/register_email_use_case.dart';
 import 'package:muaho/generated/assets.gen.dart';
 import 'package:muaho/generated/locale_keys.g.dart';
-import 'package:muaho/features/components/app_bar_component.dart';
-import 'package:muaho/features/main/bloc/main_bloc.dart';
 
 import 'bloc/register_bloc.dart';
 
@@ -70,8 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             break;
                         }
                       } else if (state is CreateAccountSuccess) {
-                        BlocProvider.of<MainBloc>(context)
-                            .add(GoToHomeScreenEvent());
+                        context.popUtilRootScreen();
                       }
                     },
                     child: _loginBuilder(ctx),

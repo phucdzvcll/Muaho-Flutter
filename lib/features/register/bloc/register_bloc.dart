@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:equatable/equatable.dart';
+import 'package:muaho/common/domain/either.dart';
+import 'package:muaho/common/domain/failure.dart';
 import 'package:muaho/common/even_bus/app_event_bus.dart';
-import 'package:muaho/domain/domain.dart';
-import 'package:muaho/features/login/bloc/login_bloc.dart';
+import 'package:muaho/features/login/presentation/bloc/login_bloc.dart';
+import 'package:muaho/features/register/domain/models/register_email_entity.dart';
+import 'package:muaho/features/register/domain/use_case/register_email_use_case.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';

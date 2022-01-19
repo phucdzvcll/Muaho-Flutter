@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:muaho/features/home/history/models/order_history_delivering_model.dart';
+import 'package:muaho/features/home/presentation/history/models/order_history_delivering_model.dart';
 
 class OrderProductBuilder extends StatelessWidget {
   final Function onClick;

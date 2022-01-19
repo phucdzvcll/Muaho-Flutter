@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:muaho/common/common.dart';
-import 'package:muaho/domain/domain.dart';
+import 'package:muaho/common/extensions/number.dart';
+import 'package:muaho/features/order/domain/models/shop_product_entity.dart';
 
 import 'image_network_builder.dart';
 
@@ -74,7 +74,7 @@ class ProductCard extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Text(
-                    product.productPrice.format(),
+                    product.productPrice.format() + "/ " + product.unit,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),

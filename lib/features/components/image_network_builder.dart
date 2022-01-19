@@ -30,7 +30,7 @@ class ImageNetworkBuilder extends StatelessWidget {
       placeholder: (context, url) => isSquare
           ? Assets.images.placeholderSquare.image()
           : Assets.images.placeholder.image(),
-      imageUrl: imgUrl,
+      imageUrl: "http://192.168.1.254:8000" + imgUrl,
       fit: BoxFit.fill,
     );
   }

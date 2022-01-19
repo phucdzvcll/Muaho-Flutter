@@ -3,9 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:muaho/domain/domain.dart';
+import 'package:muaho/common/domain/either.dart';
+import 'package:muaho/common/domain/failure.dart';
+import 'package:muaho/common/domain/use_case.dart';
+import 'package:muaho/features/search/domain/use_case/get_list_hot_search_use_case.dart';
 
 part 'hot_search_event.dart';
+
 part 'hot_search_state.dart';
 
 class HotSearchBloc extends Bloc<HotSearchEvent, HotSearchState> {

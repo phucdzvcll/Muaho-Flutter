@@ -27,6 +27,10 @@ abstract class  LocaleKeys {
   static const payment_missingDeliveryAddressMsg = 'payment.missingDeliveryAddressMsg';
   static const payment_successOrderMsg = 'payment.successOrderMsg';
   static const payment_screenTitle = 'payment.screenTitle';
+  static const payment_dialogLoginTitle = 'payment.dialogLoginTitle';
+  static const payment_dialogLoginContent = 'payment.dialogLoginContent';
+  static const payment_noLoginBtn = 'payment.noLoginBtn';
+  static const payment_yesLoginBtn = 'payment.yesLoginBtn';
   static const payment = 'payment';
   static const order_titleScreen = 'order.titleScreen';
   static const order_noDeleteItem = 'order.noDeleteItem';
@@ -95,6 +99,7 @@ abstract class  LocaleKeys {
   static const setting_discountTitle = 'setting.discountTitle';
   static const setting_languageTitle = 'setting.languageTitle';
   static const setting_logoutTitle = 'setting.logoutTitle';
+  static const setting_loginTitle = 'setting.loginTitle';
   static const setting_changePasswordTitle = 'setting.changePasswordTitle';
   static const setting_currentLanguageSubtitle = 'setting.currentLanguageSubtitle';
   static const setting_languageSelectionTitle = 'setting.languageSelectionTitle';

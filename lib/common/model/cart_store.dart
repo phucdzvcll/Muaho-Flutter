@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:muaho/domain/models/address/address_entity.dart';
-import 'package:muaho/domain/models/shop/shop_product_entity.dart';
+import 'package:muaho/features/address_info/domain/models/address_entity.dart';
+import 'package:muaho/features/order/domain/models/shop_product_entity.dart';
 
 class CartSummary extends Equatable {
   final double totalAmount;
@@ -122,6 +122,18 @@ class CartStore {
     }
   }
 
+  void deleteProduct({required int productID}) {
+    ProductEntity? productStore = findProductStore(productID);
+    if (productStore != null) {
+      int index = getIndexOfProduct(productID);
+      this.productStores.removeAt(index);
+    }
+    if (this.productStores.isEmpty) {
+      _clearStore();
+    }
+    _sendUpdateCartEvent();
+  }
+
   void removeProduct({required int productID}) {
     ProductEntity? productStore = findProductStore(productID);
     if (productStore != null) {
@@ -209,6 +221,12 @@ class CartStore {
 
   void createOrderSuccess() {
     _clearStore();
+  }
+
+  void logout() {
+    _clearStore();
+    this._addressInfo = null;
+    _sendUpdateCartEvent();
   }
 
   int getIndexOfProduct(int productID) {
