@@ -8,7 +8,7 @@ part of 'change_display_name_service.dart';
 
 class _ChangeDisplayNameService implements ChangeDisplayNameService {
   _ChangeDisplayNameService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.1.254:8000/api';
+    baseUrl ??= 'http://muaho.tinyflutterteam.com:9000/api';
   }
 
   final Dio _dio;

@@ -8,7 +8,7 @@ part of 'order_service.dart';
 
 class _OrderService implements OrderService {
   _OrderService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.1.254:8000/api';
+    baseUrl ??= 'http://muaho.tinyflutterteam.com:9000/api';
   }
 
   final Dio _dio;

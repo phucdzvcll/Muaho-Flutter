@@ -8,7 +8,7 @@ part of 'address_service.dart';
 
 class _AddressService implements AddressService {
   _AddressService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.1.254:8000/api';
+    baseUrl ??= 'http://muaho.tinyflutterteam.com:9000/api';
   }
 
   final Dio _dio;

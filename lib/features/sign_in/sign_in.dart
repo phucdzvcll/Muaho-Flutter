@@ -45,8 +45,7 @@ class SignIn extends StatelessWidget {
       return Center(
         child: CircularProgressIndicator(),
       );
-    } else {
-      // return SizedBox.shrink();
+    } else if (state is SignError) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -79,6 +78,8 @@ class SignIn extends StatelessWidget {
           ),
         ],
       );
+    } else {
+      return SizedBox.shrink();
     }
   }
 }

@@ -8,7 +8,7 @@ part of 'history_service.dart';
 
 class _HistoryService implements HistoryService {
   _HistoryService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.1.254:8000/api';
+    baseUrl ??= 'http://muaho.tinyflutterteam.com:9000/api';
   }
 
   final Dio _dio;

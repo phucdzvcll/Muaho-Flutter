@@ -8,7 +8,7 @@ part of 'create_address_service.dart';
 
 class _CreateAddressService implements CreateAddressService {
   _CreateAddressService(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.1.254:8000/api';
+    baseUrl ??= 'http://muaho.tinyflutterteam.com:9000/api';
   }
 
   final Dio _dio;
