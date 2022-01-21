@@ -1,5 +1,170 @@
 {
-  "btn_login": "ĐĂNG NHẬP",
-  "btn_register": "ĐĂNG KÝ",
-  "txt_hello": "Xin chào"
+  "searchShop": {
+    "filterButton": "Bộ lọc",
+    "allShop": "Tất cả cửa hàng",
+    "errorMsg": "Error",
+    "noDataMsg": "Nothing here",
+    "chooseShop": "Chọn Cửa Hàng"
+  },
+  "hotSearch": {
+    "errorMsg": "Error",
+    "hotShop": "Cửa hàng nổi bật",
+    "hotItems": "Mặt hàng thường mua",
+    "searchHint": "Bạn muốn mua gì?"
+  },
+  "voucherList": {
+    "errorMsg": "Error",
+    "titleScreen": "Mã giảm giá"
+  },
+  "payment": {
+    "total": "Tổng cộng",
+    "editAddress": "Chỉnh sửa",
+    "deliveryAddress": "Giao tới địa chỉ",
+    "noSaveOrder": "No",
+    "yesSaveOrder": "Yes",
+    "saveOrderConfirmMsg": "Đơn hàng sẽ được gửi đi!",
+    "saveOrderConfirmTitle": "Thông báo",
+    "requestingCreateOrderMsg": "Đang tạo đơn hàng",
+    "requestingCreateOrderTitle": "Tạo đơn hàng....",
+    "missingDeliveryAddressMsg": "Bạn chưa có địa chỉ giao hàng",
+    "successOrderMsg": "Hoàn tất đặt hàng",
+    "screenTitle": "Thanh Toán",
+    "dialogLoginTitle" : "Bạn chưa đăng nhập",
+    "dialogLoginContent" : "Đăng nhập ngay!",
+    "noLoginBtn" : "Thoát",
+    "yesLoginBtn" : "Đăng nhập"
+  },
+  "order": {
+    "titleScreen": "Chọn Sản Phẩm",
+    "noDeleteItem": "No",
+    "yesDeleteItem": "Yes",
+    "deleteItemMsg": "Sản phẩm này sẽ bị xóa khỏi giỏ hàng của bạn!",
+    "deleteItemTitle": "Xóa sản phẩm khỏi giỏ hàng?",
+    "noChangeShop": "No",
+    "yesChangeShop": "Yes",
+    "changeShopMsg": "Những món bạn chọn ở cửa hàng trước sẽ bị xóa.",
+    "changeShopTitle": "Bạn có muốn đổi cửa hàng?",
+    "errorMsg": "Error"
+  },
+  "home": {
+    "viewAllCategory": "Xem tất cả",
+    "shopCategory": "Danh mục cửa hàng",
+    "newsTitle": "Mua gì hôm nay?",
+    "hiUser": "Xin chào"
+  },
+  "orderDetail": {
+    "titleScreen": "Chi tiết đơn hàng",
+    "vndCurrency": "VND",
+    "error": "Error"
+  },
+  "orderHistoryDelivering": {
+    "error": "Error"
+  },
+  "orderHistoryDone": {
+    "error": "Error"
+  },
+  "orderHistory": {
+    "deliveredTitle": "Đã giao",
+    "deliveringTitle": "Đang giao"
+  },
+  "cartOverView": {
+    "totalAmountLabel": "{totalAmount} VND",
+    "productQuantityLabel": "{itemQuantity} đơn vị - {unitQuantity} sản phầm"
+  },
+  "chatWithSupport": {
+    "titleScreen": "Chat with supporters",
+    "lostConnectErrorMsg": "Lost connection!",
+    "netWorkErrorMsg": "Let's connect & chat with supporters.",
+    "csName": "CS",
+    "userName": "I"
+  },
+  "cart": {
+    "titleScreen": "Giỏ hàng",
+    "noDeleteItem": "No",
+    "yesDeleteItem": "Yes",
+    "deleteItemMsg": "Sản phẩm này sẽ bị xóa khỏi giỏ hàng của bạn!",
+    "deleteItemTitle": "Xóa sản phẩm",
+    "errorMsg": "Error",
+    "noItemMsg": "Không có sản phẩm nào trong giỏ",
+    "totalAmountLabel": "{totalAmount} VND"
+  },
+  "createAddress": {
+    "creatingAddress": "Đang tạo địa chỉ",
+    "creatingAddressTitle": "Tạo địa chỉ....",
+    "inputAddressHint": "Muaho sẽ giao hàng ở địa chỉ này!",
+    "inputAddressTitle": "Địa chỉ giao hàng",
+    "inputPhoneHint": "0909xxxxxx",
+    "inputPhoneTitle": "Số điện thoại",
+    "createAddressButton": "Thêm địa chỉ",
+    "errorCreateFail": "Thất Bại",
+    "invalidPhone": "Bạn chưa nhập số điện thoại",
+    "invalidAddress": "Bạn chưa nhập địa chỉ"
+  },
+  "addressList": {
+    "titleScreen": "Chọn địa chỉ giao hàng",
+    "phone": "SĐT: ",
+    "address": "Địa chỉ: ",
+    "addAddressButton": "Thêm Địa Chỉ"
+  },
+  "setting": {
+    "updateInfo": "Cập nhật thông tin",
+    "phoneNumberTitle": "Số điện thoại",
+    "addressTitle": "Địa chỉ",
+    "discountTitle": "Mã giảm giá",
+    "languageTitle": "Ngôn ngữ",
+    "logoutTitle": "Đăng xuất",
+    "loginTitle": "Đăng nhập",
+    "changePasswordTitle": "Đổi mật khẩu",
+    "currentLanguageSubtitle": "Tiếng Việt",
+    "languageSelectionTitle": "Ngôn ngữ",
+    "discountSubtitle": "Bạn có {discount} mã khuyến mãi",
+    "emailTitle": "Email",
+    "darkModeTitle": "Chế độ tối"
+  },
+  "login": {
+    "successTitle": "Thành công",
+    "emailNotExistTitle": "Email không tồn tại",
+    "emailOrPassNotMatchMess": "Email hoặc mật khẩu không đúng",
+    "errorDefaultMess": "Có lỗi đang xảy ra, vui lòng thử lại",
+    "youDonNotHaveAccountQuestion": "Bạn chưa có tài khoản",
+    "registerNowLabel": " đăng kí ngay",
+    "sloganHeadline": "Nhanh chóng, tiện lợi, an toàn",
+    "sloganSub": "Uy tín luôn là tôn chỉ hàng đầu",
+    "requestLoginMess": "Đang đang nhập...",
+    "loginLabel": "Đăng nhập",
+    "emailLabel": "Email",
+    "emailHinText": "muaho@email.com",
+    "passwordLabel": "Mật khẩu",
+    "passwordHintText": "Mật khẩu"
+  },
+  "register": {
+    "youDonHaveAccountQuestion": "Bạn đã có tài khoản",
+    "loginNowLabel": " đăng nhập ngay",
+    "sloganHeadline": "Khuyến mãi cực hấp dẫn.",
+    "sloganSub": "Đăng ký ngay!",
+    "registerLabel": "Đăng kí",
+    "emailNotInvalidMess": "Email không hợp lệ",
+    "emailEmptyInvalidMess": "Email không được để trống",
+    "emailLabel": "Email",
+    "emailHintText": "muaho@email.com",
+    "passwordTooSortMess": "Mật khẩu quá ngắn",
+    "passwordEmptyMess": "Mật khẩu không được để trống",
+    "passwordTooWeakMess": "Mật khẩu quá yếu",
+    "passwordLabel": "Password",
+    "passwordHintText": "password",
+    "confirmPasswordNotMatchMess": "Mật khẩu không trùng khớp",
+    "requestConfirmPasswordMess": "Vui lòng xác nhận lại mật khẩu",
+    "confirmPasswordLabel": "Xác nhận mật khẩu",
+    "confirmPasswordHintText": "nhập lại mật khẩu",
+    "displayNameTooLongWarning": "Tên hiển thị quá dài",
+    "displayNameEmptyWarning": "Tên hiển thị không được bỏ trống",
+    "displayNameLabel": "Tên hiển thị",
+    "displayNameHintText": "Tên hiển thị"
+  },
+  "maintenance": {
+    "label1": "Chúng tôi hiện tiếng hành đang bảo trì",
+    "label2": "Bạn đừng lo lắng, chúng tôi sẽ xong sớm thôi!",
+    "checkButtonTitle": "Kiểm tra trạng thái hệ thống",
+    "messAfterCountDown": "Sắp xong rồi, bạn đợi chút nhé"
+  }
 }

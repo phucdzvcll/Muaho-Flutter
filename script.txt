@@ -1,0 +1,42 @@
+//start deeplink
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink"
+
+//localization
+flutter pub run easy_localization:generate --source-dir ./assets/translations
+flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
+
+//gen json
+flutter pub run build_runner build --delete-conflicting-outputs
+
+//gen splash screen
+flutter pub run flutter_native_splash:create
+
+//deeplink
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=1"
+
+//test deeplink
+
+muaho://deeplink/search?keyword=value
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/search?keyword=thit"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/search?keyword=sua"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/search?keyword="
+
+muaho://deeplink/shop?id=1
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=1"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=43"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/shop?id=sdfdss"
+
+//muaho://deeplink/orderDetail?orderId=1
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/orderDetail?orderId=1"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/orderDetail?orderId=46"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/orderDetail?orderId=sdfsdfsdfkj"
+
+//muaho://deeplink/category?categoryId=1
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=1"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=1534"
+adb shell am start -W -a android.intent.action.VIEW -d "muaho://deeplink/category?categoryId=sdfdjsfgdsjkfhsdgfj"
+
+
+//tool
+//find hard code string
+"(.*?)"|'(.*?)'

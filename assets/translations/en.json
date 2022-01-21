@@ -1,5 +1,170 @@
 {
-  "btn_login": "LOGIN",
-  "btn_register": "REGISTER",
-  "txt_hello": "Hello"
+  "searchShop": {
+    "filterButton": "Bộ lọc",
+    "allShop": "All stores",
+    "errorMsg": "Error",
+    "noDataMsg": "Nothing here",
+    "chooseShop": "Select store"
+  },
+  "hotSearch": {
+    "errorMsg": "Error",
+    "hotShop": "Featured stores",
+    "hotItems": "Commonly purchased items",
+    "searchHint": "What do you want to buy?"
+  },
+  "voucherList": {
+    "errorMsg": "Error",
+    "titleScreen": "Vouchers"
+  },
+  "payment": {
+    "total": "Total",
+    "editAddress": "Edit",
+    "deliveryAddress": "Deliver to the address",
+    "noSaveOrder": "No",
+    "yesSaveOrder": "Yes",
+    "saveOrderConfirmMsg": "Your order will be dispatched!",
+    "saveOrderConfirmTitle": "Notify",
+    "requestingCreateOrderMsg": "Creating an order",
+    "requestingCreateOrderTitle": "Create order....",
+    "missingDeliveryAddressMsg": "You don't have a shipping address yet",
+    "successOrderMsg": "Complete your order",
+    "screenTitle": "Payment",
+    "dialogLoginTitle" : "You are not logged in",
+    "dialogLoginContent" : "Login now!",
+    "noLoginBtn" : "Exit",
+    "yesLoginBtn" : "Login"
+  },
+  "order": {
+    "titleScreen": "Select product",
+    "noDeleteItem": "No",
+    "yesDeleteItem": "Yes",
+    "deleteItemMsg": "This product will be removed from your cart!",
+    "deleteItemTitle": "Remove product from cart?",
+    "noChangeShop": "No",
+    "yesChangeShop": "Yes",
+    "changeShopMsg": "The items you selected in the previous store will be deleted.",
+    "changeShopTitle": "Do you want to change stores?",
+    "errorMsg": "Error"
+  },
+  "home": {
+    "viewAllCategory": "View all",
+    "shopCategory": "Store directory",
+    "newsTitle": "What to buy today?",
+    "hiUser": "Hello"
+  },
+  "orderDetail": {
+    "titleScreen": "Order details",
+    "vndCurrency": "VND",
+    "error": "Error"
+  },
+  "orderHistoryDelivering": {
+    "error": "Error"
+  },
+  "orderHistoryDone": {
+    "error": "Error"
+  },
+  "orderHistory": {
+    "deliveredTitle": "Delivered",
+    "deliveringTitle": "Delivering"
+  },
+  "cartOverView": {
+    "totalAmountLabel": "{totalAmount} VND",
+    "productQuantityLabel": "{itemQuantity} unit - {unitQuantity} items"
+  },
+  "chatWithSupport": {
+    "titleScreen": "Chat with supporters",
+    "lostConnectErrorMsg": "Lost connection!",
+    "netWorkErrorMsg": "Let's connect & chat with supporters.",
+    "csName": "CS",
+    "userName": "I"
+  },
+  "cart": {
+    "titleScreen": "Cart",
+    "noDeleteItem": "No",
+    "yesDeleteItem": "Yes",
+    "deleteItemMsg": "This product will be removed from your cart!",
+    "deleteItemTitle": "Delete product",
+    "errorMsg": "Error",
+    "noItemMsg": "There are no products in the cart",
+    "totalAmountLabel": "{totalAmount} VND"
+  },
+  "createAddress": {
+    "creatingAddress": "Address creation",
+    "creatingAddressTitle": "Create an address....",
+    "inputAddressHint": "Muaho will deliver at this address!",
+    "inputAddressTitle": "Delivery address",
+    "inputPhoneHint": "0909xxxxxx",
+    "inputPhoneTitle": "Phone number",
+    "createAddressButton": "Add address",
+    "errorCreateFail": "Failure",
+    "invalidPhone": "You did not enter a phone number",
+    "invalidAddress": "You do not enter an address"
+  },
+  "addressList": {
+    "titleScreen": "Selected delivery address",
+    "phone": "SĐT: ",
+    "address": "Address: ",
+    "addAddressButton": "Add address"
+  },
+  "setting": {
+    "updateInfo": "Update information",
+    "phoneNumberTitle": "Phone number",
+    "addressTitle": "Address",
+    "discountTitle": "Vouchers",
+    "languageTitle": "Language",
+    "logoutTitle": "Logout",
+    "loginTitle": "Login",
+    "changePasswordTitle": "Change password",
+    "currentLanguageSubtitle": "English",
+    "languageSelectionTitle": "Language",
+    "discountSubtitle": "You have {discount} voucher",
+    "emailTitle": "Email",
+    "darkModeTitle": "Dark mode"
+  },
+  "login": {
+    "successTitle": "Success",
+    "emailNotExistTitle": "Email does not exist",
+    "emailOrPassNotMatchMess": "Email or password is incorrect",
+    "errorDefaultMess": "An error is occurring, please try again",
+    "youDonNotHaveAccountQuestion": "Do not have an account",
+    "registerNowLabel": " register now",
+    "sloganHeadline": "Fast, convenient, safe",
+    "sloganSub": "Reputation is always the first principle",
+    "requestLoginMess": "Login...",
+    "loginLabel": "Login",
+    "emailLabel": "Email",
+    "emailHinText": "muaho@email.com",
+    "passwordLabel": "Password",
+    "passwordHintText": "Password"
+  },
+  "register": {
+    "youDonHaveAccountQuestion": "Do you have an account",
+    "loginNowLabel": " login now",
+    "sloganHeadline": "Very attractive promotion.",
+    "sloganSub": "Register Now!",
+    "registerLabel": "Register",
+    "emailNotInvalidMess": "Invalid email",
+    "emailEmptyInvalidMess": "Email cannot be blank",
+    "emailLabel": "Email",
+    "emailHintText": "muaho@email.com",
+    "passwordTooSortMess": "Password is too short",
+    "passwordEmptyMess": "Password can not be blank",
+    "passwordTooWeakMess": "Password is too weak",
+    "passwordLabel": "Password",
+    "passwordHintText": "password",
+    "confirmPasswordNotMatchMess": "Password does not match",
+    "requestConfirmPasswordMess": "Please confirm the password again",
+    "confirmPasswordLabel": "Confirm password",
+    "confirmPasswordHintText": "Enter the password",
+    "displayNameTooLongWarning" : "Display name too long",
+    "displayNameEmptyWarning" : "Display name cannot be blank",
+    "displayNameLabel" : "Display name",
+    "displayNameHintText" : "Display name"
+  },
+  "maintenance": {
+    "label1": "We are currently under maintenance",
+    "label2": "Don't worry, we'll be done soon!",
+    "checkButtonTitle": "Check system state",
+    "messAfterCountDown": "It's almost done, please wait a moment"
+  }
 }
