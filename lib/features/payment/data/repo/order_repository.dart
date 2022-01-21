@@ -11,20 +11,22 @@ import 'package:muaho/features/payment/domain/repo/create_order_repository.dart'
 
 class OrderRepositoryImpl implements CreateOrderRepository {
   final OrderService service;
-
-  OrderRepositoryImpl({required this.service});
+  OrderRepositoryImpl({
+    required this.service,
+  });
 
   @override
   Future<Either<Failure, OrderStatusResult>> createOrder(
       PaymentEntity paymentEntity) async {
-    var createOrder = service.createOrder(OrderBody(
+    OrderBody orderBody = OrderBody(
         total: calculatorTotal(paymentEntity.productEntities),
         totalBeforeDiscount: calculatorTotal(paymentEntity.productEntities),
         shopId: paymentEntity.shopID,
-        deliveryAddressID: 5,
+        deliveryAddressID: paymentEntity.addressID,
         products: mapOrderProduct(paymentEntity.productEntities),
         voucherDiscount: 0,
-        voucherId: null));
+        voucherId: null);
+    var createOrder = service.createOrder(orderBody);
     NetworkResult<OrderStatus> result = await handleNetworkResult(createOrder);
     if (result.isSuccess()) {
       return SuccessValue(OrderStatusResult(

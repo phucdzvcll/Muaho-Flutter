@@ -152,8 +152,16 @@ class LoginScreen extends StatelessWidget {
                           color: theme.primaryColorLight,
                         ),
                         recognizer: new TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pushNamed(ctx, RegisterScreen.routeName);
+                          ..onTap = () async {
+                            await Navigator.pushNamed(
+                                    ctx, RegisterScreen.routeName)
+                                .then((value) {
+                              if (value != null &&
+                                  value is bool &&
+                                  value == true) {
+                                Navigator.pop(ctx);
+                              }
+                            });
                           }),
                   ],
                 ),

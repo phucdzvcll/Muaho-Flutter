@@ -227,6 +227,7 @@ class PaymentScreen extends StatelessWidget {
               Navigator.pop(context);
               BlocProvider.of<PaymentBloc>(context).add(CreateOrderEvent(
                   paymentEntity: PaymentEntity(
+                      addressID: cartUpdateState.cartInfo.addressInfo?.id ?? 0,
                       shopID: cartUpdateState.cartInfo.cartShopInfo.shopID,
                       shopAddress:
                           cartUpdateState.cartInfo.cartShopInfo.shopAddress,
@@ -322,24 +323,6 @@ class PaymentScreen extends StatelessWidget {
                                 ),
                                 actions: [
                                   Container(
-                                    child: GestureDetector(
-                                      child: Text(
-                                        LocaleKeys.payment_yesLoginBtn
-                                            .translate(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2
-                                            ?.copyWith(fontSize: 16),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        context.navigatorWithRouteName(
-                                            LoginScreen.routeName);
-                                      },
-                                    ),
-                                    padding: const EdgeInsets.all(12),
-                                  ),
-                                  Container(
                                     padding: const EdgeInsets.all(12),
                                     child: GestureDetector(
                                       child: Text(
@@ -354,6 +337,24 @@ class PaymentScreen extends StatelessWidget {
                                         Navigator.pop(context);
                                       },
                                     ),
+                                  ),
+                                  Container(
+                                    child: GestureDetector(
+                                      child: Text(
+                                        LocaleKeys.payment_yesLoginBtn
+                                            .translate(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            ?.copyWith(fontSize: 16),
+                                      ),
+                                      onTap: () {
+                                        context.pop();
+                                        context.navigatorWithRouteName(
+                                            LoginScreen.routeName);
+                                      },
+                                    ),
+                                    padding: const EdgeInsets.all(12),
                                   ),
                                 ],
                               ),

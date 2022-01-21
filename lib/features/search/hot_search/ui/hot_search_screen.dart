@@ -29,8 +29,14 @@ class _SearchScreenState extends State<SearchScreen> {
       child: BlocBuilder<HotSearchBloc, HotSearchState>(
         builder: (ctx, state) {
           if (state is HotSearchLoadingState) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return Container(
+              color: Theme.of(context).backgroundColor,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(96.0),
+                  child: Lottie.asset(Assets.json.waiting),
+                ),
+              ),
             );
           } else if (state is HotSearchSuccessState) {
             return Container(
@@ -44,14 +50,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     backgroundColor: Theme.of(context).cardColor,
                     title: _appBar(context),
                   ),
-                  body: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
+                  body: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16.0, horizontal: 24.0),
+                              vertical: 16.0, horizontal: 16.0),
                           child: Text(
                             LocaleKeys.hotSearch_hotItems.translate(),
                             style:
@@ -60,30 +64,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                           ),
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: 32,
-                          child: ListView.separated(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 24.0),
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemCount: state.result.listHotKeywords.length,
-                            itemBuilder: (ctx, index) {
-                              return _itemHotKeyword(
-                                  state.result.listHotKeywords[index]);
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return SizedBox(
-                                width: 5,
-                              );
-                            },
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Wrap(
+                            children: state.result.listHotKeywords
+                                .map((e) => _itemHotKeyword(e))
+                                .toList(),
                           ),
                         ),
-                        Padding(
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16.0, horizontal: 24.0),
+                              vertical: 16.0, horizontal: 16.0),
                           child: Text(
                             LocaleKeys.hotSearch_hotShop.translate(),
                             style:
@@ -92,26 +87,28 @@ class _SearchScreenState extends State<SearchScreen> {
                                     ),
                           ),
                         ),
-                        GridView.builder(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 24.0),
-                          physics: ScrollPhysics(),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.all(16.0),
+                        sliver: SliverGrid(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return _itemHotShop(
+                                state.result.listHotShop[index],
+                              );
+                            },
+                            childCount: state.result.listHotShop.length,
+                          ),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 20,
                             mainAxisSpacing: 20,
                           ),
-                          shrinkWrap: true,
-                          itemCount: state.result.listHotShop.length,
-                          itemBuilder: (ctx, index) {
-                            return _itemHotShop(
-                              state.result.listHotShop[index],
-                            );
-                          },
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      // )
+                    ],
                   ),
                 ),
               ),
@@ -143,6 +140,7 @@ class _SearchScreenState extends State<SearchScreen> {
       },
       child: Container(
         padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
           border: Border.all(color: Theme.of(context).focusColor),

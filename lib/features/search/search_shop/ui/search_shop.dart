@@ -141,6 +141,7 @@ class _SearchShopScreenState extends State<SearchShopScreen> {
 
   Widget _shopItems(SearchShopByKeywordEntity shop) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.pushNamed(context, OrderScreen.routeName,
             arguments: ShopArgument(shopId: shop.id));

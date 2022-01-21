@@ -173,7 +173,7 @@ class CartStore {
     _sendUpdateCartEvent();
   }
 
-  getAddressInfo() {
+  AddressInfoEntity? getAddressInfo() {
     return this._addressInfo;
   }
 

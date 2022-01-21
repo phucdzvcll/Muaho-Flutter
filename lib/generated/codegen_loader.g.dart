@@ -47,8 +47,8 @@ class CodegenLoader extends AssetLoader{
     "screenTitle": "Payment",
     "dialogLoginTitle": "You are not logged in",
     "dialogLoginContent": "Login now!",
-    "noLoginBtn": "Login",
-    "yesLoginBtn": "Exit"
+    "noLoginBtn": "Exit",
+    "yesLoginBtn": "Login"
   },
   "order": {
     "titleScreen": "Select product",
@@ -217,8 +217,8 @@ static const Map<String,dynamic> vi = {
     "screenTitle": "Thanh Toán",
     "dialogLoginTitle": "Bạn chưa đăng nhập",
     "dialogLoginContent": "Đăng nhập ngay!",
-    "noLoginBtn": "Đăng nhập",
-    "yesLoginBtn": "Thoát"
+    "noLoginBtn": "Thoát",
+    "yesLoginBtn": "Đăng nhập"
   },
   "order": {
     "titleScreen": "Chọn Sản Phẩm",

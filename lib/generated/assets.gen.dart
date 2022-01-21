@@ -65,6 +65,9 @@ class $AssetsJsonGen {
 
   /// File path: assets/json/page_error.json
   String get pageError => 'assets/json/page_error.json';
+
+  /// File path: assets/json/waiting.json
+  String get waiting => 'assets/json/waiting.json';
 }
 
 class Assets {

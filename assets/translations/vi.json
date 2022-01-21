@@ -31,8 +31,8 @@
     "screenTitle": "Thanh Toán",
     "dialogLoginTitle" : "Bạn chưa đăng nhập",
     "dialogLoginContent" : "Đăng nhập ngay!",
-    "noLoginBtn" : "Đăng nhập",
-    "yesLoginBtn" : "Thoát"
+    "noLoginBtn" : "Thoát",
+    "yesLoginBtn" : "Đăng nhập"
   },
   "order": {
     "titleScreen": "Chọn Sản Phẩm",

@@ -109,8 +109,12 @@ class AddressScreen extends StatelessWidget {
               },
               itemCount: state.addressInfoEntities.length,
             )
-          : Center(
-              child: LottieBuilder.asset(Assets.json.addAddress),
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                LottieBuilder.asset(Assets.json.addAddress),
+                Text("Bạn chưa có địa chỉ nào"),
+              ],
             );
     } else {
       return Center(

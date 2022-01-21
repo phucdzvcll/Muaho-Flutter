@@ -139,8 +139,7 @@ class _SettingPageState extends State<SettingPage>
                                 buildWhen: (pre, curr) => curr is SignInState,
                                 builder: (context, state) {
                                   return Visibility(
-                                    visible: state is SignInState &&
-                                        state.signIn == SignIn.Logout,
+                                    visible: false,
                                     child: _itemSettingBuilder(
                                       title: LocaleKeys
                                           .setting_changePasswordTitle

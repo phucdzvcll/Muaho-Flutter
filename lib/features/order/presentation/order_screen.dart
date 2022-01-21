@@ -153,7 +153,7 @@ class _OrderScreenState extends State<OrderScreen>
   Widget _productGroupBuilder(OrderSuccess state, BuildContext blocContext) {
     if (state.shopDetailModel.groups.length > 0) {
       return Expanded(
-        flex: 1,
+        flex: 2,
         child: ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           shrinkWrap: true,
@@ -167,7 +167,7 @@ class _OrderScreenState extends State<OrderScreen>
                     FilterProductEvent(groupID: productGroupEntity.groupId));
               },
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 margin: const EdgeInsets.only(left: 4),
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
@@ -198,7 +198,7 @@ class _OrderScreenState extends State<OrderScreen>
 
   Widget _productBuilder(OrderDetailModel orderDetailModel) {
     return Expanded(
-      flex: 17,
+      flex: 27,
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           print(notification);

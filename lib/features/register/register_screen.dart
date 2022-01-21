@@ -37,17 +37,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     return BlocProvider<RegisterBloc>(
       create: (context) => inject(),
       child: Container(
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(ctx).backgroundColor,
           child: SafeArea(
             child: Scaffold(
               appBar: AppBarComponent(
                 widget: SizedBox.shrink(),
               ),
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(ctx).backgroundColor,
               body: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Builder(builder: (ctx) {
@@ -56,20 +56,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       if (state is RegisterSubmitErrorState) {
                         switch (state.registerError) {
                           case RegisterError.weakPassword:
-                            context
-                                .showSnackBar(RegisterError.weakPassword.name);
+                            ctx.showSnackBar(RegisterError.weakPassword.name);
                             break;
                           case RegisterError.emailAlreadyInUse:
-                            context.showSnackBar(
+                            ctx.showSnackBar(
                                 RegisterError.emailAlreadyInUse.name);
                             break;
                           case RegisterError.defaultError:
-                            context
-                                .showSnackBar(RegisterError.defaultError.name);
+                            ctx.showSnackBar(RegisterError.defaultError.name);
                             break;
                         }
                       } else if (state is CreateAccountSuccess) {
-                        context.popUtilRootScreen();
+                        Navigator.pop(context, true);
                       }
                     },
                     child: _loginBuilder(ctx),

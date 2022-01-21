@@ -43,7 +43,10 @@ class SignIn extends StatelessWidget {
   Widget _signInBuilder(SignBlocState state, BuildContext ctx) {
     if (state is SignLoading) {
       return Center(
-        child: CircularProgressIndicator(),
+        child: Padding(
+          padding: const EdgeInsets.all(96.0),
+          child: Lottie.asset(Assets.json.waiting),
+        ),
       );
     } else if (state is SignError) {
       return Column(

@@ -31,8 +31,8 @@
     "screenTitle": "Payment",
     "dialogLoginTitle" : "You are not logged in",
     "dialogLoginContent" : "Login now!",
-    "noLoginBtn" : "Login",
-    "yesLoginBtn" : "Exit"
+    "noLoginBtn" : "Exit",
+    "yesLoginBtn" : "Login"
   },
   "order": {
     "titleScreen": "Select product",

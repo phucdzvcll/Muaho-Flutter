@@ -13,7 +13,10 @@ void paymentConfig(GetIt injector) {
       injector(instanceName: DioInstanceType.DioTokenHandler.name)));
 
   injector.registerLazySingleton<CreateOrderRepository>(
-      () => OrderRepositoryImpl(service: injector()));
+    () => OrderRepositoryImpl(
+      service: injector(),
+    ),
+  );
 
   injector.registerFactory(
       () => CreateOrderUseCase(createOrderRepository: injector()));
