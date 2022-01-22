@@ -9,7 +9,7 @@
 
 - Using <strong> clean architecture </strong> to structure project.
 - Strictly following the rules of clean architecture so <strong> maintenance and testing </strong> are easy.
-- Using <strong> BloC pattern</strong> to manager state.
+- Using <strong> BloC pattern</strong> to state mangement.
 
 ## Important ingredients 
 - [Clean architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
