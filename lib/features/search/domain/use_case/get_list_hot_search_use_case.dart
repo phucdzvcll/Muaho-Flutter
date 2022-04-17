@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:muaho/common/domain/either.dart';
 import 'package:muaho/common/domain/failure.dart';
 import 'package:muaho/common/domain/use_case.dart';
@@ -17,9 +18,15 @@ class GetHotSearchUseCase extends BaseUseCase<EmptyInput, HostSearchResult> {
   }
 }
 
-class HostSearchResult {
+class HostSearchResult extends Equatable {
   final List<HotKeyword> listHotKeywords;
   final List<HotShop> listHotShop;
 
   HostSearchResult({required this.listHotKeywords, required this.listHotShop});
+
+  @override
+  List<Object?> get props => [
+        listHotKeywords,
+        listHotShop,
+      ];
 }
